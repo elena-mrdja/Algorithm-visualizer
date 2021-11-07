@@ -1,2 +1,4 @@
+
 During the first week I did some research about "backend" part of our project in which I am involved. I find out what are the lexers and parcers and how are they working. I came to understanding what are the tokens and why do we need them. After a few team meetings I realised how we are connected and how different sub-teams should operate between each other. 
 In particular I find some useful libraries which could help us and also some source codes of parcers. This led me to understanding of their processing. On the upcoming week I am planning to start working on the code of our "parcer" which will allow us to analyze input code and devide into tokens ( so we will probably start with creation of tokens classes and algorythm for string parcing).
+
