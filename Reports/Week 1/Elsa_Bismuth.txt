@@ -1,1 +1,5 @@
-
+This week, I mainly did a reasearch on tokenization, which I will have to do for the rest of the project.
+I read some articles to learn more about how it works and what it is used for.
+Then, I tried to compare different librairies that are published on github, to see which one we should use. In the end, we decided to base our code on Lexer Toolkit Librairy, but to rewrite it ourselves to make it easier to use for the rest of the team. 
+With team 1 (the team I am on), we defined which tokens we were going to code, and we defined the grammar we want to use.
+Next week, I plan on deepening my knowledge on tokenization, and master LexerTk to start coding my first token.
