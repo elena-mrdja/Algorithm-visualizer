@@ -1,6 +1,10 @@
 Report Week 1
 
-In the first week, as the github leader I created the Github repository which we are going to use for our project. I made the project in QT and structured it so that each team have their separate folders to commit to. I wrote the description for our project and the licence copyright disclaimer. Apart from establishing the repository and the project, I created a presentation on how to use Github in order to make all the teamates more familiar on how to use it. 
+In the first week, as the github leader I created the Github repository which we are going to use for our project. 
+I made the project in QT and structured it so that each team have their separate folders to commit to. 
+I wrote the description for our project and the licence copyright disclaimer. 
+Apart from establishing the repository and the project, I created a presentation on how to use Github in order to make all the teamates more familiar on how to use it. 
 
-As a leader of the GUI team, I sent a useful course on how to use QT graphics to the members of this team and we started with intensive learning. We agreed on and organized the first deadline for finishing the course and testing out the gathered knowledge through creating test graphical elements.
+As a leader of the GUI team, I sent a useful course on how to use QT graphics to the members of this team and we started with intensive learning.
+We agreed on and organized the first deadline for finishing the course and testing out the gathered knowledge through creating test graphical elements.
 
