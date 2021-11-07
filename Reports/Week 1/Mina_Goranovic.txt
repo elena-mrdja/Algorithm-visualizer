@@ -1,1 +1,9 @@
-hh
+As team leader, the first week was very important to establish good communication and organization in the team, between all of the members. Since what we are doing is new for all of the members of the team, I made sure team leaders understand what their team are responsible for and how they will communicate in the future. We spread the work into mostly independent teams and all of them spent some time learning about how to put in place the software we will use. 
+
+I was discovering with the backend team the C++ Program for Lexical Analyzer and the libraries: C++ Lexer Toolkit Library and antlr4.
+
+As also part of the GUI team, I started the course we found for learning the QT graphics with both Elena and John.
+
+What I have to do next week, is to complete the course on the Qt graphics and make sure that my teammates are on the right track not missing any deadlines.
+
+
