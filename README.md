@@ -6,7 +6,7 @@ Algorithm Visualizer is a tool that will help you see the visual representation 
 1. Mina Goranovic, goranovic37, minagoranovic2, Project lead
 2. Elena Mrdja, elena-mrdja, elenamrdja, Github master, GUI team lead
 3. Milena Nedeljkovic, milenanedeljkovic, milenanedeljkovic4, AST team lead
-4. Katarina Borisova, ekaterina-borisova, ekaterina97024145 , passer team lead
+4. Ekaterina Borisova, ekaterina-borisova, ekaterina97024145 , passer team lead
 5. Matea Gjika, mattea777, mateagjika1, Trello master
 6. Virgile Martin, VirgileMartinBX23, virgilemartin1, parser team
 7. Elsa Bismuth, elsa-bismuth, elsa_bis, parser team
@@ -19,7 +19,7 @@ Algorithm Visualizer is a tool that will help you see the visual representation 
 
 ## Parsing team
 This team will be working on the tokenization and the lexical analysis of the code.
-* Katarina Borisova
+* Ekaterina Borisova
 *	Stefan Vayln
 *	Virgile Martin
 * Elsa Bismuth
