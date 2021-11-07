@@ -1,1 +1,2 @@
-
+This week I did the research about abstract syntax trees and tokenisation to have a starting point for the project. 
+Next week I will implement the very first classes creating a link between tokens and AST in order to start placing elements in hierarchic order.
