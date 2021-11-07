@@ -1,1 +1,3 @@
-
+As the leader of Team 2, this week I worked on establishing good communication with the other leaders and making sure that me and my team have a good idea of what our task is.
+With established basic grammar and tokens, we decided to start by making a hyperclass to be able to store the tokens in lists. The two main classes will be for expressions and statements, which will be the parents of all other classes.
+For the meeting on Monday, we plan to make a list of the classes we need and assign them to each of the four of us to work on for the rest of the week, along with more research.
