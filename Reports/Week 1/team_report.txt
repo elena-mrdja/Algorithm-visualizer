@@ -1,0 +1,8 @@
+During the first week, we have spent a lot of time setting up the efficient workflows for the upcoming weeks and planning on how to carry out the project.
+We set our minimal and basic goals and discussed about additional features we would implement. 
+Sub-team leaders spent time in their respective teams, planning how they would approach the tasks and delegating various assignments to team members.
+Individually, team members spent time getting familiar with the process of lexing, parsing and creating the AST as it is a new notion for all of us. 
+
+Parsing team found the library that will help us tokenize the input code and the AST team defined the classes hierarchy for the grammar we will use.
+We have made a list of tokens we will use (both for basic goal and additional features) and defined the grammar. 
+GUI team is learning QT graphics.
