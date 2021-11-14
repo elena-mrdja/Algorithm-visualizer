@@ -37,6 +37,9 @@ During the second week, I did a more profound research on ANTLR, in order to kno
 
 #### Evdokia Gneusheva
 
+This week Team 1 came up with the idea to use ANTLR library for parsing so as a member of Team 2 my job was to get familier with this library in order to be able to convert parser trees created by Team 1 into AST. Precisely, to convert a parser tree into AST we need to use ANTLR4 visitor. Thus, I accomplished an online tutorial on how to use visitor class. But also, the most importantly, Team 2 started defining AST by creating multiple classes in ast.hpp file (on Workspace branch), where I coded set() and get() methods for all classes inherited from Expression class.  
+Next week I will continue working on AST classes and start the conversion of parser tree created by Team 1 into AST, as well as working on the output of our AST which we will pass to the Team 3.
+
 #### Stefan Vayl
 
 #### Ekaterina Borisova
