@@ -55,3 +55,5 @@ For next week I need to find out how exactly we will make an interpreter from AS
 
 
 #### John Levy 
+This week, I completed my learning of the Qt Graphics and Qt Designer libraries. The whole GUI Team then met to decide the general aspect of our main window, we quickly identified some challenges that we would have to work on. We decided on the main classes we will use for the display of our visualization tree. 
+Next week, I plan on working a lot on the Text Editor part of our UI in order to display the algorithms as in a code developement environement, and decide on the final shapes we will use for the visualization cell in order to start their implementation.
