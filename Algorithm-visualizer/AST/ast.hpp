@@ -60,6 +60,12 @@ enum bin_op {
 class AST {
     AST();
     ~AST();
+    void set_left_child(AST* lc){left_child = lc;};
+    AST* get_left_child(){return left_child;};
+    void set_right_child(AST* rc){right_child = rc;};
+    AST* get_right_child(){return right_child;};
+    void set_parent(AST* par){parent = par;};
+    AST* get_parent(){return parent;};
 private:
     AST* left_child;
     AST* right_child;
@@ -69,6 +75,8 @@ private:
 class NodeBinOp(AST) {
     NodeBinOp();
     ~NodeBinOp();
+    void set_bin_op(bin_op op){operation = op};
+    bin_op get_bin_op(){return operation;};
 private:
     bin_op operation;
 };
@@ -76,6 +84,8 @@ private:
 class NodeUnOp(AST) {
     NodeUnOp();
     ~NodeUnOp();
+    void set_un_op(un_op op){operation = op;};
+    un_op get_un_op(){return operation;};
 private:
     un_op operation;
 };
@@ -83,6 +93,10 @@ private:
 class NodeVar(AST) {
     NodeVar();
     ~NodeVar();
+    void set_var_type(var_type vt){type = vt;};
+    var_type get_var_type(return type;);
+    void set_var_name(char vn){var_name = vn;};
+    char get_var_name(){return var_name;};
 private:
     var_type type;
     char var_name;
@@ -91,17 +105,11 @@ private:
 class NodeIf(AST) {
     NodeIf();
     ~NodeIf();
+    void set_condition(AST a){condition = a;};
+    AST get_condition(){return condition;};
 private:
     AST condition;
 };
-    
-class NodeIf(AST) {
-    NodeIf();
-    ~NodeIf();
-private:
-    AST condition;
-};
-
 
 //THESE WILL BE POTENTIALLY USEFUL FOR CLASSIFYING THINGS WHILE READING THE AST
 
@@ -124,8 +132,8 @@ class Statement {
 };
 
 class Expression {
-  Expression();
-  ~Expression();
+    Expression();
+    ~Expression();
 };
 
 class Declaration : Statement {
@@ -165,7 +173,7 @@ class Return : Statement {
     Return();
     ~Return();
     void set_exp(Expression e){exp = e;};
-    Experssion get_exp(){return exp;};
+    Expression get_exp(){return exp;};
     //attribute: expression being returned
 private:
     Expression exp;
@@ -175,8 +183,8 @@ class Print : Statement {
     Print();
     ~Print();
     void set_exp(Expression e){exp = e;};
-    Experssion get_exp(){return exp;};
-    //attirbute: expression to be printed
+    Expression get_exp(){return exp;};
+    //attribute: expression to be printed
 private:
     Expression exp;
 };
