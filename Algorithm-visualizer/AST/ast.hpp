@@ -26,29 +26,6 @@ public:
 private:
 };
 
-class Program {
-    Program();
-    ~Program();
-    //list of statements or the
-    //program block - not sure yet
-};
-
-class Block {
-    Block();
-    ~Block();
-    //list of statements
-};
-
-class Statement {
-    Statement();
-    ~Statement();
-};
-
-class Expression {
-  Expression();
-  ~Expression();
-};
-
 enum var_type {
     string = 0,
     integer = 1,
@@ -78,6 +55,79 @@ enum bin_op {
     eqeq = 11
 };
 
+//AST CLASS
+
+class AST {
+    AST();
+    ~AST();
+private:
+    AST* left_child;
+    AST* right_child;
+    AST* parent;
+};
+
+class NodeBinOp(AST) {
+    NodeBinOp();
+    ~NodeBinOp();
+private:
+    bin_op operation;
+};
+
+class NodeUnOp(AST) {
+    NodeUnOp();
+    ~NodeUnOp();
+private:
+    un_op operation;
+};
+
+class NodeVar(AST) {
+    NodeVar();
+    ~NodeVar();
+private:
+    var_type type;
+    char var_name;
+};
+    
+class NodeIf(AST) {
+    NodeIf();
+    ~NodeIf();
+private:
+    AST condition;
+};
+    
+class NodeIf(AST) {
+    NodeIf();
+    ~NodeIf();
+private:
+    AST condition;
+};
+
+
+//THESE WILL BE POTENTIALLY USEFUL FOR CLASSIFYING THINGS WHILE READING THE AST
+
+class Program {
+    Program();
+    ~Program();
+    //list of statements or the
+    //program block - not sure yet
+};
+
+class Block {
+    Block();
+    ~Block();
+    //list of statements
+};
+
+class Statement {
+    Statement();
+    ~Statement();
+};
+
+class Expression {
+  Expression();
+  ~Expression();
+};
+
 class Declaration : Statement {
     Declaration();
     ~Declaration();
@@ -96,12 +146,16 @@ class Return : Statement {
     Return();
     ~Return();
     //attribute: expression being returned
+private:
+    Expression exp;
 };
 
 class Print : Statement {
     Print();
     ~Print();
     //attirbute: expression to be printed
+private:
+    Expression exp;
 };
 
 class Jump : Statement {
@@ -117,18 +171,26 @@ class IfElse : Statement {
     IfElse();
     ~IfElse();
     //attributes: condition(expression), IfRest
+private:
+    Expression condition;
+    IfRest else_stmt;
 };
 
 class IfRest : Statement {
    IfRest();
    ~IfRest();
    //atrributes: a block, or another IfElse
+private:
+    Block block_stmt;
 };
 
 class While : Statement {
     While();
     ~While();
     //attributes: condition, block
+private:
+    Expression condition;
+    Block block_stmt;
 };
 
 class Variable : Expression {
