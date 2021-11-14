@@ -6,12 +6,6 @@ This week I worked on grasping all the necessary knowledge in Qt graphics we wil
 After everyone in GUI team was done with the course, I set up a meeting to decide on all the custom classes and the shape types we want to have in our project. When this was decided, I started coding the main window of our project's GUI, adding the classes and creating a simple structure we plan to build upon next week. Next week our goal is to finish the text editor cell and implement all the shapes we decided to use.
 
 As the git leader, I created a tutorial document with all of the important git hub commands, so that everyone was sure on how to use it, and was there to help my teammates out with any git hub problems.
-This week I worked on grasping all the necessary knowledge in Qt graphics I will need to continue with the graphics part of the project. As planned, I finished the Qt Graphics course we found, and implemented the gathered skills through making a trial project where I created a main window with different shapes and their class methods, which will be of great help as I progress with coding the project.
-After everyone in GUI team was done with the course, I set up a meeting to decide on all the custom classes and the shape types we want to have in our project. When this was decided, I started coding the main window of our project's GUI, adding the classes and creating a simple structure we plan to build upon next week. Next week our goal is to finish the text editor cell and implement all the shapes we decided to use.
-
-As the git leader, I created a common branch for all of us to collaborate, and made sure everyone has their own branch if they need it. I also created a tutorial document with all of the important git hub commands, so that everyone was sure on how to use it, and was there to help my teammates out with any git hub problems.
-
-
 
 #### Matea Gjika
 
