@@ -264,8 +264,8 @@ class BinOp : Expression {
     void set_left_expression(Expression l_e){left_exp = l_e;};
     void set_right_expression(Expression r_e){right_exp = r_e;};
     bin_op get_operation(){return operation;};
-    Expression get_right_expression(){return left_exp;};
-    Expression get_left_expression(){return right_exp;};
+    Expression get_left_expression(){return left_exp;};
+    Expression get_right_expression(){return right_exp;};
 private:
     bin_op operation;
     Expression left_exp;
