@@ -49,6 +49,11 @@ Throughout the whole week I have been working on installation of ANTRL library. 
 
 This week I have been working on installing ANTRLv.4 library. There were many ideas on how we should be implementing our backend but in the end we came to an understanding that ANTRL library should work well for our project. I have managed to install it on my computer and try to run it on different libraries including a C++ library. I have found some grammar files that I can use for testing and from which I managed to create tokens using the library. Next week I am planning to get better understanding on how to use this library in order to create parsing tree because right now I am struggling to get it.
 
-#### John Levy 
-
 #### Mina Goranovic
+This week I found us resources and tutorial for antlr library the parsing team will use. I downloaded all of the needed setup for the library, but it is still not working. What I need to do next week is to learn how to get the graph output of the parse tree instead of the graphical representation. 
+Next, I finished the course on the Qt graphics and decided with the GUI team on how we want our main window to look like.
+I made us a grammar file for parsing. 
+For next week I need to find out how exactly we will make an interpreter from AST that we will connect to flowchart elements.
+
+
+#### John Levy 
