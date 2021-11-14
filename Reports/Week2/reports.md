@@ -37,17 +37,18 @@ and we all need to give input into which attributes we need)
 #### Darya Todoskova
 During the second week, I did a more profound research on ANTLR, in order to know what output we will be receiving from Team 1. I also met a couple of times with my team to discuss our progress and to define specific tasks for each one of us to do. Indeed, I defined all the AST-inherited getters and setters in the ast.hpp file. Finally, I am currently trying to set up ANTLR on mac0S just like team 1, who has been trying to set it up on Windows. For the following week, I plan on refining our ast.hpp file and working on the exact output we are going to give to the GUI team, in order to make the transition smoother.
 
-
-#### John Levy 
-
 #### Evdokia Gneusheva
 
 This week Team 1 came up with the idea to use ANTLR library for parsing so as a member of Team 2 my job was to get familier with this library in order to be able to convert parser trees created by Team 1 into AST. Precisely, to convert a parser tree into AST we need to use ANTLR4 visitor. Thus, I accomplished an online tutorial on how to use visitor class. But also, the most importantly, Team 2 started defining AST by creating multiple classes in ast.hpp file (on Workspace branch), where I coded set() and get() methods for all classes inherited from Expression class.  
 Next week I will continue working on AST classes and start the conversion of parser tree created by Team 1 into AST, as well as working on the output of our AST which we will pass to the Team 3.
 
 #### Stefan Vayl
+Throughout the whole week I have been working on installation of ANTRL library. I have managed to install it on my computer even though there were many difficulties that I had to face. I managed to test this library on small grammar files that I found online. From those grammar files it created Lexer and Parser files. Although, there is still work to be done next week especially I am planning to find out how can I be using those automatically generated files in order to create parsing tree.
 
 #### Ekaterina Borisova
 
-#### Mina Goranovic
+This week I have been working on installing ANTRLv.4 library. There were many ideas on how we should be implementing our backend but in the end we came to an understanding that ANTRL library should work well for our project. I have managed to install it on my computer and try to run it on different libraries including a C++ library. I have found some grammar files that I can use for testing and from which I managed to create tokens using the library. Next week I am planning to get better understanding on how to use this library in order to create parsing tree because right now I am struggling to get it.
 
+#### John Levy 
+
+#### Mina Goranovic
