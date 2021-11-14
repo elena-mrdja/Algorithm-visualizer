@@ -47,6 +47,8 @@ Next week I will continue working on AST classes and start the conversion of par
 
 #### Stefan Vayl
 
+Throughout the whole week I have been working on installation of ANTRL library. I have managed to install it on my computer even though there were many difficulties that I had to face. I managed to test this library on small grammar files that I found online. From those grammar files it created Lexer and Parser files. Although, there is still work to be done next week especially I am planning to find out how can I be using those automatically generated files in order to create parsing tree.
+
 #### Ekaterina Borisova
 
 #### Mina Goranovic
