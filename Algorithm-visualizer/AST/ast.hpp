@@ -129,22 +129,43 @@ class Expression {
 };
 
 class Declaration : Statement {
+public:
     Declaration();
     ~Declaration();
+    void set_var_type(var_type t){type = t;};
+    var_type get_var_type(){return type};
+    char get_value(){return value;};
+    void set_value(char v){value = v;};
+
+
+private:
+    var_type type;
+    char value;
     //int x = 7, bool y = False
     //attributes:
     //name + value of the variable or Variable + sth
 };
 
 class Assignment : Statement {
+    public:
     Assignment();
     ~Assignment();
+    char get_value(){return value;};
+    void set_value(char v){value= v;}
+    char get_name(){return name;};
+    void set_name(char n){name= n;}
+
     //x = 5; x = y
+private:
+    char name; 
+    char value;
 };
 
 class Return : Statement {
     Return();
     ~Return();
+    void set_exp(Expression e){exp = e;};
+    Experssion get_exp(){return exp;};
     //attribute: expression being returned
 private:
     Expression exp;
@@ -153,17 +174,22 @@ private:
 class Print : Statement {
     Print();
     ~Print();
+    void set_exp(Expression e){exp = e;};
+    Experssion get_exp(){return exp;};
     //attirbute: expression to be printed
 private:
     Expression exp;
 };
 
 class Jump : Statement {
+public:
   Jump();
   Jump(char value);
   ~Jump();
-  void set_value();
-  private:
+  void set_value(char v){value = v;};
+  char get_value(){return value;};
+
+private:
     char value; // values are CONT or BREAK
 };
 
@@ -171,22 +197,35 @@ class IfElse : Statement {
     IfElse();
     ~IfElse();
     //attributes: condition(expression), IfRest
+    void set_condition(Expression c){condition = c;};
+    Expression get_condition(){return condition;};
+    void set_else_stmt(IfRest stmt){else_stmt = stmt;};
+    IfRest get_else_stmt(){return else_stmt;};
 private:
     Expression condition;
     IfRest else_stmt;
 };
 
 class IfRest : Statement {
+public:
    IfRest();
    ~IfRest();
+   Block get_block_stmt(){return block_stmt;};
+   void set_block_stmt(Block stmt){block_stmt = stmt;};
    //atrributes: a block, or another IfElse
 private:
     Block block_stmt;
 };
 
 class While : Statement {
+public:
     While();
     ~While();
+    void set_condition(Expression c){condition = c;};
+    Expression get_condition(){return condition;};
+    Block get_block_stmt(){return block_stmt;};
+    void set_block_stmt(Block stmt){block_stmt = stmt;};
+
     //attributes: condition, block
 private:
     Expression condition;
