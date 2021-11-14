@@ -48,6 +48,10 @@ Next week I will continue working on AST classes and start the conversion of par
 #### Stefan Vayl
 
 #### Ekaterina Borisova
+This week I have been working on installing ANTRLv.4 library. There were many ideas on how we should be implementing our backend but in the end we came to an 
+understanding that ANTRL library should work well for our project. I have managed to install it on my computer and try to run it on different libraries including a 
+C++ library. I have found some grammar files that I can use for testing and from which I managed to create tokens using the library. Next week I am planning to get 
+better understanding on how to use this library in order to create parsing tree because right now I am struggling to get it. 
 
 #### Mina Goranovic
 
