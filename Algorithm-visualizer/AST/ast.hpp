@@ -196,6 +196,11 @@ private:
 class Variable : Expression {
     Variable();
     ~Variable();
+    void set_name(char n){name = n;};
+    void set_type(var_type t){type = t;};
+    char get_name(){return name;};
+    var_type get_type(){return type;};
+
 private:
     char name;
     var_type type;
@@ -204,6 +209,10 @@ private:
 class UnOp : Expression {
     UnOp();
     ~UnOp();
+    void set_operation(un_op op){operation = op;};
+    void set_expression(Expression e){expression = e;};
+    un_op get_operation(){return operation;};
+    Expression get_expression(){return expression;};
 private:
     un_op operation;
     Expression expression;
@@ -212,6 +221,12 @@ private:
 class BinOp : Expression {
     BinOp();
     ~BinOp();
+    void set_operation(bin_op op){operation = op;};
+    void set_left_expression(Expression l_e){left_exp = l_e;};
+    void set_right_expression(Expression r_e){right_exp = r_e;};
+    bin_op get_operation(){return operation;};
+    Expression get_right_expression(){return left_exp;};
+    Expression get_left_expression(){return right_exp;};
 private:
     bin_op operation;
     Expression left_exp;
@@ -223,6 +238,8 @@ class Boolean : Expression {
     //it down for now
     Boolean();
     ~Boolean();
+    void set_value(bool v){value = v;};
+    bool get_value(){return value;};
 private:
     bool value;
 };
