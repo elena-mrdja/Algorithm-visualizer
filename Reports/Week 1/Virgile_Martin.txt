@@ -1,1 +1,1 @@
-
+This week I did research on what tokens were and how to use them for our project. I futhermore deepened my understanding of the technical aspect of algorithm visualization. Next week, I inttend to start coding the tokens which will be use to accomplish our goal. I will use the library we found to get the base code for the tokens and improve it. 
