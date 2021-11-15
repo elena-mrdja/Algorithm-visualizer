@@ -55,12 +55,19 @@ enum bin_op {
     eqeq = 11
 };
 
+enum jump_type {
+    jump = 0,
+    continue = 1
+};
+
 //AST CLASS
 
 class AST {
     AST();
     ~AST();
-    void set_left_child(AST* lc){left_child = lc;};
+
+//this whole rest of the class will probably be deleted
+/*    void set_left_child(AST* lc){left_child = lc;};
     AST* get_left_child(){return left_child;};
     void set_right_child(AST* rc){right_child = rc;};
     AST* get_right_child(){return right_child;};
@@ -69,9 +76,10 @@ class AST {
 private:
     AST* left_child;
     AST* right_child;
-    AST* parent;
+    AST* parent; */
 };
 
+/*
 class NodeBinOp(AST) {
     NodeBinOp();
     ~NodeBinOp();
@@ -109,32 +117,24 @@ class NodeIf(AST) {
     AST get_condition(){return condition;};
 private:
     AST condition;
+}; */
+
+class Statement (AST) {
+    Statement();
+    ~Statement();
 };
 
-//THESE WILL BE POTENTIALLY USEFUL FOR CLASSIFYING THINGS WHILE READING THE AST
-
-class Program {
-    Program();
-    ~Program();
-    //list of statements or the
-    //program block - not sure yet
+class Expression (AST) {
+    Expression();
+    ~Expression();
 };
 
-class Block {
+class Block : Statement {
     Block();
     ~Block();
     //list of statements
 };
 
-class Statement {
-    Statement();
-    ~Statement();
-};
-
-class Expression {
-    Expression();
-    ~Expression();
-};
 
 class Declaration : Statement {
 public:
@@ -158,15 +158,14 @@ class Assignment : Statement {
     public:
     Assignment();
     ~Assignment();
-    char get_value(){return value;};
-    void set_value(char v){value= v;}
-    char get_name(){return name;};
-    void set_name(char n){name= n;}
-
+    Expression get_value(){return value;};
+    void set_value(Expression v){value= v;}
+    string get_name(){return name;};
+    void set_name(string n){name= n;}
     //x = 5; x = y
 private:
-    char name; 
-    char value;
+    string name; 
+    Expression value;
 };
 
 class Return : Statement {
@@ -174,7 +173,6 @@ class Return : Statement {
     ~Return();
     void set_exp(Expression e){exp = e;};
     Expression get_exp(){return exp;};
-    //attribute: expression being returned
 private:
     Expression exp;
 };
@@ -195,10 +193,9 @@ public:
   Jump(char value);
   ~Jump();
   void set_value(char v){value = v;};
-  char get_value(){return value;};
-
+  jump_type get_value(){return value;};
 private:
-    char value; // values are CONT or BREAK
+    jump_type value; // values are CONT or BREAK
 };
 
 class IfElse : Statement {
@@ -245,11 +242,11 @@ class Variable : Expression {
     ~Variable();
     void set_name(char n){name = n;};
     void set_type(var_type t){type = t;};
-    char get_name(){return name;};
+    string get_name(){return name;};
     var_type get_type(){return type;};
 
 private:
-    char name;
+    string name;
     var_type type;
 };
 
@@ -286,7 +283,7 @@ class Boolean : Expression {
     Boolean();
     ~Boolean();
     void set_value(bool v){value = v;};
-    bool get_value(){return value;};
+    bool is_true(){return value;};
 private:
     bool value;
 };
