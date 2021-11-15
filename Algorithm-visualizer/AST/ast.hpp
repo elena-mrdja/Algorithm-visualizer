@@ -1,3 +1,5 @@
+#include <map>
+#include <string>
 #ifndef AST_H
 #define AST_H
 
@@ -63,8 +65,17 @@ enum jump_type {
 //AST CLASS
 
 class AST {
+// mattea777: The AST class will contain a cache in the form of a dictionary that will keep track of all the changes to the 
+// variables during the various blocks. As each block may contain sub-blocks, but they still need information from the same dictionary, 
+// the cache will be passed by reference to sub-blocks. The cache will be passed by reference to every operation that involves 
+// changing the value of the variables, so Block, Declaration, Assignment, UnOp, and potentially expression. Constructors with a cache argument will 
+// be added to the classes by Milena. 
+public:
     AST();
+    AST()
     ~AST();
+private:
+    std::map<string, string[]> cache = {};
 
 //this whole rest of the class will probably be deleted
 /*    void set_left_child(AST* lc){left_child = lc;};
@@ -130,13 +141,22 @@ class Expression (AST) {
 };
 
 class Block : Statement {
+
+public:
     Block();
+    Block(std::map* c){cache = c;};
     ~Block();
     //list of statements
+private:
+// dictionary var_name, values[]
+// Based on Dasha's changes, I need to verify the type of the array of stored values 
+    std::map<string, string[]> cache = {};
+    
 };
 
 
 class Declaration : Statement {
+// Write method to add new varibale to cache of Block
 public:
     Declaration();
     ~Declaration();
@@ -155,6 +175,7 @@ private:
 };
 
 class Assignment : Statement {
+// Write method to add new varibale to cache of Block
     public:
     Assignment();
     ~Assignment();
@@ -251,6 +272,7 @@ private:
 };
 
 class UnOp : Expression {
+// Write method to add new varibale to cache of Block
     UnOp();
     ~UnOp();
     void set_operation(un_op op){operation = op;};
