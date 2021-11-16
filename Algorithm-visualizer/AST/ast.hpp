@@ -26,12 +26,13 @@ public:
 private:
 };
 
+<<<<<<< Updated upstream
+=======
 enum var_type {
     string = 0,
     integer = 1,
     character = 2,
     floating_point = 3
-
 };
 
 enum un_op {
@@ -141,11 +142,18 @@ public:
     Declaration();
     ~Declaration();
     void set_var_type(var_type t){type = t;};
-    var_type get_var_type(){return type};
+    var_type get_var_type(){
+        if type == 0:
+            return "string";
+        elif type == 1:
+            return "integer";
+        elif type == 2:
+            return "character";
+        elif type == 3:
+            return "floating_point";
+    };
     char get_value(){return value;};
     void set_value(char v){value = v;};
-
-
 private:
     var_type type;
     char value;
@@ -189,11 +197,16 @@ private:
 
 class Jump : Statement {
 public:
-  Jump();
-  Jump(char value);
-  ~Jump();
-  void set_value(char v){value = v;};
-  jump_type get_value(){return value;};
+    Jump();
+    Jump(char value);
+    ~Jump();
+    void set_value(char v){value = v;};
+    jump_type get_value(){
+        if value == 0:
+            return "jump";
+        elif value == 1:
+            return "continue";
+    };
 private:
     jump_type value; // values are CONT or BREAK
 };
@@ -230,7 +243,6 @@ public:
     Expression get_condition(){return condition;};
     Block get_block_stmt(){return block_stmt;};
     void set_block_stmt(Block stmt){block_stmt = stmt;};
-
     //attributes: condition, block
 private:
     Expression condition;
@@ -243,8 +255,16 @@ class Variable : Expression {
     void set_name(char n){name = n;};
     void set_type(var_type t){type = t;};
     string get_name(){return name;};
-    var_type get_type(){return type;};
-
+    var_type get_type(){
+        if type == 0:
+            return "string";
+        elif type == 1:
+            return "integer";
+        elif type == 2:
+            return "character";
+        elif type == 3:
+            return "floating_point";
+    };
 private:
     string name;
     var_type type;
@@ -255,7 +275,12 @@ class UnOp : Expression {
     ~UnOp();
     void set_operation(un_op op){operation = op;};
     void set_expression(Expression e){expression = e;};
-    un_op get_operation(){return operation;};
+    un_op get_operation(){
+        if operation == 0:
+            return "negation";
+        elif operation == 1:
+            return "plusplus";
+    };
     Expression get_expression(){return expression;};
 private:
     un_op operation;
@@ -268,7 +293,32 @@ class BinOp : Expression {
     void set_operation(bin_op op){operation = op;};
     void set_left_expression(Expression l_e){left_exp = l_e;};
     void set_right_expression(Expression r_e){right_exp = r_e;};
-    bin_op get_operation(){return operation;};
+    bin_op get_operation(){
+        if operation == 0:
+            return "conjunction";
+        elif operation == 1:
+            return "disjunction";
+        elif operation == 2:
+            return "addition";
+        elif operation == 3:
+            return "substraction";
+        elif operation == 4:
+            return "multiplication";
+        elif operation == 5:
+            return "division";
+        elif operation == 6:
+            return "lthan";
+        elif operation == 7:
+            return "mthan";
+        elif operation == 8:
+            return "leq";
+        elif operation == 9:
+            return "meq";
+        elif operation == 10:
+            return "eq";
+        elif operation == 11:
+            return "eqeq";
+    };
     Expression get_left_expression(){return left_exp;};
     Expression get_right_expression(){return right_exp;};
 private:
@@ -288,4 +338,5 @@ private:
     bool value;
 };
 
+>>>>>>> Stashed changes
 #endif // AST_H
