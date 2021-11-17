@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -52,7 +52,7 @@
      <x>0</x>
      <y>0</y>
      <width>825</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
@@ -74,7 +74,7 @@
   <customwidget>
    <class>VarCell</class>
    <extends>QWidget</extends>
-   <header>varcell.h</header>
+   <header location="global">varcell.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
