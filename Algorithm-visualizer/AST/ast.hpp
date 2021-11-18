@@ -43,9 +43,11 @@ enum jump_type {
     unknown_jump_type = 0,
     br = 1,
     cont = 2
+
 };
 enum expression_type {
     unknown_expression_type = 0
+
 };
 
 //AST CLASS
@@ -60,30 +62,5 @@ virtual std::string get_subtype() = 0; // Block, Declaration, UnOp, BinOp, ...
 private:
     std::map<char, char> variables;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #endif
