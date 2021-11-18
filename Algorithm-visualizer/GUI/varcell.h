@@ -1,11 +1,13 @@
 #ifndef VARCELL_H
 #define VARCELL_H
 
+#include <QGraphicsView>
+#include <QtWidgets>
+#include <QWidget>
 
-class VarCell
+class VarCell : public QGraphicsView
 {
-public:
-    VarCell();
+
 };
 
 #endif // VARCELL_H
