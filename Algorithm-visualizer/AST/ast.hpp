@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <QAbstractItemModel>
+using namespace std;
 
 using namespace std;
 
@@ -50,6 +51,7 @@ enum expression_type {
 
 };
 
+
 //AST CLASS
 
 class AST {
@@ -62,5 +64,7 @@ virtual std::string get_subtype() = 0; // Block, Declaration, UnOp, BinOp, ...
 private:
     std::map<char, char> variables;
 };
+
+
 
 #endif
