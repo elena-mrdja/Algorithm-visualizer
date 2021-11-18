@@ -1,342 +1,289 @@
 #ifndef AST_H
 #define AST_H
 
+#include <string>
+#include <iostream>
 #include <QAbstractItemModel>
+using namespace std;
 
-class AST : public QAbstractItemModel
-{
-    Q_OBJECT
-
-public:
-    explicit AST(QObject *parent = nullptr);
-
-    // Header:
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-
-    // Basic functionality:
-    QModelIndex index(int row, int column,
-                      const QModelIndex &parent = QModelIndex()) const override;
-    QModelIndex parent(const QModelIndex &index) const override;
-
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-
-private:
-};
-
-<<<<<<< Updated upstream
-=======
 enum var_type {
-    string = 0,
-    integer = 1,
-    character = 2,
-    floating_point = 3
+    unknown_var_type = 0,
+    string = 1,
+    integer = 2,
+    character = 3,
+    floating_point = 4
+
 };
 
 enum un_op {
-    negation = 0,
-    plusplus = 1
+    unknown_un_op = 0,
+    negation = 1,
+    plusplus = 2
     //inverse = 2 (if we add this as a unary operation for number -> -number)
 };
 
 enum bin_op {
-    conjunction = 0,
-    disjunction = 1,
-    addition = 2,
-    subtraction = 3,
-    multiplication = 4,
-    division = 5,
-    lthan = 6,
-    mthan = 7,
-    leq = 8,
-    meq = 9,
-    eq = 10,
-    eqeq = 11
+    unknown_bin_op = 0,
+    conjunction = 1,
+    disjunction = 2,
+    addition = 3,
+    subtraction = 4,
+    multiplication = 5,
+    division = 6,
+    lthan = 7,
+    mthan = 8,
+    leq = 9,
+    meq = 10,
+    eq = 11,
+    eqeq = 12
 };
 
 enum jump_type {
-    jump = 0,
-    continue = 1
+    unknown_jump_type = 0,
+    br = 1,
+    cont = 2
 };
 
 //AST CLASS
 
 class AST {
-    AST();
-    ~AST();
-
-//this whole rest of the class will probably be deleted
-/*    void set_left_child(AST* lc){left_child = lc;};
-    AST* get_left_child(){return left_child;};
-    void set_right_child(AST* rc){right_child = rc;};
-    AST* get_right_child(){return right_child;};
-    void set_parent(AST* par){parent = par;};
-    AST* get_parent(){return parent;};
+protected : AST();
+protected : ~AST();
+virtual std::string get_type() = 0; // Statement or Expression   (this is an abstract method which will be defined in subclasses Statement
+//and Expression and inherited by every other subclass below)
+virtual std::string get_subtype() = 0; // Block, Declaration, UnOp, BinOp, ...
+//(this is an abstract method which will be defined in subclasses Block, Declaration, ...)
 private:
-    AST* left_child;
-    AST* right_child;
-    AST* parent; */
+    std::map<char, char> variables;
 };
 
-/*
-class NodeBinOp(AST) {
-    NodeBinOp();
-    ~NodeBinOp();
-    void set_bin_op(bin_op op){operation = op};
-    bin_op get_bin_op(){return operation;};
-private:
-    bin_op operation;
+class Statement : public AST {
+protected : Statement();
+protected : ~Statement();
+std::string get_type(){return "Statement";};
 };
 
-class NodeUnOp(AST) {
-    NodeUnOp();
-    ~NodeUnOp();
-    void set_un_op(un_op op){operation = op;};
-    un_op get_un_op(){return operation;};
-private:
-    un_op operation;
+enum expression_type {
+    unknown_expression_type = 0
 };
 
-class NodeVar(AST) {
-    NodeVar();
-    ~NodeVar();
-    void set_var_type(var_type vt){type = vt;};
-    var_type get_var_type(return type;);
-    void set_var_name(char vn){var_name = vn;};
-    char get_var_name(){return var_name;};
-private:
-    var_type type;
-    char var_name;
-};
-    
-class NodeIf(AST) {
-    NodeIf();
-    ~NodeIf();
-    void set_condition(AST a){condition = a;};
-    AST get_condition(){return condition;};
-private:
-    AST condition;
-}; */
-
-class Statement (AST) {
-    Statement();
-    ~Statement();
-};
-
-class Expression (AST) {
-    Expression();
+class Expression : public AST {
+protected : Expression();
+protected : Expression(expression_type t) {
+        type = t;
+    };
     ~Expression();
+std::string get_type(){return "Expression";};
+private:
+    expression_type type = unknown_expression_type;
 };
 
-class Block : Statement {
-    Block();
-    ~Block();
+class Block : public Statement {
+protected : Block();
+protected : ~Block();
+std::string get_subtype(){return "Block";};
     //list of statements
 };
 
 
-class Declaration : Statement {
+
+class Declaration : public Statement {
 public:
     Declaration();
     ~Declaration();
     void set_var_type(var_type t){type = t;};
-    var_type get_var_type(){
-        if type == 0:
-            return "string";
-        elif type == 1:
-            return "integer";
-        elif type == 2:
-            return "character";
-        elif type == 3:
-            return "floating_point";
-    };
+    std::string get_var_type(){
+        switch(type) {
+        case 0: return "unknown variable type";
+        case 1: return "string";
+        case 2: return "integer";
+        case 3: return "char";
+        case 4: return "floating_point";
+        }
+    }
     char get_value(){return value;};
     void set_value(char v){value = v;};
+    std::string get_subtype(){return "Declaration";};
+
+
 private:
-    var_type type;
+    var_type type = unknown_var_type;
     char value;
     //int x = 7, bool y = False
     //attributes:
     //name + value of the variable or Variable + sth
 };
 
-class Assignment : Statement {
+class Assignment : public Statement {
     public:
     Assignment();
     ~Assignment();
-    Expression get_value(){return value;};
-    void set_value(Expression v){value= v;}
-    string get_name(){return name;};
-    void set_name(string n){name= n;}
+    Expression* get_value(){return value;};
+    void set_value(Expression* v){value= v;}
+    std::string get_name(){return name;};
+    void set_name(std::string n){name= n;}
     //x = 5; x = y
+    std::string get_subtype(){return "Assignment";};
 private:
-    string name; 
-    Expression value;
+    std::string name;
+    Expression* value;
 };
 
-class Return : Statement {
+class Return : public Statement {
     Return();
     ~Return();
-    void set_exp(Expression e){exp = e;};
-    Expression get_exp(){return exp;};
+    void set_exp(Expression* e){exp = e;};
+    Expression* get_exp(){return exp;};
+    std::string get_subtype(){return "Return";};
 private:
-    Expression exp;
+    Expression* exp;
 };
 
-class Print : Statement {
+class Print : public Statement {
     Print();
     ~Print();
-    void set_exp(Expression e){exp = e;};
-    Expression get_exp(){return exp;};
-    //attribute: expression to be printed
+    void set_exp(Expression* e){exp = e;};
+    Expression* get_exp(){return exp;};
+    std::string get_subtype(){return "Print";};
 private:
-    Expression exp;
+    Expression* exp;
 };
 
-class Jump : Statement {
-public:
+class Jump : public Statement {
     Jump();
     Jump(char value);
     ~Jump();
-    void set_value(char v){value = v;};
-    jump_type get_value(){
-        if value == 0:
-            return "jump";
-        elif value == 1:
-            return "continue";
-    };
+    void set_value(jump_type v){value = v;};
+    std::string get_value(){
+        switch(value) {
+        case 0: return "unknown jump type";
+        case 1: return "break";
+        case 2: return "continue";
+        }
+  };
+    std::string get_subtype(){return "Jump";};
 private:
-    jump_type value; // values are CONT or BREAK
+    jump_type value = unknown_jump_type;
 };
 
-class IfElse : Statement {
-    IfElse();
-    ~IfElse();
-    //attributes: condition(expression), IfRest
-    void set_condition(Expression c){condition = c;};
-    Expression get_condition(){return condition;};
-    void set_else_stmt(IfRest stmt){else_stmt = stmt;};
-    IfRest get_else_stmt(){return else_stmt;};
+class Decision : public Statement {
+    Decision();
+    ~Decision();
+    void set_condition(Expression* c){condition = c;};
+    std::string get_subtype(){return "Decision";};
 private:
-    Expression condition;
-    IfRest else_stmt;
+    Expression* condition;
 };
 
-class IfRest : Statement {
+class IfRest : public Statement {
 public:
    IfRest();
    ~IfRest();
-   Block get_block_stmt(){return block_stmt;};
-   void set_block_stmt(Block stmt){block_stmt = stmt;};
-   //atrributes: a block, or another IfElse
+   Block* get_block_stmt(){return block_stmt;};
+   void set_block_stmt(Block* stmt){block_stmt = stmt;};
+   std::string get_subtype(){return "IfRest";};
 private:
-    Block block_stmt;
+    Block* block_stmt;
 };
 
-class While : Statement {
+class IfElse : public Decision {
+    IfElse();
+    ~IfElse();
+    //attributes: condition(expression), IfRest
+    void set_condition(Expression* c){condition = c;};
+    Expression* get_condition(){return condition;};
+    void set_else_stmt(IfRest* stmt){else_stmt = stmt;};
+    IfRest* get_else_stmt(){return else_stmt;};
+    std::string get_subtype(){return "IfElse";};
+private:
+    Expression* condition;
+    IfRest* else_stmt;
+};
+
+class While : public Decision {
 public:
     While();
     ~While();
-    void set_condition(Expression c){condition = c;};
-    Expression get_condition(){return condition;};
-    Block get_block_stmt(){return block_stmt;};
-    void set_block_stmt(Block stmt){block_stmt = stmt;};
+    void set_condition(Expression* c){condition = c;};
+    Expression* get_condition(){return condition;};
+    Block* get_block_stmt(){return block_stmt;};
+    void set_block_stmt(Block* stmt){block_stmt = stmt;};
+    std::string get_subtype(){return "While";};
     //attributes: condition, block
 private:
-    Expression condition;
-    Block block_stmt;
+    Expression* condition;
+    Block* block_stmt;
 };
 
-class Variable : Expression {
+class Variable : public Expression {
     Variable();
     ~Variable();
     void set_name(char n){name = n;};
     void set_type(var_type t){type = t;};
-    string get_name(){return name;};
-    var_type get_type(){
-        if type == 0:
-            return "string";
-        elif type == 1:
-            return "integer";
-        elif type == 2:
-            return "character";
-        elif type == 3:
-            return "floating_point";
-    };
+    std::string get_name(){return name;};
+    var_type get_var_type(){return type;};
+    std::string get_subtype(){return "Variable";};
+
 private:
-    string name;
-    var_type type;
+    std::string name;
+    var_type type = unknown_var_type;
 };
 
-class UnOp : Expression {
+class UnOp : public Expression {
     UnOp();
     ~UnOp();
     void set_operation(un_op op){operation = op;};
-    void set_expression(Expression e){expression = e;};
-    un_op get_operation(){
-        if operation == 0:
-            return "negation";
-        elif operation == 1:
-            return "plusplus";
-    };
-    Expression get_expression(){return expression;};
+    void set_expression(Expression* e){expression = e;};
+    un_op get_operation(){return operation;};
+    Expression* get_expression(){return expression;};
+    std::string get_subtype(){return "UnOp";};
 private:
-    un_op operation;
-    Expression expression;
+    un_op operation = unknown_un_op;
+    Expression* expression;
 };
 
-class BinOp : Expression {
+class BinOp : public Expression {
     BinOp();
     ~BinOp();
     void set_operation(bin_op op){operation = op;};
-    void set_left_expression(Expression l_e){left_exp = l_e;};
-    void set_right_expression(Expression r_e){right_exp = r_e;};
-    bin_op get_operation(){
-        if operation == 0:
-            return "conjunction";
-        elif operation == 1:
-            return "disjunction";
-        elif operation == 2:
-            return "addition";
-        elif operation == 3:
-            return "substraction";
-        elif operation == 4:
-            return "multiplication";
-        elif operation == 5:
-            return "division";
-        elif operation == 6:
-            return "lthan";
-        elif operation == 7:
-            return "mthan";
-        elif operation == 8:
-            return "leq";
-        elif operation == 9:
-            return "meq";
-        elif operation == 10:
-            return "eq";
-        elif operation == 11:
-            return "eqeq";
-    };
-    Expression get_left_expression(){return left_exp;};
-    Expression get_right_expression(){return right_exp;};
+    void set_left_expression(Expression* l_e){left_exp = l_e;};
+    void set_right_expression(Expression* r_e){right_exp = r_e;};
+    std::string get_operation(){
+        switch(operation) {
+        case 0: return "unknown binary operation";
+        case 1: return "conjunction";
+        case 2: return "disjunction";
+        case 3: return "addition";
+        case 4: return "substraction";
+        case 5: return "multiplication";
+        case 6: return "division";
+        case 7: return "lthan";
+        case 8: return "mthan";
+        case 9: return "leq";
+        case 10: return "meq";
+        case 11: return "eq";
+        case 12: return "eqeq";
+        }
+    }
+    Expression* get_left_expression(){return left_exp;};
+    Expression* get_right_expression(){return right_exp;};
+    std::string get_subtype(){return "BinOp";};
 private:
-    bin_op operation;
-    Expression left_exp;
-    Expression right_exp;
+    bin_op operation = unknown_bin_op;
+    Expression* left_exp;
+    Expression* right_exp;
 };
 
-class Boolean : Expression {
+class Boolean : public Expression {
     //not sure if this is necessary but putting
     //it down for now
     Boolean();
     ~Boolean();
     void set_value(bool v){value = v;};
     bool is_true(){return value;};
+    std::string get_subtype(){return "Bool";};
 private:
     bool value;
 };
 
->>>>>>> Stashed changes
-#endif // AST_H
+#endif
