@@ -1,6 +1,6 @@
 #include "varcell.h"
 
-VarCell::VarCell()
+VarCell::VarCell(QWidget *parent) : QGraphicsView(parent)
 {
 
 }
