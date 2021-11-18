@@ -2,6 +2,8 @@
 #define AST_H
 
 #include <QAbstractItemModel>
+#include <string>
+using namespace std;
 
 class AST : public QAbstractItemModel
 {
@@ -63,44 +65,14 @@ enum jump_type {
 
 
 
-// function GetTypeName which returns the mane of a class
-#include <string>
-namespace internal
-{
-  static const unsigned int FRONT_SIZE = sizeof("internal::GetTypeNameHelper<") - 1u;
-  static const unsigned int BACK_SIZE = sizeof(">::GetTypeName") - 1u;
-
-  template <typename T>
-  struct GetTypeNameHelper
-  {
-    static const char* GetTypeName(void)
-    {
-      static const size_t size = sizeof(__FUNCTION__) - FRONT_SIZE - BACK_SIZE;
-      static char typeName[size] = {};
-      memcpy(typeName, __FUNCTION__ + FRONT_SIZE, size - 1u);
-
-      return typeName;
-    }
-  };
-}
-
-
-template <typename T>
-const char* GetTypeName(void)
-{
-  return internal::GetTypeNameHelper<T>::GetTypeName();
-}
-//
-
 
 //AST CLASS
 
 class AST {
     AST();
     ~AST();
-    //std::string get_type_name(){return GetTypeName<object>();};
-//private:
-    //T_AST object;   (T_AST should be a template type, object is of type Statement or Expression. How do you define this?)
+    string get_type() = 0; // Statement or Expression   (this is an abstract method which will be defined in subclasses Statement and Expression and inherited by every other subclass below)
+    string get_subtype() = 0; // Block, Declaration, UnOp, BinOp, ...   (this is an abstract method which will be defined in subclasses Block, Declaration, ...)
 
 
 //this whole rest of the class will probably be deleted
@@ -154,30 +126,27 @@ private:
     AST condition;
 }; */
 
-class Statement (AST) {
+class Statement : public AST {
     Statement();
     ~Statement();
-//  std::string get_type_name(){return GetTypeName<object_statement>();};
-//private:
-    //T_S object_statement;   (T_S should be a template type, object_statement is of type Block, ...)
+    string get_type(){return "Statement";}
 };
 
-class Expression (AST) {
+class Expression : public AST {
     Expression();
     ~Expression();
-    //  std::string get_type_name(){return GetTypeName<object_expression>();};
-//private:
-    //T_E object_expression;   (T_E should be a template type, object_expression is of type UnOp, ...)
+    string get_type(){return "Expression";}
 };
 
-class Block : Statement {
+class Block : public Statement {
     Block();
     ~Block();
+    string get_subtype(){return "Block";} //moreover, get_type() is naturally inherited from class Statement and will return "Statetemnt" for Block objects.
     //list of statements
 };
 
 
-class Declaration : Statement {
+class Declaration : public Statement {
 public:
     Declaration();
     ~Declaration();
@@ -194,6 +163,7 @@ public:
     };
     char get_value(){return value;};
     void set_value(char v){value = v;};
+    string get_subtype(){return "Declaration";}
 private:
     var_type type;
     char value;
@@ -202,7 +172,7 @@ private:
     //name + value of the variable or Variable + sth
 };
 
-class Assignment : Statement {
+class Assignment : public Statement {
     public:
     Assignment();
     ~Assignment();
@@ -210,32 +180,35 @@ class Assignment : Statement {
     void set_value(Expression v){value= v;}
     string get_name(){return name;};
     void set_name(string n){name= n;}
+    string get_subtype(){return "Assignment";}
     //x = 5; x = y
 private:
     string name;
     Expression value;
 };
 
-class Return : Statement {
+class Return : public Statement {
     Return();
     ~Return();
     void set_exp(Expression e){exp = e;};
     Expression get_exp(){return exp;};
+    string get_subtype(){return "Return";}
 private:
     Expression exp;
 };
 
-class Print : Statement {
+class Print : public Statement {
     Print();
     ~Print();
     void set_exp(Expression e){exp = e;};
     Expression get_exp(){return exp;};
+    string get_subtype(){return "Print";}
     //attribute: expression to be printed
 private:
     Expression exp;
 };
 
-class Jump : Statement {
+class Jump : public Statement {
 public:
     Jump();
     Jump(char value);
@@ -247,11 +220,12 @@ public:
         elif value == 1:
             return "continue";
     };
+    string get_subtype(){return "Jump";}
 private:
     jump_type value; // values are CONT or BREAK
 };
 
-class Decision : Statement {
+class Decision : public Statement {
     Decision();
     ~Decision();
     void set_condition(Expression c){condition = c;};
@@ -260,39 +234,42 @@ private:
     Expression condition;
 };
 
-class IfElse : Decision {
+class IfElse : public Decision {
     IfElse();
     ~IfElse();
-    //attributes: condition(expression), IfRest
     void set_else_stmt(IfRest stmt){else_stmt = stmt;};
     IfRest get_else_stmt(){return else_stmt;};
+    string get_subtype(){return "IfElse";}
+    //attributes: condition(expression), IfRest
 private:
     IfRest else_stmt;
 };
 
-class IfRest : Statement {
+class IfRest : public Statement {
 public:
    IfRest();
    ~IfRest();
    Block get_block_stmt(){return block_stmt;};
    void set_block_stmt(Block stmt){block_stmt = stmt;};
+   string get_subtype(){return "IfRest";}
    //atrributes: a block, or another IfElse
 private:
     Block block_stmt;
 };
 
-class While : Decision {
+class While : public Decision {
 public:
     While();
     ~While();
     Block get_block_stmt(){return block_stmt;};
     void set_block_stmt(Block stmt){block_stmt = stmt;};
+    string get_subtype(){return "While";}
     //attributes: condition, block
 private:
     Block block_stmt;
 };
 
-class Variable : Expression {
+class Variable : public Expression {
     Variable();
     ~Variable();
     void set_name(char n){name = n;};
@@ -308,12 +285,13 @@ class Variable : Expression {
         elif type == 3:
             return "floating_point";
     };
+    string get_subtype(){return "Variable";}
 private:
     string name;
     var_type type;
 };
 
-class UnOp : Expression {
+class UnOp : public Expression {
     UnOp();
     ~UnOp();
     void set_operation(un_op op){operation = op;};
@@ -325,12 +303,13 @@ class UnOp : Expression {
             return "plusplus";
     };
     Expression get_expression(){return expression;};
+    string get_subtype(){return "UnOp";}
 private:
     un_op operation;
     Expression expression;
 };
 
-class BinOp : Expression {
+class BinOp : public Expression {
     BinOp();
     ~BinOp();
     void set_operation(bin_op op){operation = op;};
@@ -364,19 +343,21 @@ class BinOp : Expression {
     };
     Expression get_left_expression(){return left_exp;};
     Expression get_right_expression(){return right_exp;};
+    string get_subtype(){return "BinOp";}
 private:
     bin_op operation;
     Expression left_exp;
     Expression right_exp;
 };
 
-class Boolean : Expression {
+class Boolean : public Expression {
     //not sure if this is necessary but putting
     //it down for now
     Boolean();
     ~Boolean();
     void set_value(bool v){value = v;};
     bool is_true(){return value;};
+    string get_subtype(){return "Boolean";}
 private:
     bool value;
 };
