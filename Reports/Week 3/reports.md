@@ -44,8 +44,4 @@ Creating the AST from the parsing tree wes handed over to Team 1 and I have thei
 This week I have been working on two things. The first thing was to finish the tests for our programme. There was an error with the "std::cin" function that I couldn't solve, so I had to ask my teachers for help and they explained that there was a problem with Qt creator. Then I joined Katia and Stefan in the part where we have to transform the Parse Tree into AST. This part being quite complicated, our work was mainly documentation to understand how it worked. We found some interesting articles that will help us a lot. Finally we had a meeting to collect our ideas and talk about what we will do next week.
 
 #### Elsa Bismuth
-
-
-
-
-
+This week, I completed the grammar file done by Mina, and then debugged it with her. Those files then generated a Lexer and a Parser, that were integrated to our program by Katia. Then, with team 1, we did a research on AST, so that we could transform the parse tree into AST using ANTLR librairy. For next week, I will implement at least one class for the AST.
