@@ -1,0 +1,4 @@
+This week wes dedicated to finalizing the AST classes so that they are ready to be used. OUr work had to be manually merged which me and Matea finished at the TD.
+We now have a good basis to conitnue working on the interpreter. I communicated with the GUI team about creating test ASTs.
+Writing the interpreter and the tests are the main goals for my team for the next week.
+Creating the AST from the parsing tree wes handed over to Team 1 and I have their group leader the explanation of our classes.
