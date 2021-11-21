@@ -34,13 +34,16 @@ During this week, I continued working on implementing the ANTLR4 library such th
 
 During this week, I have been first working on implementing the ANTLR4 library. In the end I have managed to make it work for java, which was later used by Ekaterina in order to set the library up running for the C++. The rest of the week following the tasks given, I have been researching on how to convert Parse Tree into AST. I have found some useful open source projects which gave a proper understanding on how to make this working for our project. So during the upcoming week, I will be concentrated on working with my team on converting Parse Tree into AST.
 
-#### Elsa Bismuth
+#### Milena Nedeljkovic
+This week wes dedicated to finalizing the AST classes so that they are ready to be used. OUr work had to be manually merged which me and Matea finished at the TD.
+We now have a good basis to conitnue working on the interpreter. I communicated with the GUI team about creating test ASTs.
+Writing the interpreter and the tests are the main goals for my team for the next week.
+Creating the AST from the parsing tree wes handed over to Team 1 and I have their group leader the explanation of our classes.
 
 #### Virgile Martin 
+This week I have been working on two things. The first thing was to finish the tests for our programme. There was an error with the "std::cin" function that I couldn't solve, so I had to ask my teachers for help and they explained that there was a problem with Qt creator. Then I joined Katia and Stefan in the part where we have to transform the Parse Tree into AST. This part being quite complicated, our work was mainly documentation to understand how it worked. We found some interesting articles that will help us a lot. Finally we had a meeting to collect our ideas and talk about what we will do next week.
 
-#### Milena Nedeljkovic
-
-
+#### Elsa Bismuth
 
 
 
