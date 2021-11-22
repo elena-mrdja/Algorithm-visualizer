@@ -1,19 +1,31 @@
-#include "mainwindow.h"
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include <QMainWindow>
+#include <QGraphicsItem> //for scrollable widgets
+#include <QGraphicsScene> //for scrollable widgets
+#include <QtGui> //for scrollable widgets
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow)
+QT_BEGIN_NAMESPACE
+namespace Ui { class MainWindow; }
+QT_END_NAMESPACE
+
+class MainWindow : public QMainWindow
 {
-    ui->setupUi(this);
-}
+    Q_OBJECT
 
-MainWindow::~MainWindow()
-{
-    delete ui;
+public:
+    MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
 
-    //the following comm is if u want picture in the scrollable widget
-    //QImage image("path to the pciture");
-    //item = new QGraphicsPixmapItem (QPixmap::fromImage(image));
-    //scene = new QGraphicsScene(this); //it does make a problem with QgraphicsScene that is "not defined"?
+private:
+    Ui::MainWindow ui;
 
-}
+
+    //this can be added for including a photo in varcell scrollable
+    //QGraphicsItem *item;
+    //QGraphicsScene *scene;
+    //ui->graphicsView->setScene(scene);
+    //scene->addItem(item);
+
