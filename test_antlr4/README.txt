@@ -12,3 +12,5 @@ SETUP:
   6) Now your project is configurated and you can open it in QT (use CMakeLists.txt file to configurate QT project)
  
 Now when all is set up, open the main.cpp file and if you run it, it will do the lexing and parsing, creating a parse tree as the final product.
+
+Folder ResultParseTree contains the png files which represent the parse tree obtained from the example files in the folder Examples.
