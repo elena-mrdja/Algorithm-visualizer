@@ -87,9 +87,9 @@ file : (library)* mainStmt (stmts)*;
 
 mainStmt: type MAIN LP RP body = block;
 
-assign: varName=variable EQ val=exp SEMICOLON;
+assign: varName=variable (LSB index=exp RSB)? EQ val=exp SEMICOLON;
 
-exp: VAR| integerType| doubleType| boolType| string | LP exp RP| exp binOp exp| unop exp| exp unop | identifier | arrayType | variable;
+exp: integerType| doubleType| boolType| string | LP exp RP| exp binOp exp| unop exp| exp unop | identifier | arrayType | variable;
 
 varDec: type varName=variable (LSB arrSize=integerType RSB)? (EQ val=exp)? SEMICOLON; 
 
@@ -99,9 +99,9 @@ returnStmt: RETURN val = exp SEMICOLON;
 
 //good below
 block: LCB stmts* RCB;
-stmts: varDec | assign | whileStmt | ifelse | returnStmt | print |library |exp SEMICOLON | jump;
+stmts: whileStmt | ifelse | returnStmt | print |library | varDec | assign |exp SEMICOLON | jump;
 
-ifelse: IF LP cond=exp RP thn=block ifrest;
+ifelse: IF LP cond = exp RP thn=block ifrest;
 
 ifrest: ELSE thn=block| ELSE ifelse;
 
@@ -123,17 +123,17 @@ binOp:  PLUS
 		| TIMES
 		| DIV
 		| MOD
-        | LT
-		| MT
-        | LEQ
-        | MEQ
 		| XOR XOR
         | XAND XAND
 		| EQQ
 		| NOTEQQ
+        | LT
+		| MT
+        | LEQ
+        | MEQ
 		;
 
-unop:	PLUSPLUS
+unop:   PLUSPLUS
 		| MINUSMINUS
         ;
 
