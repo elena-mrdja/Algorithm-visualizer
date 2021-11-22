@@ -2,9 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QGraphicsItem>
-#include <QGraphicsScene>
-#include <QtGui>
+#include <QGraphicsItem> //for scrollable widgets
+#include <QGraphicsScene> //for scrollable widgets
+#include <QtGui> //for scrollable widgets
 #include "ui_mainwindow.h"
 
 QT_BEGIN_NAMESPACE
@@ -21,6 +21,15 @@ public:
 
 private:
     Ui::MainWindow ui;
+
+
+    //this can be added for including a photo in varcell scrollable
+    //QGraphicsItem *item;
+    //QGraphicsScene *scene;
+    //ui->graphicsView->setScene(scene);
+    //scene->addItem(item);
+
+
 
 };
 
