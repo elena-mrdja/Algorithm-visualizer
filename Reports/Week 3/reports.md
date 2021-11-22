@@ -7,7 +7,14 @@ Although I faced a couple issues, they have all been solved now, so next week I 
 I will also meet with the GUI team to know what is the next important step in the project.
 
 #### Elena Mrdja
-This week I organized and divided the tasks for the GUI team, every member was given a task which we all successfully finished. I was in charge of making the cell where the visualisation of algorithms happens, the Viewer cell. I finished all the class types and methods needed to visualize our main shapes and added them to the Viewer. I was also able to fix bugs we had while using Qmainwindow class, which is crucial for continuing with the project. Now that the Viewer cell is mainly finished, the goal for the next week is to start connecting the shapes with the AST interpreter and to make methods for connecting different shapes into a flowchart. .
+This week I organized and divided the tasks for the GUI team, every member was given a task which we all successfully finished. John was occupied with working on the text editor, while Mina made our widgets scrollable and participante in defining the shapes with me. I was in charge of making the cell where the visualisation of algorithms happens, the Viewer cell. I finished all the class types and methods needed to visualize our main shapes and added them to the Viewer.
+
+There was also a bug in the code given to us while creating the project in the Qmainwindow class. We were trying to debug this with Mina. In the end I found out that it was pointer problem and I fixed the bug which was crucial for continuing with the project. 
+
+Now that the Viewer cell is mainly finished, the goal for the next week is to start connecting the shapes with the AST interpreter and to make methods for connecting different shapes into a flowchart. 
+
+I discussed with Mina by the end of the week our next goals and I proposed using QgraphicsScene for shapes making as They give better visual interpretation and They are easier to use. 
+
 
 #### Darya Todoskova
 This week, I managed to achieve my expected goals. I added basic methods to our classes in ast.hpp. Indeed, I did a type_check for every enumeration type in our classes. I also managed to set up ANTLR on macOS and visualize the files it generates for us (lexer and parser). Together with some teammates, I am also currently looking into methods to walk through the AST (useful for the transition to the GUI team). For this coming week, I plan on adjusting the ast.cpp file by adding constructors for our Statement classes (for when a dictionary is passed by reference as an argument to it). I also have to work with my teammates to work on the tests and the interpreter that the GUI team will need.
@@ -23,8 +30,8 @@ This week I have to implement the AST walk and variable tracking features.
 
 
 #### Mina Goranovic
-As part of GUI team, this week I make our widgets scrollable and we defined with Elena the look of our flowchart shapes. Before we start merging, we will start working on functions for recognizing and connecting shapes with the AST interpreter.
-As the team leader, I reorganized a little bit the structure of the teams. This means that the second team lead by Milena will work on the interpreter from now and the first team, lead by Ekaterina, will (after successfully maiking the ANTLR Library work) use the visitor class to make the AST. This way, first team has more work to do before we start merging and the second team can already start working on the interpreter. Also, as we wanted to have our own predefined grammar, we spent some time this week on making that happen. I wrote .g4 files which we debugged later on with Ekaterina and Elsa and made them work accordingly with the library. Next week, my main goal is to make sure every team finished their individual tasks and that we can start merging
+As part of GUI team, this week I make our widgets scrollable and we defined with Elena the look of our flowchart shapes. Before we start merging, we will start working on functions for recognizing and connecting shapes with the AST interpreter. During the tutorial Elena and me were struggling with a bug that appeared in the définition of Qmainwindow class. We spent some time on it, but in the end Elena found that it was a pointer bug after which we could finally build the project. By the end of the week, Elena proposed using QgraphicsScene instead of drawing shapes manulally (with parametrization). This was a very good reflexion and we will also work on that this week.
+As the team leader, I reorganized a little bit the structure of the teams. This means that the second team lead by Milena will work on the interpreter from now and the first team, lead by Ekaterina, will (after successfully maiking the ANTLR Library work) use the visitor class to make the AST. This way, first team has work to do before we start merging and the second team can already start working on the interpreter. Also, as we wanted to have our own predefined grammar, we spent some time this week on making that happen. I wrote .g4 files which we debugged later on with Ekaterina and Elsa and made them work accordingly with the library. Next week, my main goal is to make sure every team finished their individual tasks and that we can start merging.
 
 #### Ekaterina Borisova
 
