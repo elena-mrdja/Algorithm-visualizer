@@ -83,7 +83,7 @@ QPointF Viewer::compute(float t)
 
 QPointF Viewer::compute_arrow(float t)
 {
-    return QPointF(1-t,1-t);   //X,Y
+    return QPointF(1/cosh(t), t-tanh(t));   //X,Y
 }
 
 QPointF Viewer::compute_unitline(float t)
