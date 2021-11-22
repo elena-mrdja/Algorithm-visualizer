@@ -3,6 +3,14 @@
 #ifndef VARIABLE_HPP
 #define VARIABLE_HPP
 
+/* enum var_type {
+    unknown_var_type = 0,
+    string = 1,
+    integer = 2,
+    character = 3,
+    floating_point = 4
+
+}; */
 
 class Variable : public Expression {
     Variable();

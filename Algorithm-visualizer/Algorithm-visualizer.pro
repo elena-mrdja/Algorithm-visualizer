@@ -47,6 +47,7 @@ HEADERS += \
     AST/ifelse.hpp \
     AST/ifrest.hpp \
     AST/jump.hpp \
+    AST/number.hpp \
     AST/print.hpp \
     AST/statement.hpp \
     AST/unop.hpp \
