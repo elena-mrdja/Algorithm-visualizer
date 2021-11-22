@@ -87,7 +87,7 @@ file : (library)* mainStmt (stmts)*;
 
 mainStmt: type MAIN LP RP body = block;
 
-assign: VAR varName=variable EQ val=exp SEMICOLON;
+assign: varName=variable EQ val=exp SEMICOLON;
 
 exp: VAR| integerType| doubleType| boolType| string | LP exp RP| exp binOp exp| unop exp| exp unop | identifier | arrayType | variable;
 
@@ -141,7 +141,7 @@ identifier: ID;
 
 variable: .*?;
 
-print: STDC (LL exp)+ LL STDE SEMICOLON;
+print: STDC LL exp LL STDE SEMICOLON;
 
 jump: CONT | BREAK; 
 
