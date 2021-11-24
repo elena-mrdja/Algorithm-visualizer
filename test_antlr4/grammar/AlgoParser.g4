@@ -89,7 +89,7 @@ mainStmt: type MAIN LP RP body = block;
 
 assign: varName=variable (LSB index=exp RSB)? EQ val=exp SEMICOLON;
 
-exp: integerType| doubleType| boolType| string | LP exp RP| exp binOp exp| unop exp| exp unop | identifier | arrayType | variable;
+exp: integerType| doubleType| boolType| string | LP exp RP| exp binOp exp| unop exp| exp unop | negation | identifier | arrayType | variable;
 
 varDec: type varName=variable (LSB arrSize=integerType RSB)? (EQ val=exp)? SEMICOLON; 
 
@@ -97,13 +97,15 @@ whileStmt: WHILE LP cond=exp RP body=block;
 
 returnStmt: RETURN val = exp SEMICOLON;
 
+negation: MINUS integerType | MINUS doubleType;
+
 //good below
 block: LCB stmts* RCB;
 stmts: whileStmt | ifelse | returnStmt | print |library | varDec | assign |exp SEMICOLON | jump;
 
 ifelse: IF LP cond = exp RP thn=block ifrest;
 
-ifrest: ELSE thn=block| ELSE ifelse;
+ifrest: ELSE ifelse| ELSE thn=block;
 
 boolType: TRUE| FALSE;
 
@@ -139,7 +141,7 @@ unop:   PLUSPLUS
 
 identifier: ID;
 
-variable: .*?;
+variable: STRING;
 
 print: STDC LL exp LL STDE SEMICOLON;
 
