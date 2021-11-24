@@ -1,6 +1,7 @@
 #include "codecell.h"
 
-CodeCell::CodeCell(QWidget *parent) : QWidget(parent)
+CodeCell::CodeCell(QWidget *parent)
 {
 
 }
+

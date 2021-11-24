@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
  #include "varcell.h"
+=======
+#include "GUI/varcell.h"
+>>>>>>> Stashed changes
 
 VarCell::VarCell(QWidget *parent) : QGraphicsView(parent)
 {

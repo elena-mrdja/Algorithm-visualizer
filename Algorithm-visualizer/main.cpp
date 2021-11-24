@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
             break;
         }
     }
-    QWidget w;
+    MainWindow w;
     w.show();
     return a.exec();
 }
