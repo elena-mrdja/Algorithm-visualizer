@@ -51,8 +51,9 @@ protected : Expression(expression_type t) {
     };
     ~Expression();
 std::string get_type(){return "Expression";};
+expression_type type = unknown_expression_type;
 private:
-    expression_type type = unknown_expression_type;
+
 };
 
 #endif // EXPRESSION_HPP

@@ -45,7 +45,7 @@
 //};
 
 class Statement : public AST {
-protected : Statement();
+protected : Statement(){};
 protected : ~Statement();
 std::string get_type(){return "Statement";};
 };

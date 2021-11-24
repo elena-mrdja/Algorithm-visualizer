@@ -46,6 +46,7 @@
 
 
 class Block : public Statement {
+protected : Block(){variables = {};};
 protected : Block();
 protected : ~Block();
 std::string get_subtype(){return "Block";};
