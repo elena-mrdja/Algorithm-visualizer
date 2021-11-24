@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -25,7 +25,7 @@
     </property>
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
-      <widget class="QWidget" name="Viewer" native="true"/>
+      <widget class="Viewer" name="ViewerCell" native="true"/>
      </item>
      <item row="0" column="1" rowspan="2">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -42,7 +42,7 @@
       </layout>
      </item>
      <item row="1" column="0">
-      <widget class="QWidget" name="VarCell" native="true"/>
+      <widget class="VariableExplorer" name="VariableCell" native="true"/>
      </item>
     </layout>
    </widget>
@@ -63,7 +63,19 @@
   <customwidget>
    <class>CodeEditor</class>
    <extends>QWidget</extends>
-   <header>codeeditor.h</header>
+   <header>GUI/codeeditor.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>VariableExplorer</class>
+   <extends>QWidget</extends>
+   <header>GUI/variableexplorer.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Viewer</class>
+   <extends>QWidget</extends>
+   <header>GUI/viewer.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
