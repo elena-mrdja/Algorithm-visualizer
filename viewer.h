@@ -1,13 +1,7 @@
 #ifndef VIEWER_H
 #define VIEWER_H
+
 #include <QWidget>
-#include <QMainWindow>
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QtGui>
-#include <QPaintEvent>
-#include <QPainter>
-#include <Qt>
 
 class Viewer : public QWidget
 {
@@ -32,17 +26,14 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
-    QGraphicsScene *scene;
-//    QGraphicsLineItem *line;
-    QGraphicsRectItem *rectangle;
 
 private:
-    QGraphicsRectItem* compute_arrow(float t);
-    QGraphicsRectItem* compute_unitline(float t);
-    QGraphicsRectItem* compute_decision(float t);
-    QGraphicsRectItem* compute_process(float t);
+    QPointF compute_arrow(float t);
+    QPointF compute_unitline(float t);
+    QPointF compute_decision(float t);
+    QPointF compute_process(float t);
     void on_shape_changed();
-    QGraphicsRectItem* compute(float t); //dispatch function based on mShape type
+    QPointF compute(float t); //dispatch function based on mShape type
 private:
     QColor mBackgroundColor;
     QColor mShapeColor;
@@ -51,8 +42,6 @@ private:
     float mIntervalLength;
     float mScale;
     int mStepCount;
-
-
 
 signals:
 

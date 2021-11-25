@@ -1,14 +1,10 @@
-#include "viewer.h"
+﻿#include "viewer.h"
 #include "math.h"
-#include "mainwindow.h"
 #include <QPaintEvent>
 #include <QPainter>
 
 Viewer::Viewer(QWidget *parent) : QWidget(parent), mBackgroundColor(0,0,255),mShapeColor(255,255,255),mShape(Process)
 {
-    scene = new QGraphicsScene(this);
-    ui->graphicsView->setScene(scene);
-
     on_shape_changed();
 }
 
@@ -57,7 +53,7 @@ void Viewer::on_shape_changed()
         }
 }
 
-QGraphicsRectItem* Viewer::compute(float t)
+QPointF Viewer::compute(float t)
 {
     switch (mShape) {
         case Arrow:
@@ -82,46 +78,34 @@ QGraphicsRectItem* Viewer::compute(float t)
         default:
           break;
         }
-    QBrush redbrush(Qt::red);
-    QPen blackpen(Qt::black);
-    rectangle = scene ->addRect(-100,-100,50,50,blackpen,redbrush);
-    return rectangle;
+    return QPointF(0,0);
 }
 
-QGraphicsRectItem* Viewer::compute_arrow(float t)
+QPointF Viewer::compute_arrow(float t)
 {
-    QBrush redbrush(Qt::red);
-    QPen blackpen(Qt::black);
-    rectangle = scene ->addRect(-100,-100,50,50,blackpen,redbrush);
-    return rectangle;  //X,Y
+    return QPointF(1/cosh(t), t-tanh(t));   //X,Y
 }
 
-QGraphicsRectItem* Viewer::compute_unitline(float t)
+QPointF Viewer::compute_unitline(float t)
 {
-    QBrush redbrush(Qt::red);
-    QPen blackpen(Qt::black);
-    rectangle = scene ->addRect(-100,-100,50,50,blackpen,redbrush);
-    return rectangle;
+    return QPointF(t,0);   //X,Y
 }
 
-QGraphicsRectItem* Viewer::compute_decision(float t)
+QPointF Viewer::compute_decision(float t)
 {
-    QBrush redbrush(Qt::red);
-    QPen blackpen(Qt::black);
-    rectangle = scene ->addRect(-100,-100,50,50,blackpen,redbrush);
-    return rectangle;
+    return QPointF(
+                    (t-4),  //X
+                    (2*t*t*t - 24*t*t + 96*t - 128)  //Y
+        );
 }
 
-QGraphicsRectItem* Viewer::compute_process(float t)
+QPointF Viewer::compute_process(float t)
 {
     float cos_t = cos(t);
     float sin_t = sin(t);
     float x = 2*cos_t*cos_t*cos_t;
     float y=2*sin_t*sin_t*sin_t;
-    QBrush redbrush(Qt::red);
-    QPen blackpen(Qt::black);
-    rectangle = scene ->addRect(-100,-100,50,50,blackpen,redbrush);
-    return rectangle;
+    return QPointF(x,y);
 }
 
 void Viewer::paintEvent(QPaintEvent *event)
@@ -135,18 +119,18 @@ void Viewer::paintEvent(QPaintEvent *event)
 
     QPoint center = this->rect().center();
 
-    QGraphicsRectItem* prevPoint = compute(0);
+    QPointF prevPoint = compute(0);
     QPoint prevPixel;
-    //prevPixel.setX(prevPoint.x()*mScale + center.x());
-    //prevPixel.setY(prevPoint.y()*mScale + center.y());
+    prevPixel.setX(prevPoint.x()*mScale + center.x());
+    prevPixel.setY(prevPoint.y()*mScale + center.y());
 
     float step = mIntervalLength/mStepCount;
     for(float t=0; t< mIntervalLength; t+=step){
-        QGraphicsRectItem* point = compute(t);
+        QPointF point = compute(t);
 
         QPoint pixel;
-        //pixel.setX(point.x()*mScale + center.x());
-        //pixel.setY(point.y()*mScale + center.y());
+        pixel.setX(point.x()*mScale + center.x());
+        pixel.setY(point.y()*mScale + center.y());
 
         painter.drawLine(pixel,prevPixel);
         prevPixel =pixel;
