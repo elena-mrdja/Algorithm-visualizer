@@ -14,6 +14,7 @@ SOURCES += \
     AST/binop.cpp \
     AST/block.cpp \
     AST/boolean.cpp \
+    AST/cache.cpp \
     AST/class.cpp \
     AST/decision.cpp \
     AST/declaration.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     AST/binop.hpp \
     AST/block.hpp \
     AST/boolean.hpp \
+    AST/cache.hpp \
     AST/class.hpp \
     AST/decision.hpp \
     AST/declaration.hpp \
