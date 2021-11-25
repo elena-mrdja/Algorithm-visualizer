@@ -11,7 +11,7 @@ public:
     Cache(){max_size = 100;};
     ~Cache();
     void extend(char variable);
-    void new_var(char name);
+    void new_var(char name, char value);
     void append(char name, char value);
 
 private:

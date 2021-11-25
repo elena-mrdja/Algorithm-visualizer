@@ -13,9 +13,10 @@ void Cache::extend(char variable){
 
 }
 
-void Cache::new_var(char name){
+void Cache::new_var(char name, char value){
     variables[name] = new char[max_size];
-    variables[name][0] = ' ';
+    variables[name][0] = value;
+    variables[name][1] = ' ';
 }
 
 
