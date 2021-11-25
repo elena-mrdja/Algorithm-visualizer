@@ -6,18 +6,18 @@
 
 //enum bin_op {
 //    unknown_bin_op = 0,
-//    conjunction = 1,
-//    disjunction = 2,
+//    conjunction = 1, E
+//    disjunction = 2, E
 //    addition = 3,
 //    subtraction = 4,
 //    multiplication = 5,
 //    division = 6,
-//    lthan = 7,
-//    mthan = 8,
-//    leq = 9,
-//    meq = 10,
+//    lthan = 7, E
+//    mthan = 8, E
+//    leq = 9, E
+//    meq = 10, E
 //    eq = 11,
-//    eqeq = 12
+//    eqeq = 12 E
 //};
 
 class BinOp : public Expression {
