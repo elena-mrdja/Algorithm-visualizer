@@ -17,31 +17,32 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>40</y>
-      <width>771</width>
-      <height>491</height>
+      <x>20</x>
+      <y>10</y>
+      <width>541</width>
+      <height>401</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="0">
-      <widget class="VarCell" name="VarCell" native="true"/>
-     </item>
      <item row="0" column="0">
-      <widget class="Viewer" name="Viewer" native="true"/>
+      <widget class="Viewer" name="ViewerCell" native="true"/>
      </item>
      <item row="0" column="1" rowspan="2">
-      <widget class="CodeCell" name="CodeCell" native="true">
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QPushButton" name="btnVisualize">
-          <property name="text">
-           <string>Visualize</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="CodeEditor" name="CodeCell" native="true"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>PushButton</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="0">
+      <widget class="VariableExplorer" name="VariableCell" native="true"/>
      </item>
     </layout>
    </widget>
@@ -52,7 +53,7 @@
      <x>0</x>
      <y>0</y>
      <width>825</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>
@@ -60,21 +61,21 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>CodeCell</class>
+   <class>CodeEditor</class>
    <extends>QWidget</extends>
-   <header>codecell.h</header>
+   <header>GUI/codeeditor.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>VariableExplorer</class>
+   <extends>QWidget</extends>
+   <header>GUI/variableexplorer.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>Viewer</class>
    <extends>QWidget</extends>
-   <header>viewer.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>VarCell</class>
-   <extends>QWidget</extends>
-   <header location="global">varcell.h</header>
+   <header>GUI/viewer.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

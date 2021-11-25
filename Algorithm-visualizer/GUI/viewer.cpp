@@ -1,4 +1,4 @@
-﻿#include "viewer.h"
+#include "viewer.h"
 #include "math.h"
 #include <QPaintEvent>
 #include <QPainter>
@@ -22,7 +22,7 @@ void Viewer::on_shape_changed()
     switch (mShape) {
         case Arrow:
             mScale =50;
-            mIntervalLength = 1;
+            mIntervalLength = 2*M_PI;
             mStepCount = 128;
             mBackgroundColor = Qt::blue;
             break;
@@ -83,12 +83,12 @@ QPointF Viewer::compute(float t)
 
 QPointF Viewer::compute_arrow(float t)
 {
-    return QPointF(1-t,1-t);   //X,Y
+    return QPointF(1/cosh(t), t-tanh(t));   //X,Y
 }
 
 QPointF Viewer::compute_unitline(float t)
 {
-    return QPointF(1-t,1-t);   //X,Y
+    return QPointF(t,0);   //X,Y
 }
 
 QPointF Viewer::compute_decision(float t)
