@@ -5,9 +5,13 @@ void Cache::extend(std::string variable){
     char* old = variables[variable];
     max_size += 50;
     char* current = new char[max_size];
-    for (int i = 0; i<max_size; i++){
+    int i = 0;
+    while (old[i]){
         current[i] = old[i];
     }
+//    for (int i = 0; i<max_size; i++){
+//        current[i] = old[i];
+//    }
     delete[] old;
     variables[variable] = current;
 
