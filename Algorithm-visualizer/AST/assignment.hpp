@@ -1,6 +1,7 @@
 #include "ast.hpp"
 #include "statement.hpp"
 #include "expression.hpp"
+#include "cache.hpp"
 #ifndef ASSIGNMENT_HPP
 #define ASSIGNMENT_HPP
 
@@ -50,6 +51,7 @@ class Assignment : public Statement {
     public:
     Assignment();
     ~Assignment();
+    Assignment(Cache* c){cache = c;};
     Expression* get_value(){return value;};
     void set_value(Expression* v){value= v;}
     std::string get_name(){return name;};
@@ -60,5 +62,6 @@ class Assignment : public Statement {
 private:
     std::string name;
     Expression* value;
+    Cache* cache;
 };
 #endif // ASSIGNMENT_HPP

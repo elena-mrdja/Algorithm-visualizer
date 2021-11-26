@@ -1,5 +1,6 @@
 #include "expression.hpp"
 #include "ast.hpp"
+#include "cache.hpp"
 #ifndef UNOP_HPP
 #define UNOP_HPP
 
@@ -47,6 +48,7 @@
 class UnOp : public Expression {
     UnOp();
     ~UnOp();
+    UnOp(Cache* c){cache = c;};
     void set_operation(un_op op){operation = op;};
     void set_expression(Expression* e){expression = e;};
     un_op get_operation(){return operation;};
@@ -55,5 +57,6 @@ class UnOp : public Expression {
 private:
     un_op operation = unknown_un_op;
     Expression* expression;
+    Cache* cache;
 };
 #endif // UNOP_HPP
