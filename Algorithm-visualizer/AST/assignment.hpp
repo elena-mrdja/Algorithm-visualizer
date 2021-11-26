@@ -56,6 +56,7 @@ class Assignment : public Statement {
     void set_name(std::string n){name= n;}
     //x = 5; x = y
     std::string get_subtype(){return "Assignment";};
+    void add_value(char value);
 private:
     std::string name;
     Expression* value;

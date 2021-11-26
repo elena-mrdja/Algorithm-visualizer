@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include "cache.hpp"
 
-void Cache::extend(char variable){
+void Cache::extend(std::string variable){
     char* old = variables[variable];
     max_size += 50;
     char* current = new char[max_size];
@@ -13,14 +13,14 @@ void Cache::extend(char variable){
 
 }
 
-void Cache::new_var(char name, char value){
+void Cache::new_var(std::string name, char value){
     variables[name] = new char[max_size];
     variables[name][0] = value;
     variables[name][1] = ' ';
 }
 
 
-void Cache::append(char name, char value){
+void Cache::append(std::string name, char value){
     int i = 0;
     while (i< max_size && variables[name][i] != ' '){
         i++;
@@ -32,3 +32,4 @@ void Cache::append(char name, char value){
     variables[name][i+1] = ' ';
 
 }
+

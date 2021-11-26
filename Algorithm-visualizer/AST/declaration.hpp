@@ -1,5 +1,6 @@
 #include "ast.hpp"
 #include "statement.hpp"
+#include "cache.hpp"
 #ifndef DECLARATION_HPP
 #define DECLARATION_HPP
 
@@ -49,6 +50,7 @@
 class Declaration : public Statement {
 public:
     Declaration();
+    Declaration(Cache* c){cache = c;};
     ~Declaration();
     void set_var_type(var_type t){type = t;};
     std::string get_var_type(){
@@ -68,6 +70,7 @@ public:
 private:
     var_type type = unknown_var_type;
     char value;
+    Cache* cache;
     //int x = 7, bool y = False
     //attributes:
     //name + value of the variable or Variable + sth

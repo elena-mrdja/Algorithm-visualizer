@@ -1,5 +1,6 @@
 #include "ast.hpp"
 #include "statement.hpp"
+#include "cache.hpp"
 #ifndef BLOCK_HPP
 #define BLOCK_HPP
 
@@ -47,9 +48,12 @@
 
 class Block : public Statement {
 protected : Block();
+protected : Block(Cache* c){cache = c;}
 protected : ~Block();
 std::string get_subtype(){return "Block";};
     //list of statements
+private:
+    Cache* cache;
 };
 
 #endif // BLOCK_HPP
