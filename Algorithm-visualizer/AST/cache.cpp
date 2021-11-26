@@ -3,22 +3,19 @@
 
 void Cache::extend(std::string variable){
     char* old = variables[variable];
-    max_size += 50;
-    char* current = new char[max_size];
-    int i = 0;
-    while (old[i]){
+    char* current = new char[sizes[variable] + 50];
+    for (int i = 0; i<sizes[variable]; i++){
         current[i] = old[i];
     }
-//    for (int i = 0; i<max_size; i++){
-//        current[i] = old[i];
-//    }
+    sizes[variable] += 50;
     delete[] old;
     variables[variable] = current;
 
 }
 
 void Cache::new_var(std::string name, char value){
-    variables[name] = new char[max_size];
+    variables[name] = new char[50];
+    sizes[name] = 50;
     variables[name][0] = value;
     variables[name][1] = ' ';
 }
@@ -26,6 +23,7 @@ void Cache::new_var(std::string name, char value){
 
 void Cache::append(std::string name, char value){
     int i = 0;
+    int max_size = sizes[name];
     while (i< max_size && variables[name][i] != ' '){
         i++;
     }

@@ -9,7 +9,7 @@
 class Cache
 {
 public:
-    Cache(){max_size = 100;};
+    Cache(){};
     ~Cache();
     void extend(std::string variable);
     void new_var(std::string name, char value);
@@ -17,7 +17,7 @@ public:
 
 private:
     std::map<std::string, char*> variables = {};
-    int max_size;
+    std::map<std::string, int> sizes = {};
 };
 
 #endif // CACHE_HPP
