@@ -69,6 +69,7 @@ public:
 
 private:
     var_type type = unknown_var_type;
+    std::string name; //Added by Matea, don't know if it is needed
     char value;
     Cache* cache;
     //int x = 7, bool y = False
