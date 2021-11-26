@@ -15,6 +15,10 @@
 class Number : Expression {
     Number();
     ~Number();
+    std::string get_subtype(){return "Number";};
+    double get_value(){return std::stod(value);}; //returns the double of the value
+    //we keep all the values as doubles for simplicity because we don't want
+    //some random internal clash of types to happen
 private:
     var_type type;
     std::string value;
