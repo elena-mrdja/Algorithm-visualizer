@@ -15,7 +15,7 @@ protected : Expression(expression_type t) {
     ~Expression();
 std::string get_type(){return "Expression";};
 virtual bool get_bool_value(); //expressions value is either numerical, true or false
-virtual char get_num_value();
+virtual double get_num_value();
 private:
     expression_type type = unknown_expression_type;
 };

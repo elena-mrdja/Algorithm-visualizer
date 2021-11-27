@@ -7,7 +7,7 @@
 //    unknown_un_op = 0,
 //    negation = 1,
 //    plusplus = 2
-//    //inverse = 2 (if we add this as a unary operation for number -> -number)
+//    //inverse = 3 (if we add this as a unary operation for number -> -number)
 //};
 
 class UnOp : public Expression {

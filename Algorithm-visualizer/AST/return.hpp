@@ -2,8 +2,8 @@
 #include "expression.hpp"
 #include "statement.hpp"
 #include "ast.hpp"
-#ifndef CLASS_HPP
-#define CLASS_HPP
+#ifndef RETURN_H
+#define RETURN_H
 
 class Return : public Statement {
     Return();
@@ -15,4 +15,4 @@ private:
     Expression* exp;
 };
 
-#endif // CLASS_HPP
+#endif // RETURN_H

@@ -4,6 +4,16 @@
 #ifndef DECLARATION_HPP
 #define DECLARATION_HPP
 
+
+//enum var_type {
+//    unknown_var_type = 0,
+//    string = 1,
+//    integer = 2,
+//    character = 3,
+//    floating_point = 4
+
+//};
+
 class Declaration : public Statement {
 public:
     Declaration();

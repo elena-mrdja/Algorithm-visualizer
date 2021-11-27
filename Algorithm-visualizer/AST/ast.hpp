@@ -6,15 +6,6 @@
 #include <QAbstractItemModel>
 using namespace std;
 
-enum var_type {
-    unknown_var_type = 0,
-    string = 1,
-    integer = 2,
-    character = 3,
-    floating_point = 4
-
-};
-
 enum un_op {
     unknown_un_op = 0,
     negation = 1,

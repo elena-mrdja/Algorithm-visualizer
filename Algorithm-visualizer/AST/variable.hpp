@@ -1,16 +1,8 @@
 #include "expression.hpp"
 #include "ast.hpp"
+#include "expression.hpp"
 #ifndef VARIABLE_HPP
 #define VARIABLE_HPP
-
-/* enum var_type {
-    unknown_var_type = 0,
-    string = 1,
-    integer = 2,
-    character = 3,
-    floating_point = 4
-
-}; */
 
 class Variable : public Expression {
     Variable();
@@ -28,16 +20,18 @@ class Variable : public Expression {
         }
     }
     std::string get_subtype(){return "Variable";};
+    double get_num_value(){
+        assert (type ==2 or type == 4);
+        return std::stod(current_value);
+    };
+    bool get_bool_value(){
+
+    };
 
 private:
     std::string name;
     var_type type = unknown_var_type;
+    std::string current_value;
 };
 
 #endif // VARIABLE_HPP
-
-
-
-Variable x_var;
-x_var.set_name('x')
-x_var.set_type(integer)

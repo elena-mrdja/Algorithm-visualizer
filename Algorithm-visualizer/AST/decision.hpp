@@ -9,6 +9,7 @@ class Decision : public Statement {
     ~Decision();
     void set_condition(Expression* c){condition = c;};
     std::string get_subtype(){return "Decision";};
+    bool is_true();
 private:
     Expression* condition;
 };

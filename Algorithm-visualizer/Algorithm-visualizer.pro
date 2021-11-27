@@ -14,17 +14,19 @@ SOURCES += \
     AST/binop.cpp \
     AST/block.cpp \
     AST/boolean.cpp \
-    AST/class.cpp \
     AST/decision.cpp \
     AST/declaration.cpp \
     AST/expression.cpp \
+    AST/expression_template.cpp \
     AST/ifelse.cpp \
     AST/ifrest.cpp \
     AST/jump.cpp \
     AST/print.cpp \
+    AST/return.cpp \
     AST/statement.cpp \
     AST/unop.cpp \
     AST/variable.cpp \
+    AST/variable_template.cpp \
     AST/while.cpp \
     GUI/codecell.cpp \
     GUI/gui.cpp \
@@ -38,20 +40,23 @@ HEADERS += \
     AST/assignment.hpp \
     AST/ast.hpp \
     AST/binop.hpp \
+    AST/binop_template.hpp \
     AST/block.hpp \
     AST/boolean.hpp \
-    AST/class.hpp \
     AST/decision.hpp \
     AST/declaration.hpp \
+    AST/declaration_template.hpp \
     AST/expression.hpp \
+    AST/expression_template.hpp \
     AST/ifelse.hpp \
     AST/ifrest.hpp \
     AST/jump.hpp \
-    AST/number.hpp \
     AST/print.hpp \
+    AST/return.hpp \
     AST/statement.hpp \
     AST/unop.hpp \
     AST/variable.hpp \
+    AST/variable_template.hpp \
     AST/while.hpp \
     GUI/codecell.h \
     GUI/gui.hpp \
