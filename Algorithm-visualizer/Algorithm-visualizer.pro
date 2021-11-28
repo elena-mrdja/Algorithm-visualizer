@@ -12,6 +12,7 @@ SOURCES += \
     AST/assignment.cpp \
     AST/ast.cpp \
     AST/binop.cpp \
+    AST/binop_template.cpp \
     AST/block.cpp \
     AST/boolean.cpp \
     AST/decision.cpp \

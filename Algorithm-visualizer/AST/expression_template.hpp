@@ -2,7 +2,7 @@
 #define EXPRESSION_TEMPLATE_H
 #include "ast.hpp"
 
-template <typename T> class Expression : AST{
+template <typename T> class Expression : public AST{
 protected : Expression();
     ~Expression();
 std::string get_type(){return "Expression";};
