@@ -7,7 +7,11 @@
 
 class VarCell : public QGraphicsView
 {
+public:
+    VarCell(QWidget* parent = 0);
 
+protected:
+    virtual void wheelEvent(QWheelEvent *event);
 };
 
 #endif // VARCELL_H

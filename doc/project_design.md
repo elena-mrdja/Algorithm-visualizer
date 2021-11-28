@@ -16,7 +16,7 @@ Algorithm Visualizer will be a tool where user will be able to input C++ code in
 
     - How are you sub-dividing your project? Which modules are you implementing?
 
-We will have one team working on making the parser. Basically, this team will, in the first stage of the project define initial tokens and “grammar” we will use. With help of the library, they will allow the lexical analysis of the code typed by the user (that will have restrictions we will talk later about). After making the parser, this team will work on advanced functionalities and potentially help GUI team.
+We will have one team working on making the parser and the AST. Basically, this team will, in the first stage of the project define initial tokens and “grammar” we will use. With help of the library ANTLR4, they will allow the lexical analysis and parsing of the code typed by the user (that will have restrictions we will talk later about). After making the parser, this team will create from the parse tree the AST. The other team will, in the first time, be working on creating the signatures of the classes inheritance for grammar we use and writing methods that wil be used for merging backend with GUI. In the second time, this team will be wokring on the interpreter that will work with AST and allow our varCell to interpret state of variables. Last but not the least, the GUI team will firstly learn basics of QtGraphics and then create simple version of the mainwindow. In the second part of the project, GUI team will work on merging graphics with the backend.
 
     - What is the interface of each module?
 
@@ -24,7 +24,7 @@ We will have one team working on making the parser. Basically, this team will, i
 
     - What external dependencies do you have? Why?
 
-We will use a library during the lexing process and for now that seems to be the only external dependency we have.
+We will use a library during the lexing process and parsing. The library we use is ANTLR4.
 
 ## Initial grammar we defined:
 
@@ -40,6 +40,7 @@ We will use a library during the lexing process and for now that seems to be the
 * < jump > = ‘’’ | CONT| BREAK ’’’
 * < return > = ‘’’RETURN < exp > SEMICOLON’’’
 * < exp > = ‘’’|VAR |TRUE |FALSE |LP < exp > RP |< exp >  < binop > < exp > |< unop > < exp > | < exp > < unop >‘’’    
+
 
 
 

@@ -6,17 +6,6 @@
 #include <QAbstractItemModel>
 using namespace std;
 
-using namespace std;
-
-enum var_type {
-    unknown_var_type = 0,
-    string = 1,
-    integer = 2,
-    character = 3,
-    floating_point = 4
-
-};
-
 enum un_op {
     unknown_un_op = 0,
     negation = 1,
@@ -61,8 +50,6 @@ virtual std::string get_type() = 0; // Statement or Expression   (this is an abs
 //and Expression and inherited by every other subclass below)
 virtual std::string get_subtype() = 0; // Block, Declaration, UnOp, BinOp, ...
 //(this is an abstract method which will be defined in subclasses Block, Declaration, ...)
-private:
-    std::map<char, char> variables;
 };
 
 
