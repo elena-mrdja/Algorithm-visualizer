@@ -10,6 +10,8 @@ CONFIG += c++11
 
 SOURCES += \
     GUI/codeeditor.cpp \
+    GUI/highlighter.cpp \
+    GUI/linenumberarea.cpp \
     GUI/variableexplorer.cpp \
     GUI/viewer.cpp \
     main.cpp \
@@ -17,6 +19,8 @@ SOURCES += \
 
 HEADERS += \
     GUI/codeeditor.h \
+    GUI/highlighter.h \
+    GUI/linenumberarea.h \
     GUI/variableexplorer.h \
     GUI/viewer.h \
     mainwindow.h \
