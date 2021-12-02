@@ -46,6 +46,300 @@
 //};
 
 
+
+
+/*
+//
+class BoolExpression : public Expression {
+    BoolExpression();
+    ~BoolExpression();
+    std::string get_subtype(){return "bool";};
+private:
+
+};
+
+class IntExpression : public Expression {
+    IntExpression();
+    ~IntExpression();
+    std::string get_subtype(){return "int";};
+private:
+
+};
+
+class DoubleExpression : public Expression {
+    DoubleExpression();
+    ~DoubleExpression();
+    std::string get_subtype(){return "double";};
+private:
+
+};
+//
+
+
+
+
+
+
+
+//
+class BoolBinOp : public BoolExpression {
+    BoolBinOp();
+    ~BoolBinOp();
+private:
+
+};
+
+class IntBinOp : public BoolExpression {
+    IntBinOp();
+    ~IntBinOp();
+private:
+
+};
+
+class DoubleBinOp : public BoolExpression {
+    DoubleBinOp();
+    ~DoubleBinOp();
+private:
+
+};
+//
+
+
+
+
+
+
+
+
+class Intlthan : public BoolBinOp {
+    Intlthan();
+    ~Intlthan();
+private:
+
+};
+
+
+class Intmthan : public BoolBinOp {
+    Intmthan();
+    ~Intmthan();
+private:
+
+};
+
+
+class Doublelthan : public BoolBinOp {
+    Doublelthan();
+    ~Doublelthan();
+private:
+
+};
+
+
+class Doublemthan : public BoolBinOp {
+    Doublemthan();
+    ~Doublemthan();
+private:
+
+};
+
+class Intleq : public BoolBinOp {
+    Intleq();
+    ~Intleq();
+private:
+
+};
+
+
+class Intmeq : public BoolBinOp {
+    Intmeq();
+    ~Intmeq();
+private:
+
+};
+
+
+class Doubleleq : public BoolBinOp {
+    Doubleleq();
+    ~Doubleleq();
+private:
+
+};
+
+
+class Doublemeq : public BoolBinOp {
+    Doublemeq();
+    ~Doublemeq();
+private:
+
+};
+
+
+class Inteq : public BoolBinOp {
+    Inteq();
+    ~Inteq();
+private:
+
+};
+
+
+class Doubleeq : public BoolBinOp {
+    Doubleeq();
+    ~Doubleeq();
+private:
+
+};
+
+
+class Inteqeq : public BoolBinOp {
+    Inteqeq();
+    ~Inteqeq();
+private:
+
+};
+
+
+class Doubleeqeq : public BoolBinOp {
+    Doubleeqeq();
+    ~Doubleeqeq();
+private:
+
+};
+
+
+class IntDivision : public IntBinOp {
+    IntDivision();
+    ~IntDivision();
+    int get_value(){
+        if (get_subtype(left_exp) == "int" && get_subtype(right_exp) == "int"){
+            return left_exp / right_exp;
+        }
+        return -1;
+    };
+private:
+    Expression* left_exp;
+    Expression* right_exp;
+};
+
+
+class DoubleDivision : public DoubleBinOp {
+    DoubleDivision();
+    ~DoubleDivision();
+    double get_value(){
+        if (get_subtype(left_exp) == "int" && get_subtype(right_exp) == "int"){
+            return left_exp / right_exp;
+        }
+        return -1;
+    };
+private:
+    Expression* left_exp;
+    Expression* right_exp;
+};
+
+
+class IntMultiplication : public IntBinOp {
+    IntMultiplication();
+    ~IntMultiplication();
+    int get_value(){
+        if (get_subtype(left_exp) == "int" && get_subtype(right_exp) == "int"){
+            return left_exp * right_exp;
+        }
+        return -1;
+    };
+private:
+    Expression* left_exp;
+    Expression* right_exp;
+};
+
+
+class DoubleMultiplication : public DoubleBinOp {
+    DoubleMultiplication();
+    ~DoubleMultiplication();
+    double get_value(){
+        if ((get_subtype(left_exp) == "int" && get_subtype(right_exp) == "double") ||
+            (get_subtype(left_exp) == "double" && get_subtype(right_exp) == "int") ||
+            (get_subtype(left_exp) == "double" && get_subtype(right_exp) == "double")){
+            return left_exp * right_exp;
+        }
+        return -1;
+    };
+private:
+    Expression* left_exp;
+    Expression* right_exp;
+};
+
+
+class IntSubstraction : public IntBinOp {
+    IntSubstraction();
+    ~IntSubstraction();
+    int get_value(){
+        if (get_subtype(left_exp) == "int" && get_subtype(right_exp) == "int"){
+            return left_exp - right_exp;
+        }
+        return -1;
+    };
+private:
+    Expression* left_exp;
+    Expression* right_exp;
+};
+
+
+class DoubleSubstraction : public DoubleBinOp {
+    DoubleSubstraction();
+    ~DoubleSubstraction();
+    double get_value(){
+        if ((get_subtype(left_exp) == "int" && get_subtype(right_exp) == "double") ||
+            (get_subtype(left_exp) == "double" && get_subtype(right_exp) == "int") ||
+            (get_subtype(left_exp) == "double" && get_subtype(right_exp) == "double")){
+            return left_exp - right_exp;
+        }
+        return -1;
+    };
+private:
+    Expression* left_exp;
+    Expression* right_exp;
+};
+
+
+class IntAddition : public IntBinOp {
+    IntAddition();
+    ~IntAddition();
+    int get_value(){
+        if (get_subtype(left_exp) == "int" && get_subtype(right_exp) == "int"){
+            return left_exp + right_exp;
+        }
+        return -1;
+    };
+private:
+    Expression* left_exp;
+    Expression* right_exp;
+};
+
+
+class DoubleAddition : public DoubleBinOp {
+    DoubleAddition();
+    ~DoubleAddition();
+    double get_value(){
+        if ((get_subtype(left_exp) == "int" && get_subtype(right_exp) == "double") ||
+            (get_subtype(left_exp) == "double" && get_subtype(right_exp) == "int") ||
+            (get_subtype(left_exp) == "double" && get_subtype(right_exp) == "double")){
+            return left_exp + right_exp;
+        }
+        return -1;
+    };
+private:
+    Expression* left_exp;
+    Expression* right_exp;
+};
+*/
+
+
+
+
+
+
+
+
+//
 class BinOp : public Expression {
     BinOp();
     ~BinOp();
