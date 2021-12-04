@@ -1,5 +1,6 @@
 #ifndef VIEWER_H
 #define VIEWER_H
+#include "arrow.h"
 #include <QWidget>
 #include <QMainWindow>
 #include <QGraphicsScene>
@@ -33,16 +34,16 @@ public:
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
     QGraphicsScene *scene;
-//    QGraphicsLineItem *line;
+    QGraphicsLineItem *line;
     QGraphicsRectItem *rectangle;
 
 private:
-    QGraphicsRectItem* compute_arrow(float t);
-    QGraphicsRectItem* compute_unitline(float t);
-    QGraphicsRectItem* compute_decision(float t);
-    QGraphicsRectItem* compute_process(float t);
+    void compute_arrow(float t);
+    void compute_unitline(float t);
+    void compute_decision(float t);
+    void compute_process(float t);
     void on_shape_changed();
-    QGraphicsRectItem* compute(float t); //dispatch function based on mShape type
+    void compute(float t); //dispatch function based on mShape type
 private:
     QColor mBackgroundColor;
     QColor mShapeColor;

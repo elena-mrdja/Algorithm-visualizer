@@ -12,6 +12,10 @@ SOURCES += \
     GUI/codeeditor.cpp \
     GUI/variableexplorer.cpp \
     GUI/viewer.cpp \
+    arrow.cpp \
+    diagramitem.cpp \
+    diagramscene.cpp \
+    diagramtextitem.cpp \
     main.cpp \
     mainwindow.cpp \
 
@@ -19,6 +23,10 @@ HEADERS += \
     GUI/codeeditor.h \
     GUI/variableexplorer.h \
     GUI/viewer.h \
+    arrow.h \
+    diagramitem.h \
+    diagramscene.h \
+    diagramtextitem.h \
     mainwindow.h \
 
 FORMS += \
