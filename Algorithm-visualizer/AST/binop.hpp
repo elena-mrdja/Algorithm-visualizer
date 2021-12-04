@@ -53,7 +53,8 @@
 class BoolExpression : public Expression {
     BoolExpression();
     ~BoolExpression();
-    std::string get_subtype(){return "bool";};
+    virtual std::string get_subtype(){return "bool";};
+    bool get_value();
 private:
 
 };
@@ -61,7 +62,8 @@ private:
 class IntExpression : public Expression {
     IntExpression();
     ~IntExpression();
-    std::string get_subtype(){return "int";};
+    virtual std::string get_subtype(){return "int";};
+    int get_value();
 private:
 
 };
@@ -69,7 +71,8 @@ private:
 class DoubleExpression : public Expression {
     DoubleExpression();
     ~DoubleExpression();
-    std::string get_subtype(){return "double";};
+    virtual std::string get_subtype(){return "double";};
+    double get_value();
 private:
 
 };
@@ -108,132 +111,134 @@ private:
 
 
 
+//class unknown_binary_operation ?
 
 
-
-class Intlthan : public BoolBinOp {
-    Intlthan();
-    ~Intlthan();
+class andOp : public BoolBinOp {
+    andOp();
+    ~andOp();
+    bool get_value(){return left_exp->get_value() && right_exp->get_value();};
 private:
-
+    Expression* left_exp;
+    Expression* right_exp;
 };
 
 
-class Intmthan : public BoolBinOp {
-    Intmthan();
-    ~Intmthan();
+class orOp : public BoolBinOp {
+   orOp();
+   ~orOp();
+   bool get_value(){return left_exp->get_value() || right_exp->get_value();};
 private:
-
+   Expression* left_exp;
+   Expression* right_exp;
 };
 
 
-class Doublelthan : public BoolBinOp {
-    Doublelthan();
-    ~Doublelthan();
-private:
-
-};
-
-
-class Doublemthan : public BoolBinOp {
-    Doublemthan();
-    ~Doublemthan();
-private:
-
-};
-
-class Intleq : public BoolBinOp {
-    Intleq();
-    ~Intleq();
-private:
-
-};
-
-
-class Intmeq : public BoolBinOp {
-    Intmeq();
-    ~Intmeq();
-private:
-
-};
-
-
-class Doubleleq : public BoolBinOp {
-    Doubleleq();
-    ~Doubleleq();
-private:
-
-};
-
-
-class Doublemeq : public BoolBinOp {
-    Doublemeq();
-    ~Doublemeq();
-private:
-
-};
-
-
-class Inteq : public BoolBinOp {
-    Inteq();
-    ~Inteq();
-private:
-
-};
-
-
-class Doubleeq : public BoolBinOp {
-    Doubleeq();
-    ~Doubleeq();
-private:
-
-};
-
-
-class Inteqeq : public BoolBinOp {
-    Inteqeq();
-    ~Inteqeq();
-private:
-
-};
-
-
-class Doubleeqeq : public BoolBinOp {
-    Doubleeqeq();
-    ~Doubleeqeq();
-private:
-
-};
-
-
-class IntDivision : public IntBinOp {
-    IntDivision();
-    ~IntDivision();
+class lthan : public IntBinOp {                           //What is the type aka class of lthan, mthan leq, meq and eq?
+    lthan();
+    ~lthan();
     int get_value(){
-        if (get_subtype(left_exp) == "int" && get_subtype(right_exp) == "int"){
-            return left_exp / right_exp;
+        if (left_exp->get_value() < right_exp->get_value()){
+            return left_exp->get_value();
         }
-        return -1;
-    };
+        if (left_exp->get_value() > right_exp->get_value()){
+            return right_exp->get_value();
+        }
 private:
     Expression* left_exp;
     Expression* right_exp;
 };
 
 
-class DoubleDivision : public DoubleBinOp {
-    DoubleDivision();
-    ~DoubleDivision();
-    double get_value(){
-        if (get_subtype(left_exp) == "int" && get_subtype(right_exp) == "int"){
-            return left_exp / right_exp;
+class mthan : public IntBinOp {
+    mthan();
+    ~mthan();
+    int get_value(){
+        if (left_exp->get_value() > right_exp->get_value()){
+            return left_exp->get_value();
         }
-        return -1;
-    };
+        if (left_exp->get_value() < right_exp->get_value()){
+            return right_exp->get_value();
+        }
 private:
     Expression* left_exp;
     Expression* right_exp;
 };
+
+
+
+class leq : public IntBinOp {
+    leq();
+    ~leq();
+    int get_value(){
+        if (left_exp->get_value() <= right_exp->get_value()){
+            return left_exp->get_value();
+        }
+        if (left_exp->get_value() >= right_exp->get_value()){
+            return right_exp->get_value();
+        }
+private:
+    Expression* left_exp;
+    Expression* right_exp;
+};
+
+
+class meq : public IntBinOp {
+    meq();
+    ~meq();
+    int get_value(){
+        if (left_exp->get_value() >= right_exp->get_value()){
+            return left_exp->get_value();
+        }
+        if (left_exp->get_value() <= right_exp->get_value()){
+            return right_exp->get_value();
+        }
+private:
+    Expression* left_exp;
+    Expression* right_exp;
+};
+
+
+class eq : public IntBinOp {
+    eq();
+    ~eq();
+    int get_value(){
+        if (left_exp->get_value() == right_exp->get_value()){
+            return right_exp->get_value();
+        }
+private:
+    Expression* left_exp;
+    Expression* right_exp;
+};
+
+
+
+
+class eqeq : public BoolBinOp {
+    eqeq();
+    ~eqeq();
+    int get_value(){
+        if (left_exp->get_value() == right_exp->get_value()){
+            return true;
+        }
+        return false;
+private:
+    Expression* left_exp;
+    Expression* right_exp;
+};
+
+
+
+class Division : public DoubleBinOp {
+    Division();
+    ~Division();
+    douvle get_value(){return left_exp->get_value() / right_exp->get_value();};
+private:
+    Expression* left_exp;
+    Expression* right_exp;
+};
+
+
 
 
 class IntMultiplication : public IntBinOp {
@@ -241,7 +246,7 @@ class IntMultiplication : public IntBinOp {
     ~IntMultiplication();
     int get_value(){
         if (get_subtype(left_exp) == "int" && get_subtype(right_exp) == "int"){
-            return left_exp * right_exp;
+            return left_exp->get_value() * right_exp->get_value();
         }
         return -1;
     };
@@ -258,7 +263,7 @@ class DoubleMultiplication : public DoubleBinOp {
         if ((get_subtype(left_exp) == "int" && get_subtype(right_exp) == "double") ||
             (get_subtype(left_exp) == "double" && get_subtype(right_exp) == "int") ||
             (get_subtype(left_exp) == "double" && get_subtype(right_exp) == "double")){
-            return left_exp * right_exp;
+            return left_exp->get_value() * right_exp->get_value();
         }
         return -1;
     };
@@ -273,7 +278,7 @@ class IntSubstraction : public IntBinOp {
     ~IntSubstraction();
     int get_value(){
         if (get_subtype(left_exp) == "int" && get_subtype(right_exp) == "int"){
-            return left_exp - right_exp;
+            return left_exp->get_value() - right_exp->get_value();
         }
         return -1;
     };
@@ -290,7 +295,7 @@ class DoubleSubstraction : public DoubleBinOp {
         if ((get_subtype(left_exp) == "int" && get_subtype(right_exp) == "double") ||
             (get_subtype(left_exp) == "double" && get_subtype(right_exp) == "int") ||
             (get_subtype(left_exp) == "double" && get_subtype(right_exp) == "double")){
-            return left_exp - right_exp;
+            return left_exp->get_value() - right_exp->get_value();
         }
         return -1;
     };
@@ -305,7 +310,7 @@ class IntAddition : public IntBinOp {
     ~IntAddition();
     int get_value(){
         if (get_subtype(left_exp) == "int" && get_subtype(right_exp) == "int"){
-            return left_exp + right_exp;
+            return left_exp->get_value() + right_exp->get_value();
         }
         return -1;
     };
@@ -322,7 +327,7 @@ class DoubleAddition : public DoubleBinOp {
         if ((get_subtype(left_exp) == "int" && get_subtype(right_exp) == "double") ||
             (get_subtype(left_exp) == "double" && get_subtype(right_exp) == "int") ||
             (get_subtype(left_exp) == "double" && get_subtype(right_exp) == "double")){
-            return left_exp + right_exp;
+            return left_exp->get_value() + right_exp->get_value();
         }
         return -1;
     };
@@ -331,7 +336,6 @@ private:
     Expression* right_exp;
 };
 */
-
 
 
 
@@ -349,8 +353,8 @@ class BinOp : public Expression {
     std::string get_operation(){
         switch(operation) {
         case 0: return "unknown binary operation";
-        case 1: return "conjunction";
-        case 2: return "disjunction";
+        case 1: return "and";
+        case 2: return "or";
         case 3: return "addition";
         case 4: return "substraction";
         case 5: return "multiplication";

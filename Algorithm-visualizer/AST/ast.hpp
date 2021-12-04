@@ -51,8 +51,8 @@ enum expression_type {
 //AST CLASS
 
 class AST {
-protected : AST();
-protected : ~AST();
+//protected : AST();
+//protected : ~AST();
 virtual std::string get_type() = 0; // Statement or Expression   (this is an abstract method which will be defined in subclasses Statement
 //and Expression and inherited by every other subclass below)
 virtual std::string get_subtype() = 0; // Block, Declaration, UnOp, BinOp, ...
