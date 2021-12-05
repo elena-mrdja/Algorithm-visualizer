@@ -1,3 +1,7 @@
+#include "ast.hpp"
+#ifndef EXPRESSION_HPP
+#define EXPRESSION_HPP
+
 class Expression : public AST {
 public : Expression();
 public : Expression(expression_type t) {
