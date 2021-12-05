@@ -46,13 +46,9 @@
 
 class Expression : public AST {
 protected : Expression();
-protected : Expression(expression_type t) {
-        type = t;
-    };
     ~Expression();
 std::string get_type(){return "Expression";};
-private:
-    expression_type type = unknown_expression_type;
+template <typename T> T get_value();
 };
 
 #endif // EXPRESSION_HPP
