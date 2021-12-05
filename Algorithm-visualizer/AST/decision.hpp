@@ -1,16 +1,20 @@
 #include "expression.hpp"
 #include "statement.hpp"
-#include "ast.hpp"
-#ifndef DECISION_HPP
-#define DECISION_HPP
+#ifndef DECISION_H
+#define DECISION_H
 
-class Decision : public Statement {
-    Decision();
-    ~Decision();
-    void set_condition(Expression* c){condition = c;};
-    std::string get_subtype(){return "Decision";};
-    bool is_true();
+
+class Decision {
+public : Decision();
+public : ~Decision();
+public : void set_condition(Expression* c){condition = c;};
+public : string get_subtype(){return "Decision";};
+public : double get_value(){
+        if (condition->get_value()) return 1;
+        return 0;
+    };
 private:
     Expression* condition;
 };
-#endif // DECISION_HPP
+
+#endif // DECISION_H
