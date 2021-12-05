@@ -31,7 +31,7 @@ void Viewer::on_shape_changed()
             mScale =50;
             mIntervalLength = 1;
             mStepCount = 128;
-            mBackgroundColor = Qt::blue;
+            mBackgroundColor = Qt::green;
             break;
 
         case Process:
@@ -108,17 +108,18 @@ QPointF Viewer::compute_process(float t)
     return QPointF(x,y);
 }
 
-void Viewer::paintEvent(QPaintEvent *event)
+void Viewer::paintEvent(QPaintEvent *event) //draw function
 {
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing,true);
+    //painter.setRenderHint(QPainter::Antialiasing,true);
 
-    painter.setBrush(mBackgroundColor);
-    painter.setPen(mShapeColor);
-    painter.drawRect(this->rect());
+    painter.setBrush(mBackgroundColor); // blue background
+    //painter.setPen(mShapeColor);
+    painter.drawRect(this->rect()); // white line around
 
     QPoint center = this->rect().center();
 
+    //parametrization of the diamond shape (quesiton for Elena: jel si ovo sve sa tutorijala uzela ili si samakucala? neke stvari ne razumem)
     QPointF prevPoint = compute(0);
     QPoint prevPixel;
     prevPixel.setX(prevPoint.x()*mScale + center.x());
@@ -136,5 +137,6 @@ void Viewer::paintEvent(QPaintEvent *event)
         prevPixel =pixel;
     }
 }
+
 
 

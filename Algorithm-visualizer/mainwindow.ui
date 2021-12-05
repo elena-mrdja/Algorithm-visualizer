@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>707</width>
-    <height>538</height>
+    <width>825</width>
+    <height>584</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -44,18 +44,74 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="mouseTracking">
+          <bool>false</bool>
+         </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="variables">
          <property name="minimumSize">
           <size>
            <width>0</width>
            <height>50</height>
           </size>
          </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+	border-radius: 25px;
+	background-color: rgb(84, 210, 255);
+	color : rgb(35, 18, 255);
+}
+
+
+QPushButton:hover{
+	background-color: rgb(155, 231, 255);
+}
+
+
+QPushButton:clicked {
+	color: rgb(241, 255, 253);
+}</string>
+         </property>
          <property name="text">
-          <string>PushButton</string>
+          <string>Show me variables state</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="Visualize">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+	border-radius: 25px;
+	background-color: rgb(84, 210, 255);
+	color : rgb(35, 18, 255);
+}
+
+
+QPushButton:hover{
+	background-color: rgb(155, 231, 255);
+}
+
+
+QPushButton:clicked {
+	color: rgb(241, 255, 253);
+}</string>
+         </property>
+         <property name="text">
+          <string>Visualize</string>
          </property>
         </widget>
        </item>
@@ -66,7 +122,11 @@
      <widget class="QWidget" name="widget_2" native="true">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="Viewer" name="widget_3" native="true"/>
+        <widget class="Viewer" name="widget_3" native="true">
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="VariableExplorer" name="widget_5" native="true">
@@ -82,6 +142,9 @@
            <height>100</height>
           </size>
          </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
         </widget>
        </item>
       </layout>
@@ -94,7 +157,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>707</width>
+     <width>825</width>
      <height>22</height>
     </rect>
    </property>

@@ -16,16 +16,6 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::on_pushButton_clicked()
-{
-    QPainter painter(this);
-    painter.drawRect(QRect(80,100,80,100));
-
-    QPen pen;
-    pen.setColor(Qt::red);
-    pen.setWidth(10);
-
-}
 
 //void MainWindow::draw_shape(QPaintEvent *)
 //{
@@ -98,5 +88,7 @@ MainWindow, below is the old version of the mainwindow.cpp (with class implement
     //QImage image("path to the pciture");
     //item = new QGraphicsPixmapItem (QPixmap::fromImage(image));
     //scene = new QGraphicsScene(this); //it does make a problem with QgraphicsScene that is "not defined"?
+
+
 
 
