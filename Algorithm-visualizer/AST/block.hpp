@@ -50,10 +50,15 @@ class Block : public Statement {
 protected : Block();
 protected : Block(Cache* c){cache = c;}
 protected : ~Block();
+void extend_statement();
+void add_new_statement();
 std::string get_subtype(){return "Block";};
+void walk();
     //list of statements
 private:
     Cache* cache;
+    Statement* statements[50]; //Array that will store statements, will drafted methods to expand, add methods, cache code can be repurposed
+    int statement_number; // Current number of statements
 };
 
 #endif // BLOCK_HPP
