@@ -3,6 +3,7 @@
 #include <QPaintEvent>
 #include <QPainter>
 
+
 Viewer::Viewer(QWidget *parent) : QWidget(parent), mBackgroundColor(0,0,255),mShapeColor(255,255,255),mShape(Process)
 {
     on_shape_changed();
@@ -48,6 +49,14 @@ void Viewer::on_shape_changed()
             mBackgroundColor = Qt::blue;
             break;
 
+        case Start:
+            mScale = 40;
+            mIntervalLength = 2*M_PI;
+            mStepCount = 256;
+            mBackgroundColor = Qt::white;
+            break;
+
+
         default:
           break;
         }
@@ -74,6 +83,12 @@ QPointF Viewer::compute(float t)
             //mBackgroundColor = Qt::yellow;
             return compute_decision(t);
             break;
+
+        case Start:
+            //mBackgroundCOlor = Qt::white;
+            return compute_start(t);
+            break;
+
 
         default:
           break;
@@ -108,35 +123,42 @@ QPointF Viewer::compute_process(float t)
     return QPointF(x,y);
 }
 
+QPointF Viewer::compute_start(float t)
+{
+    float cos_t = cos(t);
+    float sin_t = sin(t);
+    float x = cos_t;
+    float y = sin_t;
+    return QPointF(x,y);
+
+}
+
 void Viewer::paintEvent(QPaintEvent *event) //draw function
 {
     QPainter painter(this);
     //painter.setRenderHint(QPainter::Antialiasing,true);
 
-    painter.setBrush(mBackgroundColor); // blue background
+    painter.setBrush(mBackgroundColor); // blue backgroundh
     //painter.setPen(mShapeColor);
     painter.drawRect(this->rect()); // white line around
 
     QPoint center = this->rect().center();
 
     //parametrization of the diamond shape (quesiton for Elena: jel si ovo sve sa tutorijala uzela ili si samakucala? neke stvari ne razumem)
-    QPointF prevPoint = compute(0);
-    QPoint prevPixel;
-    prevPixel.setX(prevPoint.x()*mScale + center.x());
-    prevPixel.setY(prevPoint.y()*mScale + center.y());
+    //QPointF prevPoint = compute(0);
+    //QPoint prevPixel;
+    //prevPixel.setX(prevPoint.x()*mScale + center.x());
+    //prevPixel.setY(prevPoint.y()*mScale + center.y());
 
-    float step = mIntervalLength/mStepCount;
-    for(float t=0; t< mIntervalLength; t+=step){
-        QPointF point = compute(t);
+    //float step = mIntervalLength/mStepCount;
+    //for(float t=0; t< mIntervalLength; t+=step){
+        //QPointF point = compute_start(t);
 
-        QPoint pixel;
-        pixel.setX(point.x()*mScale + center.x());
-        pixel.setY(point.y()*mScale + center.y());
+        //QPoint pixel;
+        //pixel.setX(point.x()*mScale + center.x());
+        //pixel.setY(point.y()*mScale + center.y());
 
-        painter.drawLine(pixel,prevPixel);
-        prevPixel =pixel;
-    }
+        //painter.drawLine(pixel,prevPixel);
+        //prevPixel =pixel;
+    //}
 }
-
-
-
