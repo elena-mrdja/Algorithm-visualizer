@@ -1,21 +1,12 @@
-#include "ast.hpp"
-#ifndef EXPRESSION_HPP
-#define EXPRESSION_HPP
-
-//enum expression_type {
-//    unknown_expression_type = 0
-//};
-
-
 class Expression : public AST {
-protected : Expression();
-protected : Expression(expression_type t) {
+public : Expression();
+public : Expression(expression_type t) {
         type = t;
     };
-    ~Expression();
+public : ~Expression();
 std::string get_type(){return "Expression";};
-virtual bool get_bool_value(); //expressions value is either numerical, true or false
-virtual double get_num_value();
+virtual double get_value() = 0;
+virtual std::string get_exp_type() = 0;
 private:
     expression_type type = unknown_expression_type;
 };
