@@ -4,6 +4,8 @@
 This week my focus was mainly centered on completing the goals that had been personally assigned to me. Thus, I kept working on the TextEditor Cell of the mainwindow, namely implementing parenthesis matching highlighting, autocompleting of parenthesis and auto indentation. I encountered many problems doing this and in consequence I have not been able to work on other parts of the project. 
 However, this week we will try to start implementing some visualization of simple code, as we are about to start merging code with the other parts of the project.
 #### Elena Mrdja
+This week, my main task was implementing the Diagram scene library which will allow us to connect different shapes with arrows in order to create flowchart representations for our algorithms. To do this I had to implement four classes: Arrow where the arrow shape is created in a certain position, DiagramItem where the objects we want to connect are declared and connected with arrows, DiagramScene where all the mouse events are defined and DiagramTextItem which will serve for adding text to our shapes. I also had to update our mainwindow files in order to connect all the classes. Since I had some problems with compilations, all of the new files are commited to my personal branch for now, and this week's task is to solve these bugs and merge the diagram classes with our GUI, as well as updating the viewer cell in order to be compatible with the Diagram scene.
+
 #### Darya Todoskova
 This week I started implementing the walker for the AST, and I’ll continue working on it with Matea this week. I also had to get in touch with the GUI team to know how they wanted their cells to look like. For instance a square or a circle depending on the expression, etc. by modifying the Block classes. I also had to implement the counter for the lists we have. I spent a lot of time researching the walker, as it is a very abstract and new notion to me. For this following week, I will continue refining our interpreter and the classes that Team 1 is working on. I will also try to hopefully finalize the walker by the end of the week, because it might take some time.
 #### Evdokia Gneusheva
@@ -11,6 +13,9 @@ This week I mainly worked on a problem of being able to get value of binary expr
 
 Next week I will work on putting everything that the Team AST have done so far together so that the GUI Team can test their code.
 #### Matea Gjika
+This week I worked on writing a walked that iterates through the statements in a Block and evaluates them. I had to make a few adjustments to the Block class in oder to do so, however it is still not complete as I need to check on some dependencies with other coders.
+
+This week, I hope to finalise this class.
 
 #### Mina Goranovic
 This week we had three challenges: 
