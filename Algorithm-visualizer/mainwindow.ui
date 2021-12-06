@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -25,7 +25,18 @@
     </property>
     <layout class="QGridLayout" name="gridLayout">
      <item row="1" column="0">
-      <widget class="VarCell" name="VarCell" native="true"/>
+      <widget class="VarCell" name="VarCell" native="true">
+       <widget class="varcell" name="graphicsView">
+        <property name="geometry">
+         <rect>
+          <x>5</x>
+          <y>0</y>
+          <width>371</width>
+          <height>231</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
      </item>
      <item row="0" column="0">
       <widget class="Viewer" name="Viewer" native="true"/>
@@ -52,7 +63,7 @@
      <x>0</x>
      <y>0</y>
      <width>825</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
@@ -74,8 +85,13 @@
   <customwidget>
    <class>VarCell</class>
    <extends>QWidget</extends>
-   <header>varcell.h</header>
+   <header location="global">varcell.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>varcell</class>
+   <extends>QGraphicsView</extends>
+   <header location="global">varcell.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
