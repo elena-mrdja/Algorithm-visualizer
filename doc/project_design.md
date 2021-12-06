@@ -8,8 +8,100 @@ Algorithm Visualizer will be a tool where user will be able to input C++ code in
 
     - What intermediate deadlines do you have, and what subset of functionalities will you deliver in each deadline?
 
-* Week 1-3: Create a parser, AST and the look of the user interface.
-* Weeks 3-6 (possibly 4-7 because we might not have assumed all of the problems we might have with using libraries and making a functional parser with tree representation): Add extra functionalities and represent graphically execution of the code presented in the AST.
+* Week 1:
+    * Virgile - Research on AST and parsing. Make sure you understand the task of your team throughout the project and get familiar with the process.
+    * Elsa - Research on AST and parsing. Make sure you understand the task of your team throughout the project and get familiar with the process.
+    * Stefan - Research on AST and parsing. Make sure you understand the task of your team throughout the project and get familiar with the process.
+    * Matea - Research on AST. Make sure you understand the task of your team throughout the project and get familiar with the process.
+    * Dasha - Research on AST. Make sure you understand the task of your team throughout the project and get familiar with the process. 
+    * Evdokia - Research on AST. Make sure you understand the task of your team throughout the project and get familiar with the process.
+    * Elena - Make Github repository, teach other team members on how to commit, pull and push. Start doing the QT Graphics course. 
+    * John - Start doing the QT Graphics course.
+    * Katia - Research on AST and parsing. Make sure you understand the task of your team throughout the project and get familiar with the process, decide with Mina which library to use for the parsing. Agree on grammar we will use (talk to Mina)
+    * Milena -  Research on AST. Make sure you understand the task of your team throughout the project and get familiar with the process. Agree on grammar and tokens we will use (talk to Mina). Figure out the global inheritance of classes and organization of the grammar (hyperclasses and child classes, talk to Mina).
+    * Mina - Find the course on QT Graphics, find library to use for parsing (talk to Katia), define grammar and tokens we will use. Make sure people have material to start getting familiar with the backend process of the project (parsing, tokenization, AST creation and construction of interpreter)
+    
+
+    
+* Week 2:
+    * Virgile -
+    * Elsa -
+    * Stefan -
+    * Matea -
+    * Dasha - 
+    * Evdokia - 
+    * Elena - 
+    * John - 
+    * Katia - 
+    * Milena - 
+    * Mina - 
+
+* Week 3:
+    * Virgile -
+    * Elsa -
+    * Stefan -
+    * Matea -
+    * Dasha - 
+    * Evdokia - 
+    * Elena - 
+    * John - 
+    * Katia - 
+    * Milena - 
+    * Mina - 
+    
+* Week 4:
+    * Virgile -
+    * Elsa -
+    * Stefan -
+    * Matea -
+    * Dasha - 
+    * Evdokia - 
+    * Elena - 
+    * John - 
+    * Katia - 
+    * Milena - 
+    * Mina - 
+
+* Week 5:
+    * Virgile -
+    * Elsa -
+    * Stefan -
+    * Matea -
+    * Dasha - 
+    * Evdokia - 
+    * Elena - 
+    * John - 
+    * Katia - 
+    * Milena - 
+    * Mina - 
+
+* Week 6:
+    * Virgile – Setup the ANTLR on your computer so that you can write classes and test the code (by Tuesday meeting). Make BinOp classes (do first) and UnOp class work (a must: talk to Milena and Katia for help and for discussing)
+	* Elsa - Setup the ANTLR on your computer so that you can write classes and test the code (by Tuesday meeting). Make Return (urgent) and While (after return) class work (a must: talk to Milena and Katia for help and for discussing)
+	* Stefan - Setup the ANTLR on your computer so that you can write classes and test the code (by Tuesday meeting). Make Expr, Ifelse and Ifrest classes work (after return) class work (a must: talk to Milena and Katia for help and for discussing)
+	* Matea – AST walker (a must: talk to Milena and Katia and with Dasha and Evdokia; communicate to the GUI team what you are giving them and make sure they actually do get what they need.)
+	* Dasha – AST walker (a must: talk to Milena and Katia and with Matea and Evdokia; same as Matea)
+	* Evdokia – variable tracking (communication very important! You already know how get_value() works, read Cache and ask Matea about it; then while the walker is being made you need to think about how to add tracking. So you have to work together a lot)
+	* Elena – figure out Diagram Scene and make it work. Fix the gitHub organization (work with Mina)
+	* John – Finish the text editor (by Tuesday meeting) and make a function that takes a current code from the text editor and convert it into a file.
+	* Katia – merge Assign class + as many others as possible 
+	* Milena – merge Assign class + as many others as possible
+	* Mina - merge Assign class + as many others as possible, do Diagram Scene with Elena, make very clear interfaces (Milena and Katia help)
+	
+* Week 7:
+    * Virgile -
+    * Elsa -
+    * Stefan -
+    * Matea -
+    * Dasha - 
+    * Evdokia - 
+    * Elena - 
+    * John - 
+    * Katia - merge Expr, While, Ifelse, Ifrest, Binop, Unop
+    * Milena - merge Expr, While, Ifelse, Ifrest, Binop, Unop
+    * Mina - merge Expr, While, Ifelse, Ifrest, Binop, Unop
+ 
+
 
 
 ## Software Architecture
