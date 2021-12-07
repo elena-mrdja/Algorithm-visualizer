@@ -37,6 +37,7 @@ SOURCES += \
 HEADERS += \
     AST/assignment.hpp \
     AST/ast.hpp \
+    AST/ast_classes.hpp \
     AST/binop.hpp \
     AST/block.hpp \
     AST/boolean.hpp \
