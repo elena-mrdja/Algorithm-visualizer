@@ -12,6 +12,7 @@ SOURCES += \
     GUI/codeeditor.cpp \
     GUI/highlighter.cpp \
     GUI/linenumberarea.cpp \
+    GUI/textblockdata.cpp \
     GUI/variableexplorer.cpp \
     GUI/viewer.cpp \
     main.cpp \
@@ -21,6 +22,7 @@ HEADERS += \
     GUI/codeeditor.h \
     GUI/highlighter.h \
     GUI/linenumberarea.h \
+    GUI/textblockdata.h \
     GUI/variableexplorer.h \
     GUI/viewer.h \
     mainwindow.h \

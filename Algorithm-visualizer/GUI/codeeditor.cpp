@@ -1,6 +1,6 @@
 #include "codeeditor.h"
 #include "linenumberarea.h"
-
+#include<iostream>
 CodeEditor::CodeEditor(QWidget *parent)
 {
     lineNumberArea = new LineNumberArea(this);
@@ -10,10 +10,14 @@ CodeEditor::CodeEditor(QWidget *parent)
     connect(this, &CodeEditor::updateRequest, this, &CodeEditor::updateLineNumberArea);
     //connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
     connect(this, &CodeEditor::textChanged, this, &CodeEditor::applyHiglighting);
+    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(matchParentheses()));
 
     updateLineNumberAreaWidth(0);
     //highlightCurrentLine();
     highlighter = new Highlighter(this->document());
+    QPalette p = this->palette();
+    p.setColor(QPalette::Active, QPalette::Base, Qt::black);
+    this->setPalette(p);
 }
 
 void CodeEditor::applyHiglighting()
@@ -113,3 +117,111 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
         blockNumber++;
     }
 }
+
+void CodeEditor::matchParentheses()
+{
+    bool match = false;
+    QList<QTextEdit::ExtraSelection> selections;
+    setExtraSelections(selections);
+
+    TextBlockData *data = static_cast<TextBlockData *>(textCursor().block().userData());
+
+    if (data) {
+        QVector<ParenthesisInfo *> infos = data->parentheses();
+
+        int pos = textCursor().block().position();
+        for (int i = 0; i < infos.size(); ++i) {
+            ParenthesisInfo *info = infos.at(i);
+
+            int curPos = textCursor().position() - textCursor().block().position();
+            if (info->position == curPos && info->character == '(') {
+                if (matchLeftParenthesis(textCursor().block(), i + 1, 0))
+                    createParenthesisSelection(pos + info->position);
+            } else if (info->position == curPos - 1 && info->character == ')') {
+                if (matchRightParenthesis(textCursor().block(), i - 1, 0))
+                    createParenthesisSelection(pos + info->position);
+            }
+        }
+    }
+}
+
+bool CodeEditor::matchLeftParenthesis(QTextBlock currentBlock, int i, int numLeftParentheses)
+{
+    TextBlockData *data = static_cast<TextBlockData *>(currentBlock.userData());
+    QVector<ParenthesisInfo *> infos = data->parentheses();
+
+    int docPos = currentBlock.position();
+    for (; i < infos.size(); ++i) {
+        ParenthesisInfo *info = infos.at(i);
+
+        if (info->character == '(') {
+            ++numLeftParentheses;
+            continue;
+        }
+
+        if (info->character == ')' && numLeftParentheses == 0) {
+            createParenthesisSelection(docPos + info->position);
+            return true;
+        } else
+            --numLeftParentheses;
+    }
+
+    currentBlock = currentBlock.next();
+    if (currentBlock.isValid())
+        return matchLeftParenthesis(currentBlock, 0, numLeftParentheses);
+
+    return false;
+}
+
+bool CodeEditor::matchRightParenthesis(QTextBlock currentBlock, int i, int numRightParentheses)
+{
+    TextBlockData *data = static_cast<TextBlockData *>(currentBlock.userData());
+    QVector<ParenthesisInfo *> parentheses = data->parentheses();
+
+    int docPos = currentBlock.position();
+    for (; i > -1 && parentheses.size() > 0; --i) {
+        ParenthesisInfo *info = parentheses.at(i);
+        if (info->character == ')') {
+            ++numRightParentheses;
+            continue;
+        }
+        if (info->character == '(' && numRightParentheses == 0) {
+            createParenthesisSelection(docPos + info->position);
+            return true;
+        } else
+            --numRightParentheses;
+    }
+
+    currentBlock = currentBlock.previous();
+    if (currentBlock.isValid())
+        return matchRightParenthesis(currentBlock, 0, numRightParentheses);
+
+    return false;
+}
+
+void CodeEditor::createParenthesisSelection(int pos)
+{
+    QList<QTextEdit::ExtraSelection> selections = extraSelections();
+
+    QTextEdit::ExtraSelection selection;
+    QTextCharFormat format = selection.format;
+    format.setBackground(Qt::green);
+    selection.format = format;
+
+    QTextCursor cursor = textCursor();
+    cursor.setPosition(pos);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+    selection.cursor = cursor;
+
+    selections.append(selection);
+
+    setExtraSelections(selections);
+}
+
+
+
+
+
+
+
+

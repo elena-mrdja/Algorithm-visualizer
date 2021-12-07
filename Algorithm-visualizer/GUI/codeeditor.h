@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QTextBlock>
 #include "highlighter.h"
+//#include "textblockdata.h"
 
 class CodeEditor : public QPlainTextEdit
 {
@@ -21,11 +22,17 @@ public:
         void resizeEvent(QResizeEvent *event) override;
 
     private slots:
-        //Methods to modify the elements of the line number are
+        //Methods to modify the elements of the line number area
         void applyHiglighting();
         void updateLineNumberAreaWidth(int newBlockCount);
         void highlightCurrentLine();
         void updateLineNumberArea(const QRect &rect, int dy);
+        void matchParentheses();
+
+    private:
+        bool matchLeftParenthesis(QTextBlock currentBlock, int index, int numLeftParentheses);
+        bool matchRightParenthesis(QTextBlock currentBlock, int index, int numRightParentheses);
+        void createParenthesisSelection(int pos);
 
     private:
         QWidget *lineNumberArea;

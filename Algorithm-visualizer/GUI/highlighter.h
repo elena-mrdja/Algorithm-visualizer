@@ -4,6 +4,7 @@
 #include <QSyntaxHighlighter>
 #include <QRegularExpression>
 #include <QObject>
+#include "textblockdata.h"
 
 class Highlighter : public QSyntaxHighlighter
 {

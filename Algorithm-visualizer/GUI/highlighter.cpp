@@ -1,6 +1,6 @@
 #include "highlighter.h"
 #include <QColor>
-
+#include<iostream>
 Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent)
 {
     HighlightingRule rule;
@@ -37,7 +37,7 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent)
     highlightingRules.append(rule);
 
     functionFormat.setFontItalic(true);
-    functionFormat.setForeground(Qt::blue);
+    functionFormat.setForeground(Qt::yellow);
     rule.pattern = QRegularExpression(QStringLiteral("\\b[A-Za-z0-9_]+(?=\\()"));
     rule.format = functionFormat;
     highlightingRules.append(rule);
@@ -85,4 +85,62 @@ void Highlighter::highlightBlock(const QString &text)
         setFormat(startIndex, commentLength, multiLineCommentFormat);
         startIndex = text.indexOf(commentStartExpression, startIndex + commentLength);
     }
+
+    TextBlockData *data = new TextBlockData;
+
+    int leftPos = text.indexOf('(');
+    while (leftPos != -1) {
+        ParenthesisInfo *info = new ParenthesisInfo;
+        info->character = '(';
+        info->position = leftPos;
+
+        data->insert(info);
+        leftPos = text.indexOf('(', leftPos + 1);
+    }
+
+    int rightPos = text.indexOf(')');
+    while (rightPos != -1) {
+        ParenthesisInfo *info = new ParenthesisInfo;
+        info->character = ')';
+        info->position = rightPos;
+
+        data->insert(info);
+
+        rightPos = text.indexOf(')', rightPos +1);
+    }
+
+    setCurrentBlockUserData(data);
 }
+
+
+
+
+//void Highlighter::highlightBlock(const QString &text)
+//{
+//    TextBlockData *data = new TextBlockData;
+
+//    int leftPos = text.indexOf('(');
+//    while (leftPos != -1) {
+//        ParenthesisInfo *info = new ParenthesisInfo;
+//        info->character = '(';
+//        info->position = leftPos;
+
+//        data->insert(info);
+//        leftPos = text.indexOf('(', leftPos + 1);
+//    }
+
+//    int rightPos = text.indexOf(')');
+//    while (rightPos != -1) {
+//        ParenthesisInfo *info = new ParenthesisInfo;
+//        info->character = ')';
+//        info->position = rightPos;
+
+//        data->insert(info);
+
+//        rightPos = text.indexOf(')', rightPos +1);
+//    }
+
+//    setCurrentBlockUserData(data);
+//}
+
+
