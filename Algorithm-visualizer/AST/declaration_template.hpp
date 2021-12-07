@@ -1,9 +1,18 @@
 #include "ast.hpp"
 #include "statement.hpp"
 #include "variable.hpp"
-#include "block.hpp"
 #ifndef DECLARATION_HPP
 #define DECLARATION_HPP
+
+
+//enum var_type {
+//    unknown_var_type = 0,
+//    string = 1,
+//    integer = 2,
+//    character = 3,
+//    floating_point = 4
+
+//};
 
 class Declaration : public Statement {
 public:
@@ -14,7 +23,6 @@ public:
     void set_value(char v){value = v;};
     Variable get_variable(){return variable;};
     std::string get_subtype(){return "Declaration";};
-  //void add_variable_to_list(){Block variables; variables.insert({variable, value});};
 private:
     Variable variable;
     char value;
