@@ -10,14 +10,20 @@ CONFIG += c++11
 
 SOURCES += \
     AST/ast.cpp \
+    GUI/codecell.cpp \
     GUI/gui.cpp \
+    GUI/varcell.cpp \
+    GUI/viewer.cpp \
     Parsing/parsing.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     AST/ast.hpp \
+    GUI/codecell.h \
     GUI/gui.hpp \
+    GUI/varcell.h \
+    GUI/viewer.h \
     Parsing/parsing.hpp \
     mainwindow.h
 

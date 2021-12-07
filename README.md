@@ -11,7 +11,7 @@ Algorithm Visualizer is a tool that will help you see the visual representation 
 6. Virgile Martin, VirgileMartinBX23, virgilemartin1, parser team
 7. Elsa Bismuth, elsa-bismuth, elsa_bis, parser team
 8. Stefan Vayln, StefanVaylBX2023, stefanvayl, parser team
-9. Darya Zarkotova, zorkotdasha, daryatodoskova, AST team
+9. Darya Todoskova, zorkotdasha, daryatodoskova, AST team
 10. Evdokia Guenievna, Evdokia0, evdokia_gneusheva, AST team
 11. John Levy, The11Doctor, johnnyboy34, GUI team
 
@@ -28,7 +28,7 @@ This team will be working on the tokenization and the lexical analysis of the co
 This team will be working on creating the AST.
 *	Milena Nedeljkovic
 *	Matea Gjika
-*	Darya Zarkotova
+*	Darya Todoskova
 *	Evdokia Guenievna
 
 ## GUI
