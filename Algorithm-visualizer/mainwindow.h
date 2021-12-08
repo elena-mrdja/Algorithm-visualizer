@@ -23,10 +23,11 @@ class QToolButton;
 class QAbstractButton;
 class QGraphicsView;
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+//QT_BEGIN_NAMESPACE
+//namespace Ui { class MainWindow; }
+//QT_END_NAMESPACE
 
+namespace Ui {
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -34,6 +35,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    QGraphicsView *view;
 
 //protected:
     Ui::MainWindow *ui;
@@ -74,7 +76,6 @@ private:
     QIcon createColorIcon(QColor color);
 
     DiagramScene *scene;
-    QGraphicsView *view;
 
     QAction *exitAction;
     QAction *addAction;
@@ -113,4 +114,5 @@ private:
     QAction *fillAction;
     QAction *lineAction;
 };
+}
 #endif // MAINWINDOW_H

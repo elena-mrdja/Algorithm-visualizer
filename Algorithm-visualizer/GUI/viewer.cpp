@@ -6,10 +6,12 @@
 #include <QGraphicsItem>
 
 
+
 Viewer::Viewer(QWidget *parent) : QWidget(parent), mBackgroundColor(0,0,255),mShapeColor(255,255,255),mShape(Process)
 {
     scene = new QGraphicsScene(this);
-    //ui->graphicsView->setScene(scene);
+
+    ui->view->setScene(scene);
     on_shape_changed();
 }
 

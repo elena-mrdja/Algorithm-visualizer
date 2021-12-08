@@ -2,6 +2,7 @@
 #include <QGraphicsScene>
 #include <QMenu>
 #include <QGraphicsSceneContextMenuEvent>
+#include <QGraphicsPolygonItem>
 
 #include "diagramitem.h"
 #include "arrow.h"

@@ -1,6 +1,7 @@
 #ifndef VIEWER_H
 #define VIEWER_H
 #include "arrow.h"
+#include "mainwindow.h"
 #include <QWidget>
 #include <QMainWindow>
 #include <QGraphicsScene>
@@ -10,9 +11,9 @@
 #include <QPainter>
 #include <Qt>
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class Viewer; }
-QT_END_NAMESPACE
+//QT_BEGIN_NAMESPACE
+//namespace Ui { class Viewer; }
+//QT_END_NAMESPACE
 
 
 class Viewer : public QWidget
@@ -44,7 +45,7 @@ protected:
     QGraphicsRectItem *rectangle;
     QGraphicsRectItem *diamond;
 
-    Ui::Viewer *ui;
+    Ui::MainWindow *ui;
 
 private:
     void compute_horizontal(float t);
