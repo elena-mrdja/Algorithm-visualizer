@@ -10,6 +10,11 @@
 #include <QPainter>
 #include <Qt>
 
+QT_BEGIN_NAMESPACE
+namespace Ui { class Viewer; }
+QT_END_NAMESPACE
+
+
 class Viewer : public QWidget
 {
     Q_OBJECT
@@ -38,6 +43,8 @@ protected:
     QGraphicsLineItem *vertical_line;
     QGraphicsRectItem *rectangle;
     QGraphicsRectItem *diamond;
+
+    Ui::Viewer *ui;
 
 private:
     void compute_horizontal(float t);
