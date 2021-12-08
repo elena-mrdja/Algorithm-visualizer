@@ -12,7 +12,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "mainwindow.h"
 #include "diagramitem.h"
 #include "diagramscene.h"
 #include "diagramtextitem.h"

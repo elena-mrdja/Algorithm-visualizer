@@ -1,5 +1,5 @@
 #include "viewer.h"
-#include "math.h"
+
 #include "mainwindow.h"
 #include <QPaintEvent>
 #include <QPainter>

@@ -1,6 +1,6 @@
 #ifndef VIEWER_H
 #define VIEWER_H
-#include "arrow.h"
+
 #include <QWidget>
 #include <QMainWindow>
 #include <QGraphicsScene>
