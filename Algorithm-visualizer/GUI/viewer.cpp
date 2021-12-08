@@ -9,7 +9,6 @@ Viewer::Viewer(QWidget *parent) : QWidget(parent), mBackgroundColor(0,0,255),mSh
 {
     scene = new QGraphicsScene(this);
     //ui->graphicsView->setScene(scene);
-
     on_shape_changed();
 }
 
@@ -25,19 +24,19 @@ QSize Viewer::sizeHint() const
 void Viewer::on_shape_changed()
 {
     switch (mShape) {
-        /*case Arrow:
+        case Horizontal:
             mScale =50;
             mIntervalLength = 2*M_PI;
             mStepCount = 128;
             mBackgroundColor = Qt::blue;
             break;
 
-        case UnitLine:
+        case Vertical:
             mScale =50;
             mIntervalLength = 1;
             mStepCount = 128;
             mBackgroundColor = Qt::blue;
-            break;*/
+            break;
 
         case Process:
             mScale =4;
@@ -61,14 +60,14 @@ void Viewer::on_shape_changed()
 void Viewer::compute(float t)
 {
     switch (mShape) {
-        /*case Arrow:
-        return compute_arrow(t);
+        case Horizontal:
+        return compute_horizontal(t);
             break;
 
-        case UnitLine:
+        case Vertical:
             //mBackgroundColor = Qt::green;
-            return compute_unitline(t);
-            break;*/
+            return compute_vertical(t);
+            break;
 
         case Process:
             //mBackgroundColor = Qt::blue;
@@ -85,19 +84,19 @@ void Viewer::compute(float t)
         }
 }
 
-/*void Viewer::compute_arrow(float t)
+void Viewer::compute_vertical(float t)
 {
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    scene ->addItem(arrow);
+    scene ->addItem(vertical_line);
 }
 
-void Viewer::compute_unitline(float t)
+void Viewer::compute_horizontal(float t)
 {
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    rectangle = scene ->addItem(line);
-}*/
+    scene ->addItem(horizontal_line);
+}
 
 void Viewer::compute_decision(float t)
 {

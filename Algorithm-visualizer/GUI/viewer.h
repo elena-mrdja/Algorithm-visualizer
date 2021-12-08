@@ -20,7 +20,7 @@ public:
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
     //declaring all the shapes we will use
-    enum ShapeType {Arrow, UnitLine, Decision, Process};
+    enum ShapeType {Vertical, Horizontal, Decision, Process};
 
     void setBackgroundColor(QColor color){mBackgroundColor=color;} //setter function
     QColor backgroudColor() const {return mBackgroundColor; }  //getter, const function so that it doesn't modify the class variables
@@ -34,13 +34,14 @@ public:
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
     QGraphicsScene *scene;
-    QGraphicsLineItem *line;
+    QGraphicsLineItem *horizontal_line;
+    QGraphicsLineItem *vertical_line;
     QGraphicsRectItem *rectangle;
     QGraphicsRectItem *diamond;
 
 private:
-    //void compute_arrow(float t);
-    //void compute_unitline(float t);
+    void compute_horizontal(float t);
+    void compute_vertical(float t);
     void compute_decision(float t);
     void compute_process(float t);
     void on_shape_changed();

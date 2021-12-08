@@ -1,6 +1,7 @@
 #ifndef DIAGRAMITEM_H
 #define DIAGRAMITEM_H
 
+#include <QGraphicsPolygonItem>
 #include <QGraphicsPixmapItem>
 #include <QList>
 

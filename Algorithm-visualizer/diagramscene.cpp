@@ -83,6 +83,8 @@
      }
  }
 
+
+ //this function determines what happens on the mouse click in each case:adding items, connecting items
  void DiagramScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
  {
      if (mouseEvent->button() != Qt::LeftButton)
