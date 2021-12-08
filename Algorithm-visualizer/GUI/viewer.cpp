@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QGraphicsItem>
 
+
 Viewer::Viewer(QWidget *parent) : QWidget(parent), mBackgroundColor(0,0,255),mShapeColor(255,255,255),mShape(Process)
 {
     scene = new QGraphicsScene(this);
