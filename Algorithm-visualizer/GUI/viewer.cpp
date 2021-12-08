@@ -25,7 +25,7 @@ QSize Viewer::sizeHint() const
 void Viewer::on_shape_changed()
 {
     switch (mShape) {
-        case Arrow:
+        /*case Arrow:
             mScale =50;
             mIntervalLength = 2*M_PI;
             mStepCount = 128;
@@ -37,7 +37,7 @@ void Viewer::on_shape_changed()
             mIntervalLength = 1;
             mStepCount = 128;
             mBackgroundColor = Qt::blue;
-            break;
+            break;*/
 
         case Process:
             mScale =4;
@@ -61,14 +61,14 @@ void Viewer::on_shape_changed()
 void Viewer::compute(float t)
 {
     switch (mShape) {
-        case Arrow:
+        /*case Arrow:
         return compute_arrow(t);
             break;
 
         case UnitLine:
             //mBackgroundColor = Qt::green;
             return compute_unitline(t);
-            break;
+            break;*/
 
         case Process:
             //mBackgroundColor = Qt::blue;
@@ -83,25 +83,21 @@ void Viewer::compute(float t)
         default:
           break;
         }
-    QBrush redbrush(Qt::red);
-    QPen blackpen(Qt::black);
-    rectangle = scene ->addRect(-100,-100,50,50,blackpen,redbrush);
-    //return rectangle;
 }
 
-void Viewer::compute_arrow(float t)
+/*void Viewer::compute_arrow(float t)
 {
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    //scene ->addItem(arrow);
+    scene ->addItem(arrow);
 }
 
 void Viewer::compute_unitline(float t)
 {
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    //rectangle = scene ->addItem(line);
-}
+    rectangle = scene ->addItem(line);
+}*/
 
 void Viewer::compute_decision(float t)
 {
@@ -112,16 +108,13 @@ void Viewer::compute_decision(float t)
 
 void Viewer::compute_process(float t)
 {
-    float cos_t = cos(t);
-    float sin_t = sin(t);
-    float x = 2*cos_t*cos_t*cos_t;
-    float y=2*sin_t*sin_t*sin_t;
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    //scene ->addItem(diamond);
+    diamond->setRotation(180);
+    scene ->addItem(diamond);
 }
 
-void Viewer::paintEvent(QPaintEvent *event)
+/*void Viewer::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing,true);
@@ -132,22 +125,22 @@ void Viewer::paintEvent(QPaintEvent *event)
 
     QPoint center = this->rect().center();
 
-    //compute(0);
+    compute(0);
     QPoint prevPixel;
-    //prevPixel.setX(prevPoint.x()*mScale + center.x());
-    //prevPixel.setY(prevPoint.y()*mScale + center.y());
+    prevPixel.setX(prevPoint.x()*mScale + center.x());
+    prevPixel.setY(prevPoint.y()*mScale + center.y());
 
     float step = mIntervalLength/mStepCount;
     for(float t=0; t< mIntervalLength; t+=step){
          //compute(t);
 
         QPoint pixel;
-        //pixel.setX(point.x()*mScale + center.x());
-        //pixel.setY(point.y()*mScale + center.y());
+        pixel.setX(point.x()*mScale + center.x());
+        pixel.setY(point.y()*mScale + center.y());
 
         painter.drawLine(pixel,prevPixel);
         prevPixel =pixel;
     }
 }
-
+*/
 

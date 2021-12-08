@@ -36,10 +36,11 @@ protected:
     QGraphicsScene *scene;
     QGraphicsLineItem *line;
     QGraphicsRectItem *rectangle;
+    QGraphicsRectItem *diamond;
 
 private:
-    void compute_arrow(float t);
-    void compute_unitline(float t);
+    //void compute_arrow(float t);
+    //void compute_unitline(float t);
     void compute_decision(float t);
     void compute_process(float t);
     void on_shape_changed();

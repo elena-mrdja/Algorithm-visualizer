@@ -18,6 +18,8 @@
 #include "diagramtextitem.h"
 #include "arrow.h"
 
+const int InsertTextButton = 10;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -501,6 +503,8 @@ QWidget *MainWindow::createBackgroundCellWidget(const QString &text,
     return widget;
 }
 
+
+//creates flowchat items through image
 QWidget *MainWindow::createCellWidget(const QString &text,
                       DiagramItem::DiagramType type)
 {
