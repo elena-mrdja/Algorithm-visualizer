@@ -9,10 +9,6 @@
  class QGraphicsScene;
  class QGraphicsSceneMouseEvent;
 
- class QGraphicsTextItem(double parent, double scene) {
-     parent = parent;
-     scene = scene;
- }
 
  class DiagramTextItem : public QGraphicsTextItem
  {

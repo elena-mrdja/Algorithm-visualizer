@@ -10,7 +10,11 @@
 #include <QMessageBox>
 
 #include "ui_mainwindow.h"
+<<<<<<< HEAD
 #include "mainwindow.h"
+=======
+
+>>>>>>> 17856f97d22025a30f7ff8231152f7241ef6cf6f
 #include "diagramitem.h"
 #include "diagramscene.h"
 #include "diagramtextitem.h"
