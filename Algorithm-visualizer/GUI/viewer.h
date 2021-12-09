@@ -1,11 +1,7 @@
 #ifndef VIEWER_H
 #define VIEWER_H
-<<<<<<< HEAD
 #include "arrow.h"
 #include "mainwindow.h"
-=======
-
->>>>>>> 17856f97d22025a30f7ff8231152f7241ef6cf6f
 #include <QWidget>
 #include <QMainWindow>
 #include <QGraphicsScene>
