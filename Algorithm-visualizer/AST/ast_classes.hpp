@@ -6,8 +6,14 @@
 #include <map>
 using namespace std;
 
-//AST
+//CACHE
+class Cache {
+public:
+    Cache();
+    ~Cache();
+};
 
+//AST
 class AST {
 public :
     AST();
@@ -16,6 +22,16 @@ public :
     virtual string get_subtype() = 0; // Block, Declaration, UnOp, BinOp, ...
 };
 
+//BLOCK
+class Block : public AST{
+public :
+    Block();
+    ~Block();
+    string get_type(){return "Block";};
+    list<Statement> statements; // list of statements in the block
+    Cache variables;
+    Block* parent_block; //nullptr if it is the program block
+};
 
 //STATEMENT
 class Statement : public AST {
@@ -23,6 +39,7 @@ public :
     Statement();
     ~Statement();
     string get_type(){return "Statement";};
+    Block* block; //reference to its block (to be able to access Cache)
 };
 
 
@@ -75,9 +92,10 @@ public :
 };
 
 class Addition : public BinOp {
-public : Addition();
-public : ~Addition();
-public : double get_value(){
+public :
+    Addition();
+    ~Addition();
+    public : double get_value(){
         if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean) {return 0;};
         {
             cout << "One of the expressions is a boolean";
@@ -85,10 +103,7 @@ public : double get_value(){
         };
         return left_exp->get_value() + right_exp->get_value();
     };
-public : exp_type get_exp_type(){return number;};
-
-private:
-    string type = "double";
+    exp_type get_exp_type(){return number;};
 };
 
 class Subtraction : public BinOp {
@@ -142,9 +157,10 @@ public :
 };
 
 class Mthan : public BinOp {
-public : Mthan();
-public : ~Mthan();
-public : double get_value(){
+public :
+    Mthan();
+    ~Mthan();
+    double get_value(){
         if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean)
         {
             cout << "One of the expressions is a boolean";
@@ -153,13 +169,14 @@ public : double get_value(){
         if (left_exp->get_value() > right_exp->get_value()) return 1;
         return 0;
     };
-public : exp_type get_exp_type(){return boolean;};
+    exp_type get_exp_type(){return boolean;};
 };
 
 class Lthan : public BinOp {
-public : Lthan();
-public : ~Lthan();
-public : double get_value(){
+public :
+    Lthan();
+    ~Lthan();
+    double get_value(){
         if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean)
         {
             cout << "One of the expressions is a boolean";
@@ -168,13 +185,14 @@ public : double get_value(){
         if (left_exp->get_value() < right_exp->get_value()) return 1;
         return 0;
     };
-public : exp_type get_exp_type(){return boolean;};
+    exp_type get_exp_type(){return boolean;};
 };
 
 class Leq : public BinOp {
-public : Leq();
-public : ~Leq();
-public : double get_value(){
+public :
+    Leq();
+    ~Leq();
+    double get_value(){
         if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean)
         {
             cout << "One of the expressions is a boolean";
@@ -183,13 +201,14 @@ public : double get_value(){
         if (left_exp->get_value() <= right_exp->get_value()) return 1;
         return 0;
     };
-public : exp_type get_exp_type(){return boolean;};
+    exp_type get_exp_type(){return boolean;};
 };
 
 class Meq : public BinOp {
-public : Meq();
-public : ~Meq();
-public : double get_value(){
+public :
+    Meq();
+    ~Meq();
+    double get_value(){
         if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean)
         {
             cout << "One of the expressions is a boolean";
@@ -198,57 +217,61 @@ public : double get_value(){
         if (left_exp->get_value() >= right_exp->get_value()) return 1;
         return 0;
     };
-public : exp_type get_exp_type(){return boolean;};
+    exp_type get_exp_type(){return boolean;};
 };
 
 class Eqeq : public BinOp {
-public : Eqeq();
-public : ~Eqeq();
-public : double get_value(){
+public :
+    Eqeq();
+    ~Eqeq();
+    double get_value(){
         if (left_exp->get_value() == right_exp->get_value()) return 1;
         return 0;
     };
-public : exp_type get_exp_type(){return boolean;};
+    exp_type get_exp_type(){return boolean;};
 };
 
 class AndOp : public BinOp {
-public : AndOp();
-public : ~AndOp();
-public : double get_value(){
+public :
+    AndOp();
+    ~AndOp();
+    double get_value(){
         if (left_exp->get_value() && right_exp->get_value()) return 1;
         return 0;
     };
-public : exp_type get_exp_type(){return boolean;};
+    exp_type get_exp_type(){return boolean;};
 };
 
 class OrOp : public BinOp {
-public : OrOp();
-public : ~OrOp();
-public : double get_value(){
+public :
+    OrOp();
+    ~OrOp();
+    double get_value(){
         if (left_exp->get_value() || right_exp->get_value()) return 1;
         return 0;
     };
-public : exp_type get_exp_type(){return boolean;};
+    exp_type get_exp_type(){return boolean;};
 };
 
 class Variable : public Expression {
-public : Variable();
-public : ~Variable();
-public : void set_name(std::string n){name = n;};
-public : void set_value(bool val){
+public :
+    Variable();
+    ~Variable();
+    void set_name(std::string n){name = n;};
+    void set_value(bool val){
         if (val) value = 1;
         else value = 0;
         type = boolean;
     };
-public : void set_value(double val){
+    void set_value(double val){
         value = val;
         type = number;
     };
-public : std::string get_name(){return name;};
-public : double get_value(){return value;};
-public : exp_type get_exp_type(){return type;};
-public : string get_subtype(){return "Variable";};
-private:
+    std::string get_name(){return name;};
+    double get_value(){return value;};
+    exp_type get_exp_type(){return type;};
+    string get_subtype(){return "Variable";};
+protected:
     std::string name;
     double value = 0;
     exp_type type;
