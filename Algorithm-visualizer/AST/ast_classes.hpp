@@ -21,17 +21,7 @@ public :
     virtual string get_type() = 0; // Statement or Expression
     virtual string get_subtype() = 0; // Block, Declaration, UnOp, BinOp, ...
 };
-
-//BLOCK
-class Block : public AST{
-public :
-    Block();
-    ~Block();
-    string get_type(){return "Block";};
-    list<Statement> statements; // list of statements in the block
-    Cache variables;
-    Block* parent_block; //nullptr if it is the program block
-};
+class Block; //one-line declaration, to prevent errors, as Statement needs Block and Block needs statement
 
 //STATEMENT
 class Statement : public AST {
@@ -42,6 +32,16 @@ public :
     Block* block; //reference to its block (to be able to access Cache)
 };
 
+//BLOCK
+class Block : public Statement {
+public :
+    Block();
+    ~Block();
+    string get_type(){return "Block";};
+    list<Statement> statements; // list of statements in the block
+    Cache variables;
+    Block* parent_block; //nullptr if it is the program block
+};
 
 //EXPRESSION
 enum exp_type {
@@ -285,7 +285,7 @@ protected : ~Statement();
 std::string get_type(){return "Statement";};
 };
 */
-
+/*
 class Block : public AST{
 public :
     Block();
@@ -296,6 +296,7 @@ protected:
     std::map<char, char> variables; //this is the Cache and will be changed
     Block* parent_block; //nullptr if it is the program block
 };
+*/
 
 class Declaration : public Statement {
 public:
