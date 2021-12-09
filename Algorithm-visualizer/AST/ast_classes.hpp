@@ -7,11 +7,8 @@
 using namespace std;
 
 //CACHE
-class Cache {
-public:
-    Cache();
-    ~Cache();
-};
+class CacheList;
+class CacheNode;
 
 //AST
 class AST {
@@ -396,5 +393,97 @@ protected:
     Expression* condition;
     Block* block_stmt;
 };
+//Cache
+/* Cache will be stored as a dictionary which contains a linked list. We chose this format as we do not have to decide how big the arrays need to be */
+class CacheNode{
+public:
+    CacheNode(); // Empty constructor
+    CacheNode(double v, CacheNode* p){ //Constructor when you now the value and the previous node
+        value = v;
+        prev = p;
+
+    };
+    CacheNode( CacheNode* p){ //Constructor to create an empty linked node
+        prev = p;
+
+    };
+    CacheNode* get_prev(){
+        return prev;
+    };
+    CacheNode* get_next(){
+        return next;
+    };
+    void set_prev(CacheNode* p){
+        prev =p;
+    };
+    void set_next(CacheNode* n){
+        next = n;
+    };
+    double get_value(){
+        return value;
+    };
+    void set_value(double v){
+        value = v;
+    };
+    ~CacheNode();
+private:
+    //Previous node
+    CacheNode* prev;
+    //Next node
+    CacheNode* next;
+    //Value stored at this node
+    double value;
+
+};
+
+class CacheList{
+public:
+    CacheList();
+    // You initialize a CacheList for a new variable, size of number of lines, where each node represents a the value of x at a certain line
+    CacheList(int lines){
+        // Declare the head
+        CacheNode new_head = CacheNode();
+        head = &new_head;
+        CacheNode* current = head;
+        for (int i = 0; i<lines - 1; i++){
+           // Create an empty node linked to the previous one
+           CacheNode new_node = CacheNode(current);
+           // Link the previous to the new node
+           current->set_next(&new_node);
+           current = &new_node;
+        }
+    };
+    CacheNode* get_head(){
+        return head;
+    };
+    CacheNode* get_tail(){
+        return tail;
+    };
+    void set_head(CacheNode* h){
+        head = h;
+    };
+    void set_tail(CacheNode* t){
+        tail = t;
+    };
+    CacheNode* get(int i){
+        // return the node at postion i
+        CacheNode* current = head;
+        for (int j = 0; j<i; j++){
+            current = current->get_next();
+    }
+        return current;
+    }
+    void add_value(double v, int i){
+        // set the value at position i
+        CacheNode* current = (*this).get(i);
+        current->set_value(v);
+    };
+    ~CacheList();
+private:
+    CacheNode* head;
+    CacheNode* tail;
+};
+
+class Cache; //TBC
 
 #endif // AST_CLASSES_HPP
