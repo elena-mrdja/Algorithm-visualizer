@@ -5,7 +5,7 @@
  #include "diagramscene.h"
 
  DiagramTextItem::DiagramTextItem(QGraphicsItem *parent, QGraphicsScene *scene)
-     : QGraphicsTextItem(parent, scene)
+     : QGraphicsTextItem(parent)
  {
      setFlag(QGraphicsItem::ItemIsMovable);
      setFlag(QGraphicsItem::ItemIsSelectable);

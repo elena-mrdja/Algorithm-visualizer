@@ -18,13 +18,13 @@
 
 const int InsertTextButton = 10;
 
-Ui::MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
 
     ui->setupUi(this);
-    //ui->graphicsView->setScene(scene);
+
     createActions();
     createToolBox();
     createMenus();
@@ -43,6 +43,7 @@ Ui::MainWindow::MainWindow(QWidget *parent)
     layout->addWidget(toolBox);
     view = new QGraphicsView(scene);
     layout->addWidget(view);
+    //view->setScene(scene);
 
     QWidget *widget = new QWidget;
     widget->setLayout(layout);
@@ -52,12 +53,12 @@ Ui::MainWindow::MainWindow(QWidget *parent)
     setUnifiedTitleAndToolBarOnMac(true);
 }
 
-Ui::MainWindow::~MainWindow()
+MainWindow::~MainWindow()
 {
     delete ui;
 }
 
-void Ui::MainWindow::backgroundButtonGroupClicked(QAbstractButton *button)
+void MainWindow::backgroundButtonGroupClicked(QAbstractButton *button)
 {
     QList<QAbstractButton *> buttons = backgroundButtonGroup->buttons();
     foreach (QAbstractButton *myButton, buttons) {
@@ -78,7 +79,7 @@ void Ui::MainWindow::backgroundButtonGroupClicked(QAbstractButton *button)
     view->update();
 }
 
-void Ui::MainWindow::buttonGroupClicked(int id)
+void MainWindow::buttonGroupClicked(int id)
 {
     QList<QAbstractButton *> buttons = buttonGroup->buttons();
     foreach (QAbstractButton *button, buttons) {
@@ -93,7 +94,7 @@ void Ui::MainWindow::buttonGroupClicked(int id)
     }
 }
 
-void Ui::MainWindow::deleteItem()
+void MainWindow::deleteItem()
 {
     foreach (QGraphicsItem *item, scene->selectedItems()) {
         if (item->type() == Arrow::Type) {
@@ -114,12 +115,12 @@ void Ui::MainWindow::deleteItem()
      }
 }
 
-void Ui::MainWindow::pointerGroupClicked(int)
+void MainWindow::pointerGroupClicked(int)
 {
     scene->setMode(DiagramScene::Mode(pointerTypeGroup->checkedId()));
 }
 
-void Ui::MainWindow::bringToFront()
+void MainWindow::bringToFront()
 {
     if (scene->selectedItems().isEmpty())
         return;
@@ -136,7 +137,7 @@ void Ui::MainWindow::bringToFront()
     selectedItem->setZValue(zValue);
 }
 
-void Ui::MainWindow::sendToBack()
+void MainWindow::sendToBack()
 {
     if (scene->selectedItems().isEmpty())
         return;
@@ -153,30 +154,30 @@ void Ui::MainWindow::sendToBack()
     selectedItem->setZValue(zValue);
 }
 
-void Ui::MainWindow::itemInserted(DiagramItem *item)
+void MainWindow::itemInserted(DiagramItem *item)
 {
     pointerTypeGroup->button(int(DiagramScene::MoveItem))->setChecked(true);
     scene->setMode(DiagramScene::Mode(pointerTypeGroup->checkedId()));
     buttonGroup->button(int(item->diagramType()))->setChecked(false);
 }
 
-void Ui::MainWindow::textInserted(QGraphicsTextItem *)
+void MainWindow::textInserted(QGraphicsTextItem *)
 {
     buttonGroup->button(InsertTextButton)->setChecked(false);
     scene->setMode(DiagramScene::Mode(pointerTypeGroup->checkedId()));
 }
 
-void Ui::MainWindow::currentFontChanged(const QFont &)
+void MainWindow::currentFontChanged(const QFont &)
 {
     handleFontChange();
 }
 
-void Ui::MainWindow::fontSizeChanged(const QString &)
+void MainWindow::fontSizeChanged(const QString &)
 {
     handleFontChange();
 }
 
-void Ui::MainWindow::sceneScaleChanged(const QString &scale)
+void MainWindow::sceneScaleChanged(const QString &scale)
 {
     double newScale = scale.left(scale.indexOf(tr("%"))).toDouble() / 100.0;
     QMatrix oldMatrix = view->matrix();
@@ -185,7 +186,7 @@ void Ui::MainWindow::sceneScaleChanged(const QString &scale)
     view->scale(newScale, newScale);
 }
 
-void Ui::MainWindow::textColorChanged()
+void MainWindow::textColorChanged()
 {
     textAction = qobject_cast<QAction *>(sender());
     fontColorToolButton->setIcon(createColorToolButtonIcon(
@@ -194,7 +195,7 @@ void Ui::MainWindow::textColorChanged()
     textButtonTriggered();
 }
 
-void Ui::MainWindow::itemColorChanged()
+void MainWindow::itemColorChanged()
 {
     fillAction = qobject_cast<QAction *>(sender());
     fillColorToolButton->setIcon(createColorToolButtonIcon(
@@ -203,7 +204,7 @@ void Ui::MainWindow::itemColorChanged()
     fillButtonTriggered();
 }
 
-void Ui::MainWindow::lineColorChanged()
+void MainWindow::lineColorChanged()
 {
     lineAction = qobject_cast<QAction *>(sender());
     lineColorToolButton->setIcon(createColorToolButtonIcon(
@@ -212,22 +213,22 @@ void Ui::MainWindow::lineColorChanged()
     lineButtonTriggered();
 }
 
-void Ui::MainWindow::textButtonTriggered()
+void MainWindow::textButtonTriggered()
 {
     scene->setTextColor(qvariant_cast<QColor>(textAction->data()));
 }
 
-void Ui::MainWindow::fillButtonTriggered()
+void MainWindow::fillButtonTriggered()
 {
     scene->setItemColor(qvariant_cast<QColor>(fillAction->data()));
 }
 
-void Ui::MainWindow::lineButtonTriggered()
+void MainWindow::lineButtonTriggered()
 {
     scene->setLineColor(qvariant_cast<QColor>(lineAction->data()));
 }
 
-void Ui::MainWindow::handleFontChange()
+void MainWindow::handleFontChange()
 {
     QFont font = fontCombo->currentFont();
     font.setPointSize(fontSizeCombo->currentText().toInt());
@@ -238,7 +239,7 @@ void Ui::MainWindow::handleFontChange()
     scene->setFont(font);
 }
 
-void Ui::MainWindow::itemSelected(QGraphicsItem *item)
+void MainWindow::itemSelected(QGraphicsItem *item)
 {
     DiagramTextItem *textItem =
     qgraphicsitem_cast<DiagramTextItem *>(item);
@@ -252,14 +253,14 @@ void Ui::MainWindow::itemSelected(QGraphicsItem *item)
     underlineAction->setChecked(font.underline());
 }
 
-void Ui::MainWindow::about()
+void MainWindow::about()
 {
     QMessageBox::about(this, tr("About Diagram Scene"),
                        tr("The <b>Diagram Scene</b> example shows "
                           "use of the graphics framework."));
 }
 
-void Ui::MainWindow::createToolBox()
+void MainWindow::createToolBox()
 {
     buttonGroup = new QButtonGroup(this);
     buttonGroup->setExclusive(false);
@@ -319,7 +320,7 @@ void Ui::MainWindow::createToolBox()
     toolBox->addItem(backgroundWidget, tr("Backgrounds"));
 }
 
-void Ui::MainWindow::createActions()
+void MainWindow::createActions()
 {
     toFrontAction = new QAction(QIcon(":/images/bringtofront.png"),
                                 tr("Bring to &Front"), this);
@@ -375,7 +376,7 @@ void Ui::MainWindow::createActions()
             this, SLOT(about()));
 }
 
-void Ui::MainWindow::createMenus()
+void MainWindow::createMenus()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(exitAction);
@@ -390,7 +391,7 @@ void Ui::MainWindow::createMenus()
     aboutMenu->addAction(aboutAction);
 }
 
-void Ui::MainWindow::createToolbars()
+void MainWindow::createToolbars()
 {
     editToolBar = addToolBar(tr("Edit"));
     editToolBar->addAction(deleteAction);
@@ -482,7 +483,7 @@ void Ui::MainWindow::createToolbars()
     pointerToolbar->addWidget(sceneScaleCombo);
 }
 
-QWidget *Ui::MainWindow::createBackgroundCellWidget(const QString &text,
+QWidget *MainWindow::createBackgroundCellWidget(const QString &text,
                         const QString &image)
 {
     QToolButton *button = new QToolButton;
@@ -504,7 +505,7 @@ QWidget *Ui::MainWindow::createBackgroundCellWidget(const QString &text,
 
 
 //creates flowchat items through image
-QWidget *Ui::MainWindow::createCellWidget(const QString &text,
+QWidget *MainWindow::createCellWidget(const QString &text,
                       DiagramItem::DiagramType type)
 {
 
@@ -527,7 +528,7 @@ QWidget *Ui::MainWindow::createCellWidget(const QString &text,
     return widget;
 }
 
-QMenu *Ui::MainWindow::createColorMenu(const char *slot, QColor defaultColor)
+QMenu *MainWindow::createColorMenu(const char *slot, QColor defaultColor)
 {
     QList<QColor> colors;
     colors << Qt::black << Qt::white << Qt::red << Qt::blue << Qt::yellow;
@@ -550,7 +551,7 @@ QMenu *Ui::MainWindow::createColorMenu(const char *slot, QColor defaultColor)
     return colorMenu;
 }
 
-QIcon Ui::MainWindow::createColorToolButtonIcon(const QString &imageFile,
+QIcon MainWindow::createColorToolButtonIcon(const QString &imageFile,
                         QColor color)
 {
     QPixmap pixmap(50, 80);
@@ -565,7 +566,7 @@ QIcon Ui::MainWindow::createColorToolButtonIcon(const QString &imageFile,
     return QIcon(pixmap);
 }
 
-QIcon Ui::MainWindow::createColorIcon(QColor color)
+QIcon MainWindow::createColorIcon(QColor color)
 {
     QPixmap pixmap(20, 20);
     QPainter painter(&pixmap);
@@ -599,7 +600,7 @@ QIcon Ui::MainWindow::createColorIcon(QColor color)
 //     ~MainWindow();
 
 // private:
-//     Ui::MainWindow ui;
+//     MainWindow ui;
 
 
 //     //this can be added for including a photo in varcell scrollable
@@ -616,7 +617,7 @@ MainWindow, below is the old version of the mainwindow.cpp (with class implement
 
 //MainWindow::MainWindow(QWidget *parent)
 //    : QMainWindow(parent)
-//    , ui(new Ui::MainWindow)
+//    , ui(new MainWindow)
 //{
 //    ui->setupUi(this);
 //}

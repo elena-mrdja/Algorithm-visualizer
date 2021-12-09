@@ -11,7 +11,7 @@ Viewer::Viewer(QWidget *parent) : QWidget(parent), mBackgroundColor(0,0,255),mSh
 {
     scene = new QGraphicsScene(this);
 
-    ui->view->setScene(scene);
+    //ui->view->setScene(scene);
     on_shape_changed();
 }
 
@@ -116,8 +116,9 @@ void Viewer::compute_process(float t)
     scene ->addItem(diamond);
 }
 
-/*void Viewer::paintEvent(QPaintEvent *event)
+void Viewer::paintEvent(QPaintEvent *event)
 {
+
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing,true);
 
@@ -129,20 +130,20 @@ void Viewer::compute_process(float t)
 
     compute(0);
     QPoint prevPixel;
-    prevPixel.setX(prevPoint.x()*mScale + center.x());
-    prevPixel.setY(prevPoint.y()*mScale + center.y());
+   // prevPixel.setX(prevPoint.x()*mScale + center.x());
+   // prevPixel.setY(prevPoint.y()*mScale + center.y());
 
     float step = mIntervalLength/mStepCount;
     for(float t=0; t< mIntervalLength; t+=step){
          //compute(t);
 
         QPoint pixel;
-        pixel.setX(point.x()*mScale + center.x());
-        pixel.setY(point.y()*mScale + center.y());
+       // pixel.setX(point.x()*mScale + center.x());
+       // pixel.setY(point.y()*mScale + center.y());
 
         painter.drawLine(pixel,prevPixel);
         prevPixel =pixel;
     }
+
 }
-*/
 

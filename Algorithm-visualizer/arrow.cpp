@@ -7,7 +7,7 @@ const qreal Pi = 3.14;
 
 Arrow::Arrow(DiagramItem *startItem, DiagramItem *endItem,
          QGraphicsItem *parent, QGraphicsScene *scene)
-    : QGraphicsLineItem(parent, scene)
+    : QGraphicsLineItem(parent)
 {
     myStartItem = startItem;
     myEndItem = endItem;

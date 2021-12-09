@@ -45,7 +45,8 @@ protected:
     QGraphicsRectItem *rectangle;
     QGraphicsRectItem *diamond;
 
-    Ui::MainWindow *ui;
+    //Ui::MainWindow *ui;
+    //Ui::Viewer *ui;
 
 private:
     void compute_horizontal(float t);

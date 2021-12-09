@@ -11,7 +11,7 @@
 //here we create flowchart shapes
 DiagramItem::DiagramItem(DiagramType diagramType, QMenu *contextMenu,
              QGraphicsItem *parent, QGraphicsScene *scene)
-    : QGraphicsPolygonItem(parent, scene)
+    : QGraphicsPolygonItem(parent)
 {
     myDiagramType = diagramType;
     myContextMenu = contextMenu;
