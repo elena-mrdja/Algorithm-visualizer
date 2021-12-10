@@ -103,10 +103,10 @@ public :
     exp_type get_exp_type(){return number;};
 };
 
-class Subtraction : public BinOp {
+class Substraction : public BinOp {
 public :
-    Subtraction();
-    ~Subtraction();
+    Substraction();
+    ~Substraction();
     double get_value(){
         if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean)
         {
@@ -485,5 +485,85 @@ private:
 };
 
 class Cache; //TBC
+
+//FUNCTION CREATE_AST_FROM_PARSE
+string create_ast_from_parse(string pre_ast) {
+    //UnOp
+    if (pre_ast[1] == '!'){
+        Negation ast;
+        ast.expression* = pre_ast[0];
+    }
+
+    //BinOp
+    if (pre_ast[1] == '+'){
+        Addition ast;
+        ast.left_exp* = pre_ast[0];
+        ast.right_exp* = pre_ast[2];
+    }
+    if (pre_ast[1] == '-'){
+        Substraction ast;
+        ast.left_exp* = pre_ast[0];
+        ast.right_exp* = pre_ast[2];
+    }
+    if (pre_ast[1] == '*'){
+        Multiplication ast;
+        ast.left_exp* = pre_ast[0];
+        ast.right_exp* = pre_ast[2];
+    }
+    if (pre_ast[1] == '/'){
+        Division ast;
+        ast.left_exp* = pre_ast[0];
+        ast.right_exp* = pre_ast[2];
+    }
+    if (pre_ast[1] == '<'){
+        Mthan ast;
+        ast.left_exp* = pre_ast[0];
+        ast.right_exp* = pre_ast[2];
+    }
+    if (pre_ast[1] == '>'){
+        Lthan ast;
+        ast.left_exp* = pre_ast[0];
+        ast.right_exp* = pre_ast[2];
+    }
+    if (pre_ast[1] == '<='){
+        Meq ast;
+        ast.left_exp* = pre_ast[0];
+        ast.right_exp* = pre_ast[2];
+    }
+    if (pre_ast[1] == '>='){
+        Leq ast;
+        ast.left_exp* = pre_ast[0];
+        ast.right_exp* = pre_ast[2];
+    }
+    if (pre_ast[1] == '=='){
+        Eqeq ast;
+        ast.left_exp* = pre_ast[0];
+        ast.right_exp* = pre_ast[2];
+    }
+    if (pre_ast[1] == '&&'){
+        AndOp ast;
+        ast.left_exp* = pre_ast[0];
+        ast.right_exp* = pre_ast[2];
+    }
+    if (pre_ast[1] == '||'){
+        OrOp ast;
+        ast.left_exp* = pre_ast[0];
+        ast.right_exp* = pre_ast[2];
+    }
+
+    //Variable
+    if (pre_ast[0] == ('bool' || 'int' || 'double' || 'char' || 'list' || 'string') ){
+        Variable ast;
+        ast.name = pre_ast[1];
+        ast.value = pre_ast[2];
+        ast.type = pre_ast[0]
+    }
+
+    //Assignment
+    if (pre_ast[0] == 'x'){  //what shoul i put as a condition for assignement???
+        Assignment ast;
+        ast.var_name = pre_ast[0];
+    }
+};
 
 #endif // AST_CLASSES_HPP
