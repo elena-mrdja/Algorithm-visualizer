@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QPainter>
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -90,9 +91,21 @@ MainWindow, below is the old version of the mainwindow.cpp (with class implement
     //scene = new QGraphicsScene(this); //it does make a problem with QgraphicsScene that is "not defined"?
 
 
+<<<<<<< HEAD
 void MainWindow::on_Visualize_clicked()
 {
     this->ui->widget_3->setShape(Viewer::Process);
     this->ui->widget_3->compute();
+=======
+void MainWindow::on_variables_clicked()
+{
+    this->ui->widget_4->writeOut(QString("Btn "));
+}
+
+
+void MainWindow::on_Visualize_clicked()
+{
+    this->ui->widget_4->readIn();
+>>>>>>> 1c751daf5e26e44ccf99f7bae28e97308783d66f
 }
 
