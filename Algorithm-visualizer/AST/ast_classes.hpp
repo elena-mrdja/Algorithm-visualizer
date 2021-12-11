@@ -427,6 +427,7 @@ protected:
 };
 //Cache
 /* Cache will be stored as a dictionary which contains a linked list. We chose this format as we do not have to decide how big the arrays need to be */
+class VarNode; //one line declaration
 class CacheNode{
 public:
     CacheNode(); // Empty constructor
@@ -446,7 +447,7 @@ public:
         return next;
     };
     void set_prev(CacheNode* p){
-        prev =p;
+        prev = p;
     };
     void set_next(CacheNode* n){
         next = n;
@@ -465,6 +466,7 @@ private:
     CacheNode* next;
     //Value stored at this node
     double value;
+    VarNode* variables;
 
 };
 
@@ -516,6 +518,26 @@ private:
     CacheNode* tail;
 };
 
+class VarNode{
+public:
+    VarNode();
+    VarNode(string n, double v){
+        name = n;
+        value = v;
+    };
+    ~VarNode();
+    void set_name(string n){name = n;};
+    void set_value(double v){value = v;};
+    string get_name(){return name;};
+    double get_value(){return value;};
+private:
+    string name;
+    double value;
+    VarNode* next;
+    CacheNode* line;
+};
+
+
 class Cache; //TBC
 
 enum chart_shape {
@@ -531,31 +553,48 @@ struct flowchart {
     int second_block; // num of stmts in else
 };
 
-void read_statement(Statement* stmt){
+flowchart read_statement(Statement* stmt, int i){
     //returns a flowchart corresponding to the given statement
+    //this function is supposed to be used within the walker i will keep the line of the statement being read
+    //(so, if stmt is in the 20th line, i = 20)
     string stmt_type = stmt->get_subtype();
     flowchart chart;
     if (stmt_type == "Declaration"){
         chart.shape = rectangle;
         chart.text = "Declare " + stmt->get_variable()->get_name();
-
+        VarNode var = VarNode(stmt->get_variable()->get_name(), stmt->get_variable()->get_value());
+        return chart;
     }
     if(stmt_type == "Assignment"){
         chart.shape = rectangle;
         chart.text = "Assign " + stmt->get_name();
+        return chart;
     };
     if(stmt_type == "IfElse"){
         chart.shape = diamond;
         chart.text = stmt->get_condition()->get_text();
         chart.first_block = stmt->block->num_statements();
         chart.second_block = stmt->else_stmt->num_statements();
+        return chart;
     };
     if(stmt_type == "While"){
         chart.shape = diamond;
         chart.text = stmt->get_condition()->get_text();
         chart.first_block = stmt->block->num_statements();
+        return chart;
     };
 };
+
+list<flowchart> ast_walker(list<Statement>* stmts){
+    list<Statement>::iterator i;
+    for(i = stmts->begin(); i != stmts->end(); ++i){
+        flowchart chart;
+        //anyway i can't access individual elements by subscript for some reason
+        //will come back to it
+    };
+};
+
+
 
 
 
