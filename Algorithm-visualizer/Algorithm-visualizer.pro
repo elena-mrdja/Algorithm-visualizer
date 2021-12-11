@@ -11,6 +11,8 @@ CONFIG += c++11
 SOURCES += \
     AST/assignment.cpp \
     AST/ast.cpp \
+    AST/ast_builder.cpp\
+    AST/ast_classes.cpp\
     AST/binop.cpp \
     AST/block.cpp \
     AST/boolean.cpp \
@@ -22,7 +24,9 @@ SOURCES += \
     AST/ifrest.cpp \
     AST/jump.cpp \
     AST/print.cpp \
+    AST/shapes.cpp \
     AST/statement.cpp \
+    AST/tracking.cpp \
     AST/unop.cpp \
     AST/variable.cpp \
     AST/while.cpp \
@@ -32,11 +36,13 @@ SOURCES += \
     GUI/viewer.cpp \
     Parsing/parsing.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
 
 HEADERS += \
     AST/assignment.hpp \
-    AST/ast_classes.hpp \
+    AST/ast.hpp \
+    AST/ast_builder.hpp\
+    AST/ast_classes.hpp\
     AST/binop.hpp \
     AST/block.hpp \
     AST/boolean.hpp \
@@ -48,16 +54,20 @@ HEADERS += \
     AST/ifrest.hpp \
     AST/jump.hpp \
     AST/print.hpp \
+    AST/shapes.hpp \
     AST/statement.hpp \
+    AST/tracking.hpp \
     AST/unop.hpp \
     AST/variable.hpp \
     AST/while.hpp \
-    GUI/codecell.h \
+    GUI/codecell.hpp \
     GUI/gui.hpp \
-    GUI/varcell.h \
-    GUI/viewer.h \
+    GUI/varcell.hpp \
+    GUI/viewer.hpp \
     Parsing/parsing.hpp \
-    mainwindow.h
+    main.hpp \
+    mainwindow.hpp \
+
 
 FORMS += \
     mainwindow.ui
