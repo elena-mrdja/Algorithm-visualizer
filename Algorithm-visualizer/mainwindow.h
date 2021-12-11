@@ -21,6 +21,10 @@ public:
 private slots:
 
 
+    void on_variables_clicked();
+
+    void on_Visualize_clicked();
+
 private:
     Ui::MainWindow *ui;
 

@@ -16,6 +16,8 @@ public:
     //Methos to paint the line numbers and to have acess to it's width
         void lineNumberAreaPaintEvent(QPaintEvent *event);
         int lineNumberAreaWidth();
+        void writeOut(QString docText);
+        void readIn();
 
     protected:
         //We need to be able to resize in case the viewer scrolls or the number of lines changes (adding a line at the bottom)
@@ -28,6 +30,7 @@ public:
         void highlightCurrentLine();
         void updateLineNumberArea(const QRect &rect, int dy);
         void matchParentheses();
+        void addRightParenthesis();
 
     private:
         bool matchLeftParenthesis(QTextBlock currentBlock, int index, int numLeftParentheses);

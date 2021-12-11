@@ -1,6 +1,7 @@
 #include "codeeditor.h"
 #include "linenumberarea.h"
-#include<iostream>
+#include <iostream>
+#include<fstream>
 CodeEditor::CodeEditor(QWidget *parent)
 {
     lineNumberArea = new LineNumberArea(this);
@@ -11,6 +12,7 @@ CodeEditor::CodeEditor(QWidget *parent)
     //connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
     connect(this, &CodeEditor::textChanged, this, &CodeEditor::applyHiglighting);
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(matchParentheses()));
+    //connect(this, &CodeEditor::textChanged, this, SLOT(addRightParenthesis()));
 
     updateLineNumberAreaWidth(0);
     //highlightCurrentLine();
@@ -118,6 +120,50 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     }
 }
 
+
+void CodeEditor::writeOut(QString docText)
+{
+    QDir::currentPath()
+    std::string const nomFichier("/Users/johnlevy/score.txt");
+    docText = this->toPlainText();
+    std::ofstream MyFile(nomFichier);
+    if(MyFile)
+    {
+        MyFile << docText.toStdString();
+    } else {std::cout << "Could not read file";}
+    MyFile.close();
+}
+
+void CodeEditor::readIn()
+{
+    std::string const nomFichier("/Users/johnlevy/score.txt");
+    std::string myText;
+    std::ifstream readFile(nomFichier);
+
+    // Use a while loop together with the getline() function to read the file line by line
+    QString doc;
+    while (getline (readFile, myText)) {
+      // Output the text from the file
+        doc.append(QString::fromStdString(myText + "\n"));
+      //std::cout << myText;
+    }
+    this->setPlainText(doc);
+
+    // Close the file
+    readFile.close();
+
+}
+
+
+
+
+/* ============================
+ * The next section of the file concerns parenthesis matching (highlighting when cursor is before of after a paire of parenthesis
+ * TO BE IMPLEMENTED: Functions also recognise {} and [] (side-project)
+ * ============================
+*/
+
+
 void CodeEditor::matchParentheses()
 {
     bool match = false;
@@ -216,6 +262,18 @@ void CodeEditor::createParenthesisSelection(int pos)
     selections.append(selection);
 
     setExtraSelections(selections);
+}
+
+void CodeEditor::addRightParenthesis()
+{
+    QTextCursor cur = this->textCursor();
+    cur.movePosition(QTextCursor::PreviousCharacter,QTextCursor::KeepAnchor,2);
+
+    if(cur.selectedText() == '('){
+        const QString match = QString(')');
+        std::cout << "Adding the matching p" ;
+        this->insertPlainText(match);
+     }
 }
 
 
