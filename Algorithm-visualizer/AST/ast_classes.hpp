@@ -15,10 +15,17 @@ class AST {
 public :
     AST();
     ~AST();
-    virtual string get_type() = 0; // Statement or Expression
-    virtual string get_subtype() = 0; // Block, Declaration, UnOp, BinOp, ...
+    virtual string get_type(); // Statement or Expression
+    virtual string get_subtype(); // Block, Declaration, UnOp, BinOp, ...
+    void set_prev(AST* previous){prev = previous;};
+    void set_next(AST* following){next = following;};
+    AST* prev = nullptr;
+    AST* next = nullptr;
 };
 class Block; //one-line declaration, to prevent errors, as Statement needs Block and Block needs statement
+class Variable;
+class Declaration;
+class Expression;
 
 //STATEMENT
 class Statement : public AST {
@@ -27,6 +34,10 @@ public :
     ~Statement();
     string get_type(){return "Statement";};
     Block* block; //reference to its block (to be able to access Cache)
+    Variable* get_variable();
+    string get_name();
+    Expression* get_condition();
+    Block* else_stmt;
 };
 
 //BLOCK
@@ -34,10 +45,18 @@ class Block : public Statement {
 public :
     Block();
     ~Block();
-    string get_type(){return "Block";};
+    string get_subtype(){return "Block";};
     list<Statement> statements; // list of statements in the block
-    Cache variables;
+    CacheList* variables;
     Block* parent_block; //nullptr if it is the program block
+    int num_statements(){
+        list<Statement>::iterator i;
+        int j = 0;
+        for(i = statements.begin(); i != statements.end(); ++i){
+               j++;
+        }
+        return j;
+    };
 };
 
 //EXPRESSION
@@ -54,6 +73,7 @@ public :
     string get_type(){return "Expression";};
     virtual double get_value() = 0;
     virtual exp_type get_exp_type() = 0;
+    string get_text();
 };
 
 
@@ -70,6 +90,7 @@ public :
         if (expression->get_value() != 0) return 0;
         return 1;
     };
+    string get_text(){return "not(" + expression->get_text() + ")";};
 private :
     Expression* expression;
 };
@@ -101,6 +122,7 @@ public :
         return left_exp->get_value() + right_exp->get_value();
     };
     exp_type get_exp_type(){return number;};
+    string get_text(){return left_exp->get_text() + " + " + right_exp->get_text();};
 };
 
 class Subtraction : public BinOp {
@@ -116,6 +138,7 @@ public :
         return left_exp->get_value() - right_exp->get_value();
     };
     exp_type get_exp_type(){return number;};
+    string get_text(){return left_exp->get_text() + " - " + right_exp->get_text();};
 };
 
 class Multiplication : public BinOp {
@@ -131,6 +154,7 @@ public :
         return left_exp->get_value() * right_exp->get_value();
     };
     exp_type get_exp_type(){return number;};
+    string get_text(){return left_exp->get_text() + " * " + right_exp->get_text();};
 };
 
 class Division : public BinOp {
@@ -151,6 +175,7 @@ public :
         return left_exp->get_value() / right_exp->get_value();
     };
     exp_type get_exp_type(){return number;};
+    string get_text(){return left_exp->get_text() + " / " + right_exp->get_text();};
 };
 
 class Mthan : public BinOp {
@@ -167,6 +192,7 @@ public :
         return 0;
     };
     exp_type get_exp_type(){return boolean;};
+    string get_text(){return left_exp->get_text() + " > " + right_exp->get_text();};
 };
 
 class Lthan : public BinOp {
@@ -183,6 +209,7 @@ public :
         return 0;
     };
     exp_type get_exp_type(){return boolean;};
+    string get_text(){return left_exp->get_text() + " < " + right_exp->get_text();};
 };
 
 class Leq : public BinOp {
@@ -199,6 +226,7 @@ public :
         return 0;
     };
     exp_type get_exp_type(){return boolean;};
+    string get_text(){return left_exp->get_text() + " <= " + right_exp->get_text();};
 };
 
 class Meq : public BinOp {
@@ -215,6 +243,7 @@ public :
         return 0;
     };
     exp_type get_exp_type(){return boolean;};
+    string get_text(){return left_exp->get_text() + " >= " + right_exp->get_text();};
 };
 
 class Eqeq : public BinOp {
@@ -226,6 +255,7 @@ public :
         return 0;
     };
     exp_type get_exp_type(){return boolean;};
+    string get_text(){return left_exp->get_text() + " == " + right_exp->get_text();};
 };
 
 class AndOp : public BinOp {
@@ -237,6 +267,7 @@ public :
         return 0;
     };
     exp_type get_exp_type(){return boolean;};
+    string get_text(){return left_exp->get_text() + " and " + right_exp->get_text();};
 };
 
 class OrOp : public BinOp {
@@ -248,6 +279,7 @@ public :
         return 0;
     };
     exp_type get_exp_type(){return boolean;};
+    string get_text(){return left_exp->get_text() + " or " + right_exp->get_text();};
 };
 
 class Variable : public Expression {
@@ -268,6 +300,7 @@ public :
     double get_value(){return value;};
     exp_type get_exp_type(){return type;};
     string get_subtype(){return "Variable";};
+    string get_text(){return name;};
 protected:
     std::string name;
     double value = 0;
@@ -342,7 +375,6 @@ public :
     ~Decision();
     void set_condition(Expression* c){condition = c;};
     Expression* get_condition(){return condition;};
-    string get_subtype(){return "Decision";};
     double get_value(){
         if (condition->get_value()) return 1;
         return 0;
@@ -362,7 +394,6 @@ public:
    Block* get_block_stmt(){return block_stmt;};
    void set_block_stmt(Block* stmt){block_stmt = stmt;};
    string get_subtype(){return "IfRest";};
-protected:
     Block* block_stmt;
 };
 
@@ -377,6 +408,7 @@ public:
     IfRest* get_else_stmt(){return else_stmt;};
     std::string get_subtype(){return "IfElse";};
 protected:
+    Block* block;
     IfRest* else_stmt;
 };
 
@@ -485,5 +517,70 @@ private:
 };
 
 class Cache; //TBC
+
+enum chart_shape {
+    rectangle = 0,
+    diamond = 1,
+    circle = 2
+};
+
+struct flowchart {
+    chart_shape shape;
+    string text;
+    int first_block; // num of stmts in the first block (if in if and the only block in while)
+    int second_block; // num of stmts in else
+};
+
+void read_statement(Statement* stmt){
+    //returns a flowchart corresponding to the given statement
+    string stmt_type = stmt->get_subtype();
+    flowchart chart;
+    if (stmt_type == "Declaration"){
+        chart.shape = rectangle;
+        chart.text = "Declare " + stmt->get_variable()->get_name();
+
+    }
+    if(stmt_type == "Assignment"){
+        chart.shape = rectangle;
+        chart.text = "Assign " + stmt->get_name();
+    };
+    if(stmt_type == "IfElse"){
+        chart.shape = diamond;
+        chart.text = stmt->get_condition()->get_text();
+        chart.first_block = stmt->block->num_statements();
+        chart.second_block = stmt->else_stmt->num_statements();
+    };
+    if(stmt_type == "While"){
+        chart.shape = diamond;
+        chart.text = stmt->get_condition()->get_text();
+        chart.first_block = stmt->block->num_statements();
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #endif // AST_CLASSES_HPP
