@@ -1,6 +1,6 @@
 #ifndef VIEWER_H
 #define VIEWER_H
-#include "arrow.h"
+
 #include "mainwindow.h"
 #include <QWidget>
 #include <QMainWindow>
@@ -10,11 +10,6 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <Qt>
-
-//QT_BEGIN_NAMESPACE
-//namespace Ui { class Viewer; }
-//QT_END_NAMESPACE
-
 
 class Viewer : public QWidget
 {
@@ -26,7 +21,7 @@ public:
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
     //declaring all the shapes we will use
-    enum ShapeType {Vertical, Horizontal, Decision, Process};
+    enum ShapeType {Vertical, Horizontal, Decision, Process, Start};
 
     void setBackgroundColor(QColor color){mBackgroundColor=color;} //setter function
     QColor backgroudColor() const {return mBackgroundColor; }  //getter, const function so that it doesn't modify the class variables
@@ -37,24 +32,29 @@ public:
     void setScale(float scale) {mScale=scale; repaint();}
     float scale() const {return mScale;}
 
-protected:
+    void draw_start(const int radius);
+
+public:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+
     QGraphicsScene *scene;
     QGraphicsLineItem *horizontal_line;
     QGraphicsLineItem *vertical_line;
     QGraphicsRectItem *rectangle;
     QGraphicsRectItem *diamond;
+    QGraphicsEllipseItem *ellipse;
 
     //Ui::MainWindow *ui;
     //Ui::Viewer *ui;
 
-private:
-    void compute_horizontal(float t);
-    void compute_vertical(float t);
-    void compute_decision(float t);
-    void compute_process(float t);
+public:
+    void compute_start();
+    void compute_horizontal();
+    void compute_vertical();
+    void compute_decision();
+    void compute_process();
     void on_shape_changed();
-    void compute(float t); //dispatch function based on mShape type
+    void compute(); //dispatch function based on mShape type
 private:
     QColor mBackgroundColor;
     QColor mShapeColor;
@@ -63,8 +63,6 @@ private:
     float mIntervalLength;
     float mScale;
     int mStepCount;
-
-
 
 signals:
 

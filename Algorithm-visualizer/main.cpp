@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
             break;
         }
     }
+
     MainWindow w;
     w.showFullScreen();
     return a.exec();

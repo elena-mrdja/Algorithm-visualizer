@@ -1,17 +1,11 @@
 #include "viewer.h"
-
-#include "mainwindow.h"
+#include "math.h"
 #include <QPaintEvent>
 #include <QPainter>
-#include <QGraphicsItem>
-
 
 
 Viewer::Viewer(QWidget *parent) : QWidget(parent), mBackgroundColor(0,0,255),mShapeColor(255,255,255),mShape(Process)
 {
-    scene = new QGraphicsScene(this);
-
-    //ui->view->setScene(scene);
     on_shape_changed();
 }
 
@@ -60,26 +54,30 @@ void Viewer::on_shape_changed()
         }
 }
 
-void Viewer::compute(float t)
+void Viewer::compute()
 {
     switch (mShape) {
         case Horizontal:
-        return compute_horizontal(t);
+        return compute_horizontal();
             break;
 
         case Vertical:
             //mBackgroundColor = Qt::green;
-            return compute_vertical(t);
+            return compute_vertical();
             break;
+
+        case Start:
+            return compute_start();
+                break;
 
         case Process:
             //mBackgroundColor = Qt::blue;
-            return compute_process(t);
+            return compute_process();
             break;
 
         case Decision:
             //mBackgroundColor = Qt::yellow;
-            return compute_decision(t);
+            return compute_decision();
             break;
 
         default:
@@ -87,63 +85,75 @@ void Viewer::compute(float t)
         }
 }
 
-void Viewer::compute_vertical(float t)
+void Viewer::compute_vertical()
 {
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    scene ->addItem(vertical_line);
+    vertical_line = scene ->addLine(10,10,100,100);
 }
 
-void Viewer::compute_horizontal(float t)
+
+void Viewer::compute_horizontal()
 {
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    scene ->addItem(horizontal_line);
+    horizontal_line = scene ->addLine(10,10,100,100);
 }
 
-void Viewer::compute_decision(float t)
+void Viewer::compute_start()
+{
+    /*float cos_t = cos(t);
+    float sin_t = sin(t);
+    float x = cos_t;
+    float y = sin_t;
+    return QPointF(x,y);*/
+    QBrush redbrush(Qt::red);
+    QPen blackpen(Qt::black);
+    ellipse = scene ->addEllipse(10,10,100,100);
+}
+
+
+void Viewer::compute_decision()
 {
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    scene ->addItem(rectangle);
+    diamond = scene ->addRect(0,0,100,100);
+    //diamond -> setRotation(180);
 }
 
-void Viewer::compute_process(float t)
+void Viewer::compute_process()
 {
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    diamond->setRotation(180);
-    scene ->addItem(diamond);
+    rectangle = scene ->addRect(20,20,100,100, blackpen, redbrush);
 }
 
-void Viewer::paintEvent(QPaintEvent *event)
+void Viewer::paintEvent(QPaintEvent *event) //draw function
 {
-
     QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing,true);
+    //painter.setRenderHint(QPainter::Antialiasing,true);
 
-    painter.setBrush(mBackgroundColor);
-    painter.setPen(mShapeColor);
-    painter.drawRect(this->rect());
+    painter.setBrush(mBackgroundColor); // blue backgroundh
+    //painter.setPen(mShapeColor);
+    painter.drawRect(this->rect()); // white line around
 
     QPoint center = this->rect().center();
 
-    compute(0);
-    QPoint prevPixel;
-   // prevPixel.setX(prevPoint.x()*mScale + center.x());
-   // prevPixel.setY(prevPoint.y()*mScale + center.y());
+    //parametrization of the diamond shape (quesiton for Elena: jel si ovo sve sa tutorijala uzela ili si samakucala? neke stvari ne razumem)
+    //QPointF prevPoint = compute(0);
+    //QPoint prevPixel;
+    //prevPixel.setX(prevPoint.x()*mScale + center.x());
+    //prevPixel.setY(prevPoint.y()*mScale + center.y());
 
-    float step = mIntervalLength/mStepCount;
-    for(float t=0; t< mIntervalLength; t+=step){
-         //compute(t);
+    //float step = mIntervalLength/mStepCount;
+    //for(float t=0; t< mIntervalLength; t+=step){
+        //QPointF point = compute_start(t);
 
-        QPoint pixel;
-       // pixel.setX(point.x()*mScale + center.x());
-       // pixel.setY(point.y()*mScale + center.y());
+        //QPoint pixel;
+        //pixel.setX(point.x()*mScale + center.x());
+        //pixel.setY(point.y()*mScale + center.y());
 
-        painter.drawLine(pixel,prevPixel);
-        prevPixel =pixel;
-    }
-
+        //painter.drawLine(pixel,prevPixel);
+        //prevPixel =pixel;
+    //}
 }
-
