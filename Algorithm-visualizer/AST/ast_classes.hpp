@@ -484,7 +484,7 @@ struct flowchart {
     int second_block; // num of stmts in else
 };
 
-flowchart* read_statement(Statement* stmt, int i){
+flowchart* read_statement(Statement* stmt, int i, list<CacheList*> variables){
     //returns a flowchart corresponding to the given statement
     //this function is supposed to be used within the walker i will keep the line of the statement being read
     //(so, if stmt is in the 20th line, i = 20)
@@ -522,8 +522,6 @@ void draw_flowchart(Block* block){
     //initialize CacheList of length n
     for (int i = 0; i < n; i++){
         //flowchart* chart = read_statement(block->statements[i], i);
-
-
     };
 };
 
