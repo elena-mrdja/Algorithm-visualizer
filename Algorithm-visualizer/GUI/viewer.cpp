@@ -21,18 +21,18 @@ QSize Viewer::sizeHint() const
 void Viewer::on_shape_changed()
 {
     switch (mShape) {
-        case Arrow:
+        case Horizontal:
             mScale =50;
             mIntervalLength = 2*M_PI;
             mStepCount = 128;
             mBackgroundColor = Qt::blue;
             break;
 
-        case UnitLine:
+        case Vertical:
             mScale =50;
             mIntervalLength = 1;
             mStepCount = 128;
-            mBackgroundColor = Qt::green;
+            mBackgroundColor = Qt::blue;
             break;
 
         case Process:
@@ -49,88 +49,83 @@ void Viewer::on_shape_changed()
             mBackgroundColor = Qt::blue;
             break;
 
-        case Start:
-            mScale = 40;
-            mIntervalLength = 2*M_PI;
-            mStepCount = 256;
-            mBackgroundColor = Qt::white;
-            break;
-
-
         default:
           break;
         }
 }
 
-QPointF Viewer::compute(float t)
+void Viewer::compute()
 {
     switch (mShape) {
-        case Arrow:
-        return compute_arrow(t);
+        case Horizontal:
+        return compute_horizontal();
             break;
 
-        case UnitLine:
+        case Vertical:
             //mBackgroundColor = Qt::green;
-            return compute_unitline(t);
+            return compute_vertical();
             break;
+
+        case Start:
+            return compute_start();
+                break;
 
         case Process:
             //mBackgroundColor = Qt::blue;
-            return compute_process(t);
+            return compute_process();
             break;
 
         case Decision:
             //mBackgroundColor = Qt::yellow;
-            return compute_decision(t);
+            return compute_decision();
             break;
-
-        case Start:
-            //mBackgroundCOlor = Qt::white;
-            return compute_start(t);
-            break;
-
 
         default:
           break;
         }
-    return QPointF(0,0);
 }
 
-QPointF Viewer::compute_arrow(float t)
+void Viewer::compute_vertical()
 {
-    return QPointF(1/cosh(t), t-tanh(t));   //X,Y
+    QBrush redbrush(Qt::red);
+    QPen blackpen(Qt::black);
+    vertical_line = scene ->addLine(10,10,100,100);
 }
 
-QPointF Viewer::compute_unitline(float t)
+
+void Viewer::compute_horizontal()
 {
-    return QPointF(t,0);   //X,Y
+    QBrush redbrush(Qt::red);
+    QPen blackpen(Qt::black);
+    horizontal_line = scene ->addLine(10,10,100,100);
 }
 
-QPointF Viewer::compute_decision(float t)
+void Viewer::compute_start()
 {
-    return QPointF(
-                    (t-4),  //X
-                    (2*t*t*t - 24*t*t + 96*t - 128)  //Y
-        );
-}
-
-QPointF Viewer::compute_process(float t)
-{
-    float cos_t = cos(t);
-    float sin_t = sin(t);
-    float x = 2*cos_t*cos_t*cos_t;
-    float y=2*sin_t*sin_t*sin_t;
-    return QPointF(x,y);
-}
-
-QPointF Viewer::compute_start(float t)
-{
-    float cos_t = cos(t);
+    /*float cos_t = cos(t);
     float sin_t = sin(t);
     float x = cos_t;
     float y = sin_t;
-    return QPointF(x,y);
+    return QPointF(x,y);*/
+    QBrush redbrush(Qt::red);
+    QPen blackpen(Qt::black);
+    ellipse = scene ->addEllipse(10,10,100,100);
+}
 
+
+void Viewer::compute_decision()
+{
+    QBrush redbrush(Qt::red);
+    QPen blackpen(Qt::black);
+    diamond = scene ->addRect(0,0,100,100);
+    //diamond -> setRotation(180);
+}
+
+void Viewer::compute_process()
+{
+    QBrush redbrush(Qt::red);
+    QPen blackpen(Qt::black);
+    rectangle = scene ->addRect(20,20,100,100, blackpen, redbrush);
 }
 
 void Viewer::paintEvent(QPaintEvent *event) //draw function

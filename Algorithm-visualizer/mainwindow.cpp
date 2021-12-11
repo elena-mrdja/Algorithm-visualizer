@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 #include <QPainter>
 
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -89,4 +88,11 @@ MainWindow, below is the old version of the mainwindow.cpp (with class implement
     //QImage image("path to the pciture");
     //item = new QGraphicsPixmapItem (QPixmap::fromImage(image));
     //scene = new QGraphicsScene(this); //it does make a problem with QgraphicsScene that is "not defined"?
+
+
+void MainWindow::on_Visualize_clicked()
+{
+    this->ui->widget_3->setShape(Viewer::Process);
+    this->ui->widget_3->compute();
+}
 

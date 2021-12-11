@@ -18,8 +18,10 @@ public:
     ~MainWindow();
 
 
-private slots:
+public slots:
 
+
+    void on_Visualize_clicked();
 
 private:
     Ui::MainWindow *ui;
