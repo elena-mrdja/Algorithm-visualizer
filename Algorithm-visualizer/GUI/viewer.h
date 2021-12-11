@@ -43,6 +43,7 @@ public:
     QGraphicsRectItem *rectangle;
     QGraphicsRectItem *diamond;
     QGraphicsEllipseItem *ellipse;
+    QGraphicsView *view;
 
     //Ui::MainWindow *ui;
     //Ui::Viewer *ui;

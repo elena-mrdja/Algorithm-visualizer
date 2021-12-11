@@ -7,6 +7,13 @@
 Viewer::Viewer(QWidget *parent) : QWidget(parent), mBackgroundColor(0,0,255),mShapeColor(255,255,255),mShape(Process)
 {
     on_shape_changed();
+
+    scene = new QGraphicsScene(this);
+    view = new QGraphicsView(this);
+    view->setScene(scene);
+    QBrush redbrush(Qt::red);
+    QPen blackpen(Qt::black);
+    ellipse = scene ->addEllipse(10,10,100,100,blackpen, redbrush);
 }
 
 QSize Viewer::minimumSizeHint() const
