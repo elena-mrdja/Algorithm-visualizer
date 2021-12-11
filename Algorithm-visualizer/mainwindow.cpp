@@ -1,13 +1,30 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QPainter>
-
+#include <QGraphicsView>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    //drawing of elipse with text
+    //scene = new QGraphicsScene(this);
+    //ui->graphicsView->setScene(scene);
+
+    //QBrush greenBrush(Qt::green);
+    //QBrush whiteBrush(Qt::red);
+    //QPen outlinePen(Qt::lightGray);
+    //outlinePen.setWidth(2);
+
+    // addEllipse(x,y,w,h,pen,brush)
+    //ellipse = scene->addEllipse(0, -200, 300, 60, outlinePen, whiteBrush);
+
+    //text = scene->addText("Start", QFont("Arial", 30) );
+    // movable text
+    //text->setFlag(QGraphicsItem::ItemIsMovable);
+    //text->setPos(110, -190);
 }
 
 

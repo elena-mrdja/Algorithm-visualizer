@@ -3,7 +3,9 @@
 
 #include <QMainWindow>
 #include <QPainter>
-
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QGraphicsItem>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -23,6 +25,11 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    //define objects for different shapes
+    QGraphicsScene *scene;
+    QGraphicsEllipseItem *ellipse;
+    QGraphicsRectItem *rectangle;
+    QGraphicsTextItem *text;
 
 };
 
