@@ -28,10 +28,10 @@ We will use a library during the lexing process and for now that seems to be the
 
 ## Initial grammar we defined:
 
-* < program > = ‘’’ INT MAIN LP RP < block > ‘’’ 
+* < program > = ‘’’ INT MAIN LP RP <block> ‘’’ 
 * < block > = ’’’LCB < stmts > RCB ‘’’
 * < stmts > = ‘’’ < varDec > < stmts > |< block >  < stmts > |< assign > < stmts > |< print > < stmts > |< while > < stmts > |< jump > < stmts >  |< ifelse > < stmts > |< return > < stmts > | ‘’’
-* < varDec > = ‘’’< type > VAR ASSIGN < exp > SEMICOLON’’’
+* < varDec > = ‘’’< type > VAR ASSIGN < exp > SEMICOMMA’’’
 * < type > = ‘’’ | INT | BOOL | STR | DOUBLE ’’’
 * < assign > = ‘’’VAR EQ < exp > SEMICOLON’’’
 * < while > = ‘’’WHILE LP < exp > RP <block>’’’

@@ -9,17 +9,23 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    AST/ast.cpp \
-    GUI/gui.cpp \
-    Parsing/parsing.cpp \
+    GUI/codeeditor.cpp \
+    GUI/highlighter.cpp \
+    GUI/linenumberarea.cpp \
+    GUI/textblockdata.cpp \
+    GUI/variableexplorer.cpp \
+    GUI/viewer.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
 
 HEADERS += \
-    AST/ast.hpp \
-    GUI/gui.hpp \
-    Parsing/parsing.hpp \
-    mainwindow.h
+    GUI/codeeditor.h \
+    GUI/highlighter.h \
+    GUI/linenumberarea.h \
+    GUI/textblockdata.h \
+    GUI/variableexplorer.h \
+    GUI/viewer.h \
+    mainwindow.h \
 
 FORMS += \
     mainwindow.ui
@@ -33,3 +39,8 @@ CONFIG += embed_translations
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+
+
+
+

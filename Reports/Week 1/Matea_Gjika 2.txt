@@ -1,0 +1,10 @@
+During the first week, my first task was to set up the Trello board. Our group is split into 3 teams, two backend teams and one front-end GUI team, so I devised 4 
+boards, a general board for everyone, and 3 sub-boards, one for every team. I then did some research on how to use Trello to optimise our experience. The first 
+thing I implemented was using a Card Numbering plugin by Reenhance. This plugin numbers every card as it's added to the Trello board, and based on the card number,
+we can create a separate git branch to implement every feature before merging into develop. This will help up organise our code and make collaboration easier. 
+Another feature I implemented was making use of the automation features Trello offers. I created color-coded unique labels for every team, and wrote rules so when a
+card is added and labelled to the main board, it is then automatically added to the appropriate team board. I was unfortunately unable to sync the card numbers when
+the cards are copied in separate boards, but I did link them, so it is easy to find the correct card number to name the branch. 
+
+For this week, I need to complete a course on writing a parser and tokenizations. It is an 18 part YouTube series. Once I have a stronger grasp on these concepts, 
+we will be able to plan our coding and divide tasks. 

@@ -1,0 +1,2 @@
+During the first week, I looked up AST to be able to understand how we will implement it (tokenization, parsing then code generation). I also got informed on building a parser/tokenizer from scratch. 
+Next week, I will get familiar with the library we chose and how we are going to use it. I will also get together with my team to define specific tasks, after having assimilated as much information as we could the first week.

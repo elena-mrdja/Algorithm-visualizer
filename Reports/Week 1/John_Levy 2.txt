@@ -1,0 +1,1 @@
+The past week has been dedicated to gaining knowledge in GUI programming, especially the Qt Library. Having followed a course on Robust Qt and C++ GUI, this week I intend to start designing the interface of the project with the rest of the team and start the implementation. 
