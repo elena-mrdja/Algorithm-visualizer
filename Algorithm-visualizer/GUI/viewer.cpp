@@ -109,7 +109,7 @@ void Viewer::compute_start()
     return QPointF(x,y);*/
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    ellipse = scene ->addEllipse(10,10,100,100);
+    ellipse = scene ->addEllipse(10,10,100,100,blackpen, redbrush);
 }
 
 
@@ -117,7 +117,7 @@ void Viewer::compute_decision()
 {
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    diamond = scene ->addRect(0,0,100,100);
+    diamond = scene ->addRect(0,0,100,100,blackpen, redbrush);
     //diamond -> setRotation(180);
 }
 

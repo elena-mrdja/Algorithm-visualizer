@@ -19,13 +19,8 @@ public:
 
 
 public slots:
-
-
-<<<<<<< HEAD
-=======
     void on_variables_clicked();
 
->>>>>>> 1c751daf5e26e44ccf99f7bae28e97308783d66f
     void on_Visualize_clicked();
 
 private:
