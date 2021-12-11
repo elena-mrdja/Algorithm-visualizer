@@ -263,7 +263,21 @@ Block* While::get_block_stmt(){return block_stmt;};
 void While::set_block_stmt(Block* stmt){block_stmt = stmt;};
 subtypes While::get_subtype(){return while_loop;};
 
-flowchart read_statement(Statement* stmt, int i, list<CacheList*> variables){
+ValuesList::ValuesList(Value* h, Value* t){
+    head = h;
+    tail = t;
+};
+Value* ValuesList::get_head(){return head;};
+Value* ValuesList::get_tail(){return tail;};
+void ValuesList::set_head(Value* h){head = h;};
+void ValuesList::set_tail(Value* t){tail = t;};
+void ValuesList::add_value(Value* v){
+    tail->next = v;
+    v->prev = tail;
+    tail = v;
+};
+
+flowchart read_statement(Statement* stmt, int i, list<map<Variable*, Value>*> variables){
     //returns a flowchart corresponding to the given statement
     //this function is supposed to be used within the walker i will keep the line of the statement being read
     //(so, if stmt is in the 20th line, i = 20)
@@ -272,7 +286,9 @@ flowchart read_statement(Statement* stmt, int i, list<CacheList*> variables){
     if (stmt_type == declaration){
         chart.shape = rectangle;
         chart.text = "Declare " + stmt->get_variable()->get_name();
-        VarNode var = VarNode(stmt->get_variable()->get_name(), stmt->get_variable()->get_value());
+        Value var;
+        var.value = stmt->get_variable()->get_value();
+        //variables[i][stmt->get_variable()].add_value(var);
         return chart;
     }
     if(stmt_type == assignment){
@@ -303,45 +319,3 @@ void draw_flowchart(Block* block){
         //flowchart* chart = read_statement(block->statements[i], i);
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

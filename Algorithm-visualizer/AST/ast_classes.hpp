@@ -357,6 +357,29 @@ public:
 };
 //Cache
 /* Cache will be stored as a dictionary which contains a linked list. We chose this format as we do not have to decide how big the arrays need to be */
+
+struct Value{
+    double value;
+    Value* prev;
+    Value* next;
+};
+
+class ValuesList {
+public:
+    ValuesList();
+    ValuesList(Value* h, Value* t);
+    ~ValuesList();
+    Value* get_head();
+    Value* get_tail();
+    void set_head(Value* h);
+    void set_tail(Value* t);
+    void add_value(Value* v);
+private:
+    Value* head;
+    Value* tail;
+};
+
+/*
 class VarNode; //one line declaration
 class CacheNode{
 public:
@@ -470,6 +493,7 @@ private:
 
 
 class Cache; //TBC
+*/
 
 enum chart_shape {
     rectangle = 0,
