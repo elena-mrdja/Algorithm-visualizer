@@ -277,7 +277,7 @@ void ValuesList::add_value(Value* v){
     tail = v;
 };
 
-flowchart read_statement(Statement* stmt, int i, list<map<Variable*, Value>*> variables){
+flowchart read_statement(Statement* stmt, int i, list<map<Variable*, Value>*>* variables){
     //returns a flowchart corresponding to the given statement
     //this function is supposed to be used within the walker i will keep the line of the statement being read
     //(so, if stmt is in the 20th line, i = 20)
@@ -314,7 +314,8 @@ flowchart read_statement(Statement* stmt, int i, list<map<Variable*, Value>*> va
 
 void draw_flowchart(Block* block){
     int n = block->num_statements();
-    //initialize CacheList of length n
+    list<map<Variable*, Value>*>* variables = new list<map<Variable*, Value>*>[n];
+    //this list has to be initialized to have pointers to maps for each line
     for (int i = 0; i < n; i++){
         //flowchart* chart = read_statement(block->statements[i], i);
     };
