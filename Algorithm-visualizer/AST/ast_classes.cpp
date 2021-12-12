@@ -19,6 +19,16 @@ int Block::num_statements(){
     return j;
 };
 
+list<Statement*>* Block::get_statements(){
+    return statements;
+};
+
+
+
+
+
+
+
 Negation::Negation(Expression* exp){expression = exp;};
 Expression* Negation::get_expression(){return expression;};
 void Negation::set_expression(Expression* exp){expression = exp;};
@@ -32,6 +42,11 @@ void BinOp::set_left_exp(Expression* exp){left_exp = exp;};
 void BinOp::set_right_exp(Expression* exp){right_exp = exp;};
 Expression* BinOp::get_left_exp(){return left_exp;};
 Expression* BinOp::get_right_exp(){return right_exp;};
+
+
+
+
+
 
 Addition::Addition(Expression* l_e, Expression* r_e){
     left_exp = l_e;
@@ -277,7 +292,7 @@ void ValuesList::add_value(Value* v){
     tail = v;
 };
 
-flowchart read_statement(Statement* stmt, int i, list<map<Variable*, Value>*>* variables){
+flowchart read_statement(Statement* stmt, int i, list<map<Variable*, ValuesList*>*>* variables){
     //returns a flowchart corresponding to the given statement
     //this function is supposed to be used within the walker i will keep the line of the statement being read
     //(so, if stmt is in the 20th line, i = 20)
@@ -314,9 +329,12 @@ flowchart read_statement(Statement* stmt, int i, list<map<Variable*, Value>*>* v
 
 void draw_flowchart(Block* block){
     int n = block->num_statements();
-    list<map<Variable*, Value>*>* variables = new list<map<Variable*, Value>*>[n];
+    list<map<Variable*, ValuesList*>*>* variables = new list<map<Variable*, ValuesList*>*>[n];
     //this list has to be initialized to have pointers to maps for each line
-    for (int i = 0; i < n; i++){
-        //flowchart* chart = read_statement(block->statements[i], i);
+    list<Statement*>::iterator i;
+    int j = 1;
+    for (i = block->get_statements()->begin(); i != block->get_statements()->end();i++){
+        flowchart chart = read_statement(*i, j, variables);
+        j++;
     };
 };

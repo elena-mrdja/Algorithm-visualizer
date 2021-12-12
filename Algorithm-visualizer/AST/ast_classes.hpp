@@ -61,10 +61,12 @@ public :
     Block();
     ~Block();
     subtypes get_subtype();
-    list<Statement> statements; // list of statements in the block
+    list<Statement*>* get_statements();
     CacheList* variables;
     Block* parent_block; //nullptr if it is the program block
     int num_statements();
+protected:
+    list<Statement*>* statements; // list of statements in the block
 };
 
 //EXPRESSION
@@ -374,6 +376,7 @@ public:
     void set_head(Value* h);
     void set_tail(Value* t);
     void add_value(Value* v);
+    bool is_empty(); //fill in
 private:
     Value* head;
     Value* tail;
