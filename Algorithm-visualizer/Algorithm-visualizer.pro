@@ -12,6 +12,7 @@ SOURCES += \
     AST/assignment.cpp \
     AST/ast.cpp \
     AST/ast_builder.cpp\
+    AST/ast_classes.cpp \
     AST/ast_classes.cpp\
     AST/binop.cpp \
     AST/block.cpp \

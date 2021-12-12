@@ -10,34 +10,49 @@ using namespace std;
 class CacheList;
 class CacheNode;
 
+enum types {
+    expression = 0,
+    statement = 1
+};
+
+enum subtypes {
+    block = 0,
+    neg = 1,
+    ifelse = 2,
+    ifrest = 3,
+    while_loop = 4,
+    binop = 5,
+    variable = 6,
+    declaration = 7,
+    assignment = 8,
+    return_stmt = 9
+};
+
 //AST
 class AST {
 public :
     AST();
     ~AST();
-    virtual string get_type(); // Statement or Expression
-    virtual string get_subtype(); // Block, Declaration, UnOp, BinOp, ...
-    void set_prev(AST* previous){prev = previous;};
-    void set_next(AST* following){next = following;};
-    AST* prev = nullptr;
-    AST* next = nullptr;
+    virtual types get_type(); // Statement or Expression
+    virtual subtypes get_subtype(); // Block, Declaration, UnOp, BinOp, ...
 };
 class Block; //one-line declaration, to prevent errors, as Statement needs Block and Block needs statement
 class Variable;
 class Declaration;
 class Expression;
+class IfRest;
 
 //STATEMENT
 class Statement : public AST {
 public :
     Statement();
     ~Statement();
-    string get_type(){return "Statement";};
-    Block* block; //reference to its block (to be able to access Cache)
+    types get_type();
     Variable* get_variable();
     string get_name();
     Expression* get_condition();
-    Block* else_stmt;
+    Block* block_stmt;
+    IfRest* else_stmt;
 };
 
 //BLOCK
@@ -45,18 +60,11 @@ class Block : public Statement {
 public :
     Block();
     ~Block();
-    string get_subtype(){return "Block";};
+    subtypes get_subtype();
     list<Statement> statements; // list of statements in the block
     CacheList* variables;
     Block* parent_block; //nullptr if it is the program block
-    int num_statements(){
-        list<Statement>::iterator i;
-        int j = 0;
-        for(i = statements.begin(); i != statements.end(); ++i){
-               j++;
-        }
-        return j;
-    };
+    int num_statements();
 };
 
 //EXPRESSION
@@ -70,7 +78,7 @@ class Expression : public AST {
 public :
     Expression();
     ~Expression();
-    string get_type(){return "Expression";};
+    types get_type();
     virtual double get_value() = 0;
     virtual exp_type get_exp_type() = 0;
     string get_text();
@@ -81,16 +89,14 @@ public :
 class Negation : public Expression {
 public :
     Negation();
+    Negation(Expression* exp);
     ~Negation();
-    string get_subtype(){return "UnOp";};
-    exp_type get_exp_type(){return boolean;};
-    Expression* get_expression(){return expression;};
-    void set_expression(Expression* exp){expression = exp;};
-    double get_value(){
-        if (expression->get_value() != 0) return 0;
-        return 1;
-    };
-    string get_text(){return "not(" + expression->get_text() + ")";};
+    subtypes get_subtype();
+    exp_type get_exp_type();
+    Expression* get_expression();
+    void set_expression(Expression* exp);
+    double get_value();
+    string get_text();
 private :
     Expression* expression;
 };
@@ -100,11 +106,11 @@ class BinOp : public Expression {
 public :
     BinOp();
     ~BinOp();
-    string get_subtype(){return "BinOp";};
-    void set_left_exp(Expression* exp){left_exp = exp;};
-    void set_right_exp(Expression* exp){right_exp = exp;};
-    Expression* get_left_exp(){return left_exp;};
-    Expression* get_right_exp(){return right_exp;};
+    subtypes get_subtype();
+    void set_left_exp(Expression* exp);
+    void set_right_exp(Expression* exp);
+    Expression* get_left_exp();
+    Expression* get_right_exp();
     Expression* left_exp;
     Expression* right_exp;
 };
@@ -112,197 +118,129 @@ public :
 class Addition : public BinOp {
 public :
     Addition();
+    Addition(Expression* l_e, Expression* r_e);
     ~Addition();
-    public : double get_value(){
-        if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean) {return 0;};
-        {
-            cout << "One of the expressions is a boolean";
-            return 0;
-        };
-        return left_exp->get_value() + right_exp->get_value();
-    };
-    exp_type get_exp_type(){return number;};
-    string get_text(){return left_exp->get_text() + " + " + right_exp->get_text();};
+    public : double get_value();
+    exp_type get_exp_type();
+    string get_text();
 };
 
 class Subtraction : public BinOp {
 public :
     Subtraction();
+    Subtraction(Expression* l_e, Expression* r_e);
     ~Subtraction();
-    double get_value(){
-        if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean)
-        {
-            cout << "One of the expressions is a boolean";
-            return 0;
-        };
-        return left_exp->get_value() - right_exp->get_value();
-    };
-    exp_type get_exp_type(){return number;};
-    string get_text(){return left_exp->get_text() + " - " + right_exp->get_text();};
+    double get_value();
+    exp_type get_exp_type();
+    string get_text();
 };
 
 class Multiplication : public BinOp {
 public :
     Multiplication();
+    Multiplication(Expression* l_e, Expression* r_e);
     ~Multiplication();
-    double get_value(){
-        if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean)
-        {
-            cout << "One of the expressions is a boolean";
-            return 0;
-        };
-        return left_exp->get_value() * right_exp->get_value();
-    };
-    exp_type get_exp_type(){return number;};
-    string get_text(){return left_exp->get_text() + " * " + right_exp->get_text();};
+    double get_value();
+    exp_type get_exp_type();
+    string get_text();
 };
 
 class Division : public BinOp {
 public :
     Division();
+    Division(Expression* l_e, Expression* r_e);
     ~Division();
-    double get_value(){
-        if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean)
-        {
-            cout << "One of the expressions is a boolean";
-            return 0;
-        };
-        if (right_exp->get_value() == 0)
-        {
-            cout << "Division by zero";
-            return 0;
-        };
-        return left_exp->get_value() / right_exp->get_value();
-    };
-    exp_type get_exp_type(){return number;};
-    string get_text(){return left_exp->get_text() + " / " + right_exp->get_text();};
+    double get_value();
+    exp_type get_exp_type();
+    string get_text();
 };
 
 class Mthan : public BinOp {
 public :
     Mthan();
+    Mthan(Expression* l_e, Expression* r_e);
     ~Mthan();
-    double get_value(){
-        if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean)
-        {
-            cout << "One of the expressions is a boolean";
-            return 0;
-        };
-        if (left_exp->get_value() > right_exp->get_value()) return 1;
-        return 0;
-    };
-    exp_type get_exp_type(){return boolean;};
-    string get_text(){return left_exp->get_text() + " > " + right_exp->get_text();};
+    double get_value();
+    exp_type get_exp_type();
+    string get_text();
 };
 
 class Lthan : public BinOp {
 public :
     Lthan();
+    Lthan(Expression* l_e, Expression* r_e);
     ~Lthan();
-    double get_value(){
-        if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean)
-        {
-            cout << "One of the expressions is a boolean";
-            return 0;
-        };
-        if (left_exp->get_value() < right_exp->get_value()) return 1;
-        return 0;
-    };
-    exp_type get_exp_type(){return boolean;};
-    string get_text(){return left_exp->get_text() + " < " + right_exp->get_text();};
+    double get_value();
+    exp_type get_exp_type();
+    string get_text();
 };
 
 class Leq : public BinOp {
 public :
     Leq();
+    Leq(Expression* l_e, Expression* r_e);
     ~Leq();
-    double get_value(){
-        if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean)
-        {
-            cout << "One of the expressions is a boolean";
-            return 0;
-        };
-        if (left_exp->get_value() <= right_exp->get_value()) return 1;
-        return 0;
-    };
-    exp_type get_exp_type(){return boolean;};
-    string get_text(){return left_exp->get_text() + " <= " + right_exp->get_text();};
+    double get_value();
+    exp_type get_exp_type();
+    string get_text();
 };
 
 class Meq : public BinOp {
 public :
     Meq();
+    Meq(Expression* l_e, Expression* r_e);
     ~Meq();
-    double get_value(){
-        if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean)
-        {
-            cout << "One of the expressions is a boolean";
-            return 0;
-        };
-        if (left_exp->get_value() >= right_exp->get_value()) return 1;
-        return 0;
-    };
-    exp_type get_exp_type(){return boolean;};
-    string get_text(){return left_exp->get_text() + " >= " + right_exp->get_text();};
+    double get_value();
+    exp_type get_exp_type();
+    string get_text();
 };
 
 class Eqeq : public BinOp {
 public :
     Eqeq();
+    Eqeq(Expression* l_e, Expression* r_e);
     ~Eqeq();
-    double get_value(){
-        if (left_exp->get_value() == right_exp->get_value()) return 1;
-        return 0;
-    };
-    exp_type get_exp_type(){return boolean;};
-    string get_text(){return left_exp->get_text() + " == " + right_exp->get_text();};
+    double get_value();
+    exp_type get_exp_type();
+    string get_text();
 };
 
 class AndOp : public BinOp {
 public :
     AndOp();
+    AndOp(Expression* l_e, Expression* r_e);
     ~AndOp();
-    double get_value(){
-        if (left_exp->get_value() && right_exp->get_value()) return 1;
-        return 0;
-    };
-    exp_type get_exp_type(){return boolean;};
-    string get_text(){return left_exp->get_text() + " and " + right_exp->get_text();};
+    double get_value();
+    exp_type get_exp_type();
+    string get_text();
 };
 
 class OrOp : public BinOp {
 public :
     OrOp();
+    OrOp(Expression* l_e, Expression* r_e);
     ~OrOp();
-    double get_value(){
-        if (left_exp->get_value() || right_exp->get_value()) return 1;
-        return 0;
-    };
-    exp_type get_exp_type(){return boolean;};
-    string get_text(){return left_exp->get_text() + " or " + right_exp->get_text();};
+    double get_value();
+    exp_type get_exp_type();
+    string get_text();
 };
 
 class Variable : public Expression {
 public :
     Variable();
+    Variable(string n, double v);
+    Variable(string n, bool v);
     ~Variable();
-    void set_name(std::string n){name = n;};
-    void set_value(bool val){
-        if (val) value = 1;
-        else value = 0;
-        type = boolean;
-    };
-    void set_value(double val){
-        value = val;
-        type = number;
-    };
-    std::string get_name(){return name;};
-    double get_value(){return value;};
-    exp_type get_exp_type(){return type;};
-    string get_subtype(){return "Variable";};
-    string get_text(){return name;};
+    void set_name(std::string n);
+    void set_value(bool val);
+    void set_value(double val);
+    std::string get_name();
+    double get_value();
+    exp_type get_exp_type();
+    subtypes get_subtype();
+    string get_text();
 protected:
-    std::string name;
+    string name;
     double value = 0;
     exp_type type;
 };
@@ -337,7 +275,7 @@ public:
     void set_value(double v){variable.set_value(v);};
     void set_value(bool v){variable.set_value(v);};
     Variable get_variable(){return variable;};
-    std::string get_subtype(){return "Declaration";};
+    subtypes get_subtype(){return declaration;};
   //void add_variable_to_list(){Block variables; variables.insert({variable, value});};
 protected:
     Variable variable;
@@ -349,7 +287,7 @@ public:
     ~Assignment();
     string get_name(){return var_name;};
     void set_name(string n){var_name = n;};
-    string get_subtype(){return "Assignment";};
+    subtypes get_subtype(){return assignment;};
 protected:
     //the Assigment is of form Variable = Expression
     //the value of the expression is supposed to be added straight to the Cache and not kept in this object
@@ -363,7 +301,7 @@ class Return : public Statement {
     ~Return();
     void set_exp(Expression* e){exp = e;};
     Expression* get_exp(){return exp;};
-    string get_subtype(){return "Return";};
+    subtypes get_subtype(){return return_stmt;};
 private:
     Expression* exp;
 };
@@ -372,61 +310,76 @@ private:
 class Decision : public Statement {
 public :
     Decision();
+    Decision(Expression* c);
     ~Decision();
-    void set_condition(Expression* c){condition = c;};
-    Expression* get_condition(){return condition;};
-    double get_value(){
-        if (condition->get_value()) return 1;
-        return 0;
-    };
-    bool is_true(){
-        if (get_value() == 1) return true;
-        return false;
-    };
+    void set_condition(Expression* c);
+    Expression* get_condition();
+    double get_value();
+    bool is_true();
 protected:
     Expression* condition;
 };
 
 class IfRest : public Statement {
 public:
-   IfRest();
-   ~IfRest();
-   Block* get_block_stmt(){return block_stmt;};
-   void set_block_stmt(Block* stmt){block_stmt = stmt;};
-   string get_subtype(){return "IfRest";};
-    Block* block_stmt;
+    IfRest();
+    IfRest(Block* b);
+    ~IfRest();
+    Block* get_block_stmt();
+    void set_num_stmt(int n);
+    void set_block_stmt(Block* stmt);
+    subtypes get_subtype();
+    int num_stmt;
 };
 
 class IfElse : public Decision {
 public:
     IfElse();
+    IfElse(Block* block, IfRest* else_stmt);
     ~IfElse();
-    //attributes: condition(expression), IfRest
-    void set_condition(Expression* c){condition = c;};
-    Expression* get_condition(){return condition;};
-    void set_else_stmt(IfRest* stmt){else_stmt = stmt;};
-    IfRest* get_else_stmt(){return else_stmt;};
-    std::string get_subtype(){return "IfElse";};
-protected:
-    Block* block;
-    IfRest* else_stmt;
+    void set_condition(Expression* c);
+    Expression* get_condition();
+    void set_else_stmt(IfRest* stmt);
+    IfRest* get_else_stmt();
+    subtypes get_subtype();
 };
 
 class While : public Decision {
 public:
     While();
+    While(Expression* c, Block* b);
     ~While();
-    void set_condition(Expression* c){condition = c;};
-    Expression* get_condition(){return condition;};
-    Block* get_block_stmt(){return block_stmt;};
-    void set_block_stmt(Block* stmt){block_stmt = stmt;};
-    std::string get_subtype(){return "While";};
-protected:
-    Expression* condition;
-    Block* block_stmt;
+    void set_condition(Expression* c);
+    Expression* get_condition();
+    Block* get_block_stmt();
+    void set_block_stmt(Block* stmt);
+    subtypes get_subtype();
 };
 //Cache
 /* Cache will be stored as a dictionary which contains a linked list. We chose this format as we do not have to decide how big the arrays need to be */
+
+struct Value{
+    double value;
+    Value* prev;
+    Value* next;
+};
+
+class ValuesList {
+public:
+    ValuesList();
+    ValuesList(Value* h, Value* t);
+    ~ValuesList();
+    Value* get_head();
+    Value* get_tail();
+    void set_head(Value* h);
+    void set_tail(Value* t);
+    void add_value(Value* v);
+private:
+    Value* head;
+    Value* tail;
+};
+
+/*
 class VarNode; //one line declaration
 class CacheNode{
 public:
@@ -467,6 +420,7 @@ private:
     //Value stored at this node
     double value;
     VarNode* variables;
+    string name;
 
 };
 
@@ -539,6 +493,7 @@ private:
 
 
 class Cache; //TBC
+*/
 
 enum chart_shape {
     rectangle = 0,
@@ -552,73 +507,6 @@ struct flowchart {
     int first_block; // num of stmts in the first block (if in if and the only block in while)
     int second_block; // num of stmts in else
 };
-
-flowchart read_statement(Statement* stmt, int i){
-    //returns a flowchart corresponding to the given statement
-    //this function is supposed to be used within the walker i will keep the line of the statement being read
-    //(so, if stmt is in the 20th line, i = 20)
-    string stmt_type = stmt->get_subtype();
-    flowchart chart;
-    if (stmt_type == "Declaration"){
-        chart.shape = rectangle;
-        chart.text = "Declare " + stmt->get_variable()->get_name();
-        VarNode var = VarNode(stmt->get_variable()->get_name(), stmt->get_variable()->get_value());
-        return chart;
-    }
-    if(stmt_type == "Assignment"){
-        chart.shape = rectangle;
-        chart.text = "Assign " + stmt->get_name();
-        return chart;
-    };
-    if(stmt_type == "IfElse"){
-        chart.shape = diamond;
-        chart.text = stmt->get_condition()->get_text();
-        chart.first_block = stmt->block->num_statements();
-        chart.second_block = stmt->else_stmt->num_statements();
-        return chart;
-    };
-    if(stmt_type == "While"){
-        chart.shape = diamond;
-        chart.text = stmt->get_condition()->get_text();
-        chart.first_block = stmt->block->num_statements();
-        return chart;
-    };
-};
-// matea take a look
-void ast_walker(list<Statement>* stmts){
-    list<Statement>::iterator i;
-    for(i = stmts->begin(); i != stmts->end(); ++i){
-        flowchart chart;
-        //anyway i can't access individual elements by subscript for some reason
-        //will come back to it
-    };
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
