@@ -11,9 +11,9 @@ subtypes Variable::get_subtype(){return variable;};
 exp_type Negation::get_exp_type(){return boolean;}
 
 int Block::num_statements(){
-    list<Statement>::iterator i;
+    list<Statement*>::iterator i;
     int j = 0;
-    for(i = statements.begin(); i != statements.end(); ++i){
+    for(i = statements->begin(); i != statements->end(); ++i){
            j++;
     }
     return j;
