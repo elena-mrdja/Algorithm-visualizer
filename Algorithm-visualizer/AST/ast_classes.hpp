@@ -511,6 +511,4 @@ struct flowchart {
     int second_block; // num of stmts in else
 };
 
-
-
 #endif // AST_CLASSES_HPP
