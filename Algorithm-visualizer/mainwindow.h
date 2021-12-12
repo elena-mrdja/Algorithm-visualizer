@@ -7,6 +7,7 @@
 #include <QGraphicsView>
 #include <QGraphicsItem>
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -19,16 +20,24 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    QGraphicsScene *scene;
+    QGraphicsView *view;
 
-private slots:
+
+public slots:
+    void on_Visualize_clicked();
+
 
 
 private:
     Ui::MainWindow *ui;
-    //define objects for different shapes
-    QGraphicsScene *scene;
-    QGraphicsEllipseItem *ellipse;
+    //QGraphicsScene *scene;
+    QGraphicsLineItem *horizontal_line;
+    QGraphicsLineItem *vertical_line;
     QGraphicsRectItem *rectangle;
+    QGraphicsRectItem *diamond;
+    QGraphicsEllipseItem *ellipse;
+    //QGraphicsView *view;
     QGraphicsTextItem *text;
 
 };

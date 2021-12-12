@@ -3,28 +3,14 @@
 #include <QPainter>
 #include <QGraphicsView>
 
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
-    //drawing of elipse with text
-    //scene = new QGraphicsScene(this);
-    //ui->graphicsView->setScene(scene);
 
-    //QBrush greenBrush(Qt::green);
-    //QBrush whiteBrush(Qt::red);
-    //QPen outlinePen(Qt::lightGray);
-    //outlinePen.setWidth(2);
-
-    // addEllipse(x,y,w,h,pen,brush)
-    //ellipse = scene->addEllipse(0, -200, 300, 60, outlinePen, whiteBrush);
-
-    //text = scene->addText("Start", QFont("Arial", 30) );
-    // movable text
-    //text->setFlag(QGraphicsItem::ItemIsMovable);
-    //text->setPos(110, -190);
 }
 
 
@@ -32,6 +18,18 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+
+void MainWindow::on_Visualize_clicked()
+{
+    this->ui->widget_3->manual_flowchart(); // but it doesn't work for some reason
+
+    //this->ui->widget_3->setShape(Viewer::Process);
+    //this->ui->widget_3->compute();
+ }
+
+
+
 
 
 

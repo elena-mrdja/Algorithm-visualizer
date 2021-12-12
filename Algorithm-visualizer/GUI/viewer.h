@@ -1,8 +1,19 @@
 #ifndef VIEWER_H
 #define VIEWER_H
-
 #include <QWidget>
+#include <QMainWindow>
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QGraphicsTextItem>
+#include <QtGui>
+#include <QPaintEvent>
+#include <QGraphicsItem>
+#include <QPainter>
+#include <Qt>
 
+QT_BEGIN_NAMESPACE
+namespace Ui { class Viewer; }
+QT_END_NAMESPACE
 
 class Viewer : public QWidget
 {
@@ -14,7 +25,8 @@ public:
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
     //declaring all the shapes we will use
-    enum ShapeType {Arrow, UnitLine, Decision, Process, Start};
+    enum ShapeType {Vertical, Horizontal, Decision, Process, Start};
+
 
     void setBackgroundColor(QColor color){mBackgroundColor=color;} //setter function
     QColor backgroudColor() const {return mBackgroundColor; }  //getter, const function so that it doesn't modify the class variables
@@ -25,19 +37,35 @@ public:
     void setScale(float scale) {mScale=scale; repaint();}
     float scale() const {return mScale;}
 
-    void draw_start(const int radius);
 
-protected:
+    //useless tho, cuz start is always the same, no need for radius nor any computation..Delete this after telling Elena
+    void draw_start(const int radius); //just defined, never actually coded in .cpp
+
+
+    void manual_flowchart();
+
+    QGraphicsScene *scene;
+    QGraphicsLineItem *horizontal_line;
+    QGraphicsLineItem *vertical_line;
+    QGraphicsRectItem *rectangle;
+    QGraphicsRectItem *diamond;
+    QGraphicsEllipseItem *ellipse;
+    QGraphicsView *view;
+    QGraphicsTextItem *text;
+    QGraphicsItem *item;
+    QPainter *painter;
+
+
+public:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
-
-private:
-    QPointF compute_arrow(float t);
-    QPointF compute_unitline(float t);
-    QPointF compute_decision(float t);
-    QPointF compute_process(float t);
-    QPointF compute_start(float t);
+    void compute_start();
+    void compute_horizontal();
+    void compute_vertical();
+    void compute_decision();
+    void compute_process();
     void on_shape_changed();
-    QPointF compute(float t); //dispatch function based on mShape type
+    void compute(); //dispatch function based on mShape type
+
 private:
     QColor mBackgroundColor;
     QColor mShapeColor;
@@ -46,6 +74,12 @@ private:
     float mIntervalLength;
     float mScale;
     int mStepCount;
+
+
+protected:
+    virtual void WheelEvent(QWheelEvent *event);
+
+
 
 signals:
 
