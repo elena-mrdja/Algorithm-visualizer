@@ -38,8 +38,8 @@ public:
     float scale() const {return mScale;}
 
 
-    //useless tho, cuz start is always the same, no need for radius nor any computation..Delete this after telling Elena
-    void draw_start(const int radius); //just defined, never actually coded in .cpp
+
+    void draw_start(const int radius);
 
 
     void manual_flowchart();

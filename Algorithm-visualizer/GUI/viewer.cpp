@@ -10,6 +10,10 @@ Viewer::Viewer(QWidget *parent) : QWidget(parent),mBackgroundColor(0, 0, 0),mSha
 {
     on_shape_changed();
 
+
+    manual_flowchart();
+
+
 }
 
 QSize Viewer::minimumSizeHint() const
@@ -21,65 +25,12 @@ QSize Viewer::sizeHint() const
     return QSize(400,200);
 }
 
-void Viewer::manual_flowchart()
-{
-    //manually made flowchart:
-
-    //setting up the scene..
-    scene = new QGraphicsScene(this);
-    view = new QGraphicsView(this);
-    view->setScene(scene);
-
-    //the background of scene and shapes
-    scene->setBackgroundBrush(Qt::black);
 
 
 
-    //QBrush greenBrush(Qt::green);
-    QBrush whiteBrush(Qt::red);
-    QPen outlinePen(Qt::lightGray);
-    outlinePen.setWidth(2);
+void draw_start()
+{PASS_MAX;}
 
-
-    // movable text (do we need it at all?)
-    //text->setFlag(QGraphicsItem::ItemIsMovable);
-
-
-    //position text(it fails every time, it doesn't work nice, we need to find other solution
-    //text->setPos(350, -300);
-
-
-
-    //this seems like cool idea to center string into shapes, but I still don't quite understand how it works
-    //painter->drawText(item->boundingRect(), Qt::AlignCenter, QString::number(3));
-    //QFont numberFont = QFont("Helvetica [Cronyx]", 20);
-    //painter->setFont(numberFont);
-
-
-
-    //draw elements with add_____(x,y,w,h,pen,brush)
-    ellipse = scene->addEllipse(320, -300, 300, 60, outlinePen, whiteBrush);
-    text = scene->addText(".", QFont("Arial", 30)); // if u remove this line, the whole flowchart will be f***ed up cuz coordinates change if it is not here????? I have no idea why it happens
-    rectangle = scene->addRect(320, -220, 300, 60, outlinePen, whiteBrush);
-    rectangle = scene->addRect(320, -140, 300, 60, outlinePen, whiteBrush);
-    diamond = scene->addRect(320, - 60, 150, 150, outlinePen, whiteBrush);
-    diamond->setRotation(+45); //and yes obv the moment you rotate the whole coordinate system is untrackable.. (or at least I couldn't find any logic behing it
-    //so it is brute forced to work.... :)
-    diamond->setPos(200, -255);
-    rectangle = scene->addRect(480, 150, 300, 60, outlinePen, whiteBrush); //indentation works well and it is easy
-    rectangle = scene->addRect(480, 230, 300, 60, outlinePen, whiteBrush);
-    rectangle = scene->addRect(480, 310, 300, 60, outlinePen, whiteBrush);
-    rectangle = scene->addRect(480,390, 300, 60, outlinePen, whiteBrush);
-    rectangle = scene->addRect(480,470, 300, 60, outlinePen, whiteBrush);
-    rectangle = scene->addRect(320, 550, 300, 60, outlinePen, whiteBrush);
-    rectangle = scene->addRect(320, 630, 300, 60, outlinePen, whiteBrush);
-    rectangle = scene->addRect(320, 710, 300, 60, outlinePen, whiteBrush);
-    rectangle = scene->addRect(320, 790, 300, 60, outlinePen, whiteBrush);
-    rectangle = scene->addRect(320, 870, 300, 60, outlinePen, whiteBrush);
-    rectangle = scene->addRect(320, 950, 300, 60, outlinePen, whiteBrush);
-    ellipse = scene->addEllipse(320, 1030, 300, 60, outlinePen, whiteBrush);
-
-}
 
 void Viewer::on_shape_changed()
 {
@@ -225,3 +176,67 @@ void Viewer::paintEvent(QPaintEvent *event) //draw function
     QPoint center = this->rect().center(); //i guess this line centers the point which influences the coordinate system later on for coordinates
 
 }
+
+
+
+
+
+
+//function that makes manual_flowchart (u can delete once we don't need it anymore)
+void Viewer::manual_flowchart()
+{
+    //manually made flowchart:
+
+    //setting up the scene..
+    scene = new QGraphicsScene(this);
+    view = new QGraphicsView(this);
+    view->setScene(scene);
+
+    //the background of scene and shapes
+    scene->setBackgroundBrush(Qt::black);
+
+
+
+    //QBrush greenBrush(Qt::green);
+    QBrush whiteBrush(Qt::red);
+    QPen outlinePen(Qt::lightGray);
+    outlinePen.setWidth(2);
+
+
+    // movable text (do we need it at all?)
+    //text->setFlag(QGraphicsItem::ItemIsMovable);
+
+
+    //position text(it fails every time, it doesn't work nice, we need to find other solution
+    //text->setPos(350, -300);
+
+
+
+    //this seems like cool idea to center string into shapes, but I still don't quite understand how it works
+    //painter->drawText(item->boundingRect(), Qt::AlignCenter, QString::number(3));
+    //QFont numberFont = QFont("Helvetica [Cronyx]", 20);
+    //painter->setFont(numberFont);
+
+    text = scene->addText(".", QFont("Arial", 30)); // if u remove this line, the whole flowchart will be f***ed up cuz coordinates change if it is not here????? I have no idea why it happens
+    ellipse = scene->addEllipse(320, -300, 300, 60, outlinePen, whiteBrush);
+
+    //draw elements with add_____(x,y,w,h,pen,brush)
+    for(int i = 0; i < 2; i++){
+        rectangle = scene->addRect(320, -220+80*i, 300, 60, outlinePen, whiteBrush);
+
+    diamond = scene->addRect(320, - 60, 150, 150, outlinePen, whiteBrush);
+    diamond->setRotation(+45); //and yes obv the moment you rotate the whole coordinate system is untrackable.. (or at least I couldn't find any logic behing it
+    //so it is brute forced to work.... :)
+    diamond->setPos(200, -255);
+    for(int j = 0; j < 5; j++) {
+        rectangle = scene->addRect(480, 150+80*j, 300, 60, outlinePen, whiteBrush); //indentation works well
+
+    }
+    for(int z = 0; z < 6; z++) {
+    {
+        rectangle = scene->addRect(320, 550+80*z, 300, 60, outlinePen, whiteBrush);
+    }
+
+    ellipse = scene->addEllipse(320, 1030, 300, 60, outlinePen, whiteBrush);
+
+}}}
