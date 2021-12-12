@@ -1,0 +1,86 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.7"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "test_antlr4",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "antlr4_runtime::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-antlr4_runtime-d1ce2cdd826535af1496.json",
+					"name" : "antlr4_runtime",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "antlr4_runtime-build_shared::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-antlr4_runtime-build_shared-ae344a2cd561a3b09a37.json",
+					"name" : "antlr4_runtime-build_shared",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "antlr4_runtime-build_static::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-antlr4_runtime-build_static-ee95eb7066efc9603009.json",
+					"name" : "antlr4_runtime-build_static",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "test_antlr4::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-test_antlr4-d8f7605df9f846931e1c.json",
+					"name" : "test_antlr4",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/katushaborisova/Desktop/test_antlr4 copy/build",
+		"source" : "/Users/katushaborisova/Desktop/test_antlr4 copy"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 0
+	}
+}
