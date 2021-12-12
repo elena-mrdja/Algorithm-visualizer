@@ -8,12 +8,15 @@ Viewer::Viewer(QWidget *parent) : QWidget(parent), mBackgroundColor(0,0,255),mSh
 {
     on_shape_changed();
 
-    scene = new QGraphicsScene(this);
-    view = new QGraphicsView(this);
-    view->setScene(scene);
-    QBrush redbrush(Qt::red);
-    QPen blackpen(Qt::black);
-    ellipse = scene ->addEllipse(10,10,100,100,blackpen, redbrush);
+    set_background();
+    //manual_flowchart();
+
+    //scene = new QGraphicsScene(this);
+    //view = new QGraphicsView(this);
+    //view->setScene(scene);
+    //QBrush redbrush(Qt::red);
+    //QPen blackpen(Qt::black);
+    //ellipse = scene ->addEllipse(10,10,100,100,blackpen, redbrush);
 }
 
 QSize Viewer::minimumSizeHint() const
@@ -46,7 +49,7 @@ void Viewer::on_shape_changed()
             mScale =4;
             mIntervalLength = 4*M_PI;
             mStepCount = 256;
-            mBackgroundColor = Qt::blue;
+            mBackgroundColor = Qt::black;
             break;
 
         case Decision:
@@ -61,30 +64,30 @@ void Viewer::on_shape_changed()
         }
 }
 
-void Viewer::compute()
+void Viewer::compute(double x, double y, double l, double w)
 {
     switch (mShape) {
         case Horizontal:
-        return compute_horizontal();
+        return compute_horizontal(x, y, l, w);
             break;
 
         case Vertical:
             //mBackgroundColor = Qt::green;
-            return compute_vertical();
+            return compute_vertical(x, y, l, w);
             break;
 
         case Start:
-            return compute_start();
+            return compute_start(x, y, l, w);
                 break;
 
         case Process:
             //mBackgroundColor = Qt::blue;
-            return compute_process();
+            return compute_process(x, y, l, w);
             break;
 
         case Decision:
             //mBackgroundColor = Qt::yellow;
-            return compute_decision();
+            return compute_decision(x, y, l, w);
             break;
 
         default:
@@ -92,22 +95,24 @@ void Viewer::compute()
         }
 }
 
-void Viewer::compute_vertical()
+void Viewer::compute_vertical(double x, double y, double l, double w)
 {
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    vertical_line = scene ->addLine(10,10,100,100);
+    vertical_line = scene ->addLine(x, y, l, w);
+    //10,10,100,100
 }
 
 
-void Viewer::compute_horizontal()
+void Viewer::compute_horizontal(double x, double y, double l, double w)
 {
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    horizontal_line = scene ->addLine(10,10,100,100);
+    horizontal_line = scene ->addLine(x, y, l, w);
+    //10,10,100,100
 }
 
-void Viewer::compute_start()
+void Viewer::compute_start(double x, double y, double l, double w)
 {
     /*float cos_t = cos(t);
     float sin_t = sin(t);
@@ -116,23 +121,26 @@ void Viewer::compute_start()
     return QPointF(x,y);*/
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    ellipse = scene ->addEllipse(10,10,100,100,blackpen, redbrush);
+    ellipse = scene ->addEllipse(x, y, l, w,blackpen, redbrush);
+    //10,10,100,100
 }
 
 
-void Viewer::compute_decision()
+void Viewer::compute_decision(double x, double y, double l, double w)
 {
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    diamond = scene ->addRect(0,0,100,100,blackpen, redbrush);
-    //diamond -> setRotation(180);
+    diamond = scene ->addRect(x, y, l, w,blackpen, redbrush);
+    //diamond -> setRotation(45);
+    //0,0,100,100
 }
 
-void Viewer::compute_process()
+void Viewer::compute_process(double x, double y, double l, double w)
 {
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    rectangle = scene ->addRect(20,20,100,100, blackpen, redbrush);
+    rectangle = scene ->addRect(x, y, l, w, blackpen, redbrush);
+    //20,20,100,100
 }
 
 void Viewer::paintEvent(QPaintEvent *event) //draw function
@@ -146,21 +154,119 @@ void Viewer::paintEvent(QPaintEvent *event) //draw function
 
     QPoint center = this->rect().center();
 
-    //parametrization of the diamond shape (quesiton for Elena: jel si ovo sve sa tutorijala uzela ili si samakucala? neke stvari ne razumem)
-    //QPointF prevPoint = compute(0);
-    //QPoint prevPixel;
-    //prevPixel.setX(prevPoint.x()*mScale + center.x());
-    //prevPixel.setY(prevPoint.y()*mScale + center.y());
-
-    //float step = mIntervalLength/mStepCount;
-    //for(float t=0; t< mIntervalLength; t+=step){
-        //QPointF point = compute_start(t);
-
-        //QPoint pixel;
-        //pixel.setX(point.x()*mScale + center.x());
-        //pixel.setY(point.y()*mScale + center.y());
-
-        //painter.drawLine(pixel,prevPixel);
-        //prevPixel =pixel;
-    //}
 }
+
+
+//scrollable Viewer cell
+//problem is that the scroll line appears right next to the shapes and does not take the whole Viewer cell area
+//another weird thing is that it always cut in half the last element which idk why happens
+void Viewer::WheelEvent(QWheelEvent *event)
+{
+    view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+    double scaleFactor = 1.15;
+    if (event->delta() > 0)
+    {
+        item->setTransform(QTransform::fromScale(scaleFactor, scaleFactor), true);
+
+    }
+    else
+    {
+        item->setTransform(QTransform::fromScale(1/scaleFactor, 1/scaleFactor), true);
+    }
+
+}
+
+
+
+
+
+//function that makes manual_flowchart (u can delete once we don't need it anymore)
+void Viewer::manual_flowchart()
+{
+    //manually made flowchart:
+
+    //setting up the scene..
+    scene = new QGraphicsScene(this);
+    view = new QGraphicsView(this);
+    view->setScene(scene);
+
+    //the background of scene and shapes
+    scene->setBackgroundBrush(Qt::black);
+
+
+
+    //QBrush greenBrush(Qt::green);
+    QBrush whiteBrush(Qt::red);
+    QPen outlinePen(Qt::lightGray);
+    outlinePen.setWidth(2);
+
+
+    // movable text (do we need it at all?)
+    //text->setFlag(QGraphicsItem::ItemIsMovable);
+
+
+    //position text(it fails every time, it doesn't work nice, we need to find other solution
+    //text->setPos(350, -300);
+
+
+
+    //this seems like cool idea to center string into shapes, but I still don't quite understand how it works
+    //painter->drawText(item->boundingRect(), Qt::AlignCenter, QString::number(3));
+    //QFont numberFont = QFont("Helvetica [Cronyx]", 20);
+    //painter->setFont(numberFont);
+
+    text = scene->addText(".", QFont("Arial", 30)); // if u remove this line, the whole flowchart will be f***ed up cuz coordinates change if it is not here????? I have no idea why it happens
+    ellipse = scene->addEllipse(320, -300, 300, 60, outlinePen, whiteBrush);
+
+    //draw elements with add_____(x,y,w,h,pen,brush)
+    for(int i = 0; i < 2; i++){
+        rectangle = scene->addRect(320, -220+80*i, 300, 60, outlinePen, whiteBrush);
+
+    diamond = scene->addRect(320, - 60, 150, 150, outlinePen, whiteBrush);
+    diamond->setRotation(+45); //and yes obv the moment you rotate the whole coordinate system is untrackable.. (or at least I couldn't find any logic behing it
+    //so it is brute forced to work.... :)
+    diamond->setPos(200, -255);
+    for(int j = 0; j < 5; j++) {
+        rectangle = scene->addRect(480, 150+80*j, 300, 60, outlinePen, whiteBrush); //indentation works well
+
+    }
+    for(int z = 0; z < 6; z++) {
+    {
+        rectangle = scene->addRect(320, 550+80*z, 300, 60, outlinePen, whiteBrush);
+    }
+
+    ellipse = scene->addEllipse(320, 1030, 300, 60, outlinePen, whiteBrush);
+
+}}}
+
+
+
+void Viewer::set_background()
+{
+
+    scene = new QGraphicsScene(this);
+    view = new QGraphicsView(this);
+    view->setScene(scene);
+
+    //the background of scene and shapes
+    scene->setBackgroundBrush(Qt::black);
+
+
+    QBrush greenBrush(Qt::green);
+    QBrush whiteBrush(Qt::white);
+    QBrush blackBrush(Qt::black);
+    QPen outlinePen(Qt::lightGray);
+    QPen black_pen(Qt::black);
+    outlinePen.setWidth(2);
+
+    rectangle = scene->addRect(0, 1000, 100, 20, black_pen, blackBrush);
+    rectangle = scene->addRect(10000, 0, 100, 20, black_pen, blackBrush);
+    rectangle = scene->addRect(10000, 10000, 100, 20, black_pen, blackBrush);
+    rectangle = scene->addRect(0, 0, 100, 20, black_pen, blackBrush);
+}
+
+
+
+
+
+

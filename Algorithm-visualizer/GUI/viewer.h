@@ -8,6 +8,7 @@
 #include <QGraphicsView>
 #include <QtGui>
 #include <QPaintEvent>
+#include <QGraphicsItem>
 #include <QPainter>
 #include <Qt>
 
@@ -34,6 +35,9 @@ public:
 
     void draw_start(const int radius);
 
+    void manual_flowchart();
+    void set_background();
+
 public:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
@@ -44,18 +48,22 @@ public:
     QGraphicsRectItem *diamond;
     QGraphicsEllipseItem *ellipse;
     QGraphicsView *view;
+    QGraphicsItem *item;
+    QPainter *painter;
+    QGraphicsTextItem *text;
 
     //Ui::MainWindow *ui;
     //Ui::Viewer *ui;
 
-public:
-    void compute_start();
-    void compute_horizontal();
-    void compute_vertical();
-    void compute_decision();
-    void compute_process();
+
+    void compute_start(double x, double y, double l, double w);
+    void compute_horizontal(double x, double y, double l, double w);
+    void compute_vertical(double x, double y, double l, double w);
+    void compute_decision(double x, double y, double l, double w);
+    void compute_process(double x, double y, double l, double w);
     void on_shape_changed();
-    void compute(); //dispatch function based on mShape type
+    void compute(double x, double y, double l , double w); //dispatch function based on mShape type
+
 private:
     QColor mBackgroundColor;
     QColor mShapeColor;
@@ -64,6 +72,10 @@ private:
     float mIntervalLength;
     float mScale;
     int mStepCount;
+
+
+protected:
+    virtual void WheelEvent(QWheelEvent *event);
 
 signals:
 

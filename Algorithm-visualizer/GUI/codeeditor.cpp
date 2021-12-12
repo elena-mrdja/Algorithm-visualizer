@@ -121,10 +121,11 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 }
 
 
+//function that takes current state of the text editor and converts it into a file
 void CodeEditor::writeOut(QString docText)
 {
     //QDir::currentPath()
-    std::string const nomFichier("/Users/johnlevy/score.txt");
+    std::string const nomFichier("/Users/mina_goranovic/Desktop/score.txt");
     docText = this->toPlainText();
     std::ofstream MyFile(nomFichier);
     if(MyFile)
@@ -136,7 +137,7 @@ void CodeEditor::writeOut(QString docText)
 
 void CodeEditor::readIn()
 {
-    std::string const nomFichier("/Users/johnlevy/score.txt");
+    std::string const nomFichier("/Users/mina_goranovic/Desktop/score.txt");
     std::string myText;
     std::ifstream readFile(nomFichier);
 
