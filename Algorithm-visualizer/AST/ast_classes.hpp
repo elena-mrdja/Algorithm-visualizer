@@ -584,8 +584,8 @@ flowchart read_statement(Statement* stmt, int i){
         return chart;
     };
 };
-
-list<flowchart> ast_walker(list<Statement>* stmts){
+// matea take a look
+void ast_walker(list<Statement>* stmts){
     list<Statement>::iterator i;
     for(i = stmts->begin(); i != stmts->end(); ++i){
         flowchart chart;
