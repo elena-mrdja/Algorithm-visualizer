@@ -4,6 +4,7 @@
 #include <iostream>
 #include <list>
 #include <map>
+#include <array>
 using namespace std;
 
 //CACHE
@@ -53,6 +54,8 @@ public :
     Expression* get_condition();
     Block* block_stmt;
     IfRest* else_stmt;
+    Expression* get_assign_exp();
+    double get_assign_value();
 };
 
 //BLOCK
@@ -287,15 +290,19 @@ class Assignment : public Statement {
 public:
     Assignment();
     ~Assignment();
-    string get_name(){return var_name;};
-    void set_name(string n){var_name = n;};
+    Variable* get_variable(){return variable;};
+    Expression* get_assign_exp(){return exp;};
+    double get_assign_value(){return exp->get_value();};
+    void set_variable(Variable* v){variable = v;};
+    void set_assign_expression(Expression* e){exp = e;};
     subtypes get_subtype(){return assignment;};
 protected:
     //the Assigment is of form Variable = Expression
     //the value of the expression is supposed to be added straight to the Cache and not kept in this object
     //When we do the walker/variable tracking maybe we will need to add another argument
     //in this object that keeps Variable/Expression.
-    string var_name; //at this point we know that the variable is in Cache
+    Variable* variable;
+    Expression* exp; //expression is the value the variable is assigned
 };
 
 class Return : public Statement {
@@ -512,83 +519,6 @@ struct flowchart {
 };
 
 //FUNCTION CREATE_AST_FROM_PARSE
-string create_ast_from_parse(string pre_ast) {
-    //UnOp
-    if (pre_ast[1] == '!'){
-        Negation ast;
-        ast.expression* = pre_ast[0];
-    }
-
-    //BinOp
-    if (pre_ast[1] == '+'){
-        Addition ast;
-        ast.left_exp* = pre_ast[0];
-        ast.right_exp* = pre_ast[2];
-    }
-    if (pre_ast[1] == '-'){
-        Subtraction ast;
-        ast.left_exp* = pre_ast[0];
-        ast.right_exp* = pre_ast[2];
-    }
-    if (pre_ast[1] == '*'){
-        Multiplication ast;
-        ast.left_exp* = pre_ast[0];
-        ast.right_exp* = pre_ast[2];
-    }
-    if (pre_ast[1] == '/'){
-        Division ast;
-        ast.left_exp* = pre_ast[0];
-        ast.right_exp* = pre_ast[2];
-    }
-    if (pre_ast[1] == '<'){
-        Mthan ast;
-        ast.left_exp* = pre_ast[0];
-        ast.right_exp* = pre_ast[2];
-    }
-    if (pre_ast[1] == '>'){
-        Lthan ast;
-        ast.left_exp* = pre_ast[0];
-        ast.right_exp* = pre_ast[2];
-    }
-    if (pre_ast[1] == '<='){
-        Meq ast;
-        ast.left_exp* = pre_ast[0];
-        ast.right_exp* = pre_ast[2];
-    }
-    if (pre_ast[1] == '>='){
-        Leq ast;
-        ast.left_exp* = pre_ast[0];
-        ast.right_exp* = pre_ast[2];
-    }
-    if (pre_ast[1] == '=='){
-        Eqeq ast;
-        ast.left_exp* = pre_ast[0];
-        ast.right_exp* = pre_ast[2];
-    }
-    if (pre_ast[1] == '&&'){
-        AndOp ast;
-        ast.left_exp* = pre_ast[0];
-        ast.right_exp* = pre_ast[2];
-    }
-    if (pre_ast[1] == '||'){
-        OrOp ast;
-        ast.left_exp* = pre_ast[0];
-        ast.right_exp* = pre_ast[2];
-    }
-
-    //Variable
-    if (pre_ast[0] == ('bool' || 'int' || 'double' || 'char' || 'list' || 'string') ){
-        Variable ast;
-        ast.name = pre_ast[1];
-        ast.value = pre_ast[2];
-        ast.type = pre_ast[0]
-    }
-
-    //Assignment
-    if (pre_ast[0] == 'x'){  //what shoul i put as a condition for assignement???
-        Assignment ast;
-        ast.var_name = pre_ast[0];
-    }
-};
+string create_ast_from_parse(string pre_ast);
 
 #endif // AST_CLASSES_HPP
