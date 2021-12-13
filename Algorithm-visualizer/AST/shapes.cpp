@@ -1,4 +1,5 @@
 #include "shapes.hpp"
+#include "ast_classes.hpp"
 
 //function that creates struct for a flowchart for each statement
 flowchart read_statement(Statement* stmt, int i, list<map<Variable*, ValuesList*>*>* variables){
