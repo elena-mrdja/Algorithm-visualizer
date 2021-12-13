@@ -120,6 +120,15 @@ void Viewer::compute_horizontal(double x, double y, double l, double w)
 
 void Viewer::compute_start(double x, double y, double l, double w)
 {
+    QString words;
+    bool value = 1; // The variable value will actually be passed to the function as argument (it tells us if it's END or START)
+    if (value)
+    {
+        words = "START";
+    }
+    else words = "END";
+
+
     /*float cos_t = cos(t);
     float sin_t = sin(t);
     float x = cos_t;
@@ -127,8 +136,9 @@ void Viewer::compute_start(double x, double y, double l, double w)
     return QPointF(x,y);*/
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
+
+    auto text = this->createText(words, x,y,l,w);
     ellipse = scene ->addEllipse(x, y, l, w,blackpen, redbrush);
-    auto text = this->createText("START", x,y,l,w);
     scene->addItem(ellipse);
     scene->addItem(text);
 }
@@ -136,18 +146,41 @@ void Viewer::compute_start(double x, double y, double l, double w)
 
 void Viewer::compute_decision(double x, double y, double l, double w)
 {
+    QString words;
+    QString condition = "x > 0"; // The variable condition will actually be passed to the function as argument (condition gotten from backend)
+    bool value = 1; // The variable value will actually be passed to the function as argument (it tells us if it's IF or WHILE)
+    if (value)
+    {
+        words = "if " + condition;
+    }
+    else words = "while " + condition;
+
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
     diamond = scene ->addRect(x, y, l, w,blackpen, redbrush);
+    auto text = this->createText(words, x,y,l,w);
+    scene->addItem(ellipse);
+    scene->addItem(text);
     //diamond -> setRotation(45);
     //0,0,100,100
 }
 
 void Viewer::compute_process(double x, double y, double l, double w)
 {
+    QString words;
+    QString varName = "x "; // The variable condition will actually be passed to the function as argument (var name gotten from backend)
+    bool value = 1; // The variable value will actually be passed to the function as argument (it tells us if it's DECLARE or ASSIGN)
+    if (value)
+    {
+        words = "DECLARE " + varName;
+    }
+    else words = "ASSIGN " + varName;
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
     rectangle = scene ->addRect(x, y, l, w, blackpen, redbrush);
+    auto text = this->createText(words, x,y,l,w);
+    scene->addItem(ellipse);
+    scene->addItem(text);
     //20,20,100,100
 }
 
@@ -280,7 +313,6 @@ void Viewer::set_background()
 
 QGraphicsSimpleTextItem* Viewer::createText(QString str, int x, int y, int w, int l)
 {
-    //auto str = QString("HELLO");
     auto text = new QGraphicsSimpleTextItem(str);
     text->setBrush(QBrush(Qt::white));
     text->setPen(QPen(QPen(Qt::white)));
