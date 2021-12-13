@@ -4,6 +4,7 @@
 #include <iostream>
 #include <list>
 #include <map>
+#include <array>
 using namespace std;
 
 //CACHE
@@ -53,6 +54,8 @@ public :
     Expression* get_condition();
     Block* block_stmt;
     IfRest* else_stmt;
+    Expression* get_assign_exp();
+    double get_assign_value();
 };
 
 //BLOCK
@@ -287,15 +290,19 @@ class Assignment : public Statement {
 public:
     Assignment();
     ~Assignment();
-    string get_name(){return var_name;};
-    void set_name(string n){var_name = n;};
+    Variable* get_variable(){return variable;};
+    Expression* get_assign_exp(){return exp;};
+    double get_assign_value(){return exp->get_value();};
+    void set_variable(Variable* v){variable = v;};
+    void set_assign_expression(Expression* e){exp = e;};
     subtypes get_subtype(){return assignment;};
 protected:
     //the Assigment is of form Variable = Expression
     //the value of the expression is supposed to be added straight to the Cache and not kept in this object
     //When we do the walker/variable tracking maybe we will need to add another argument
     //in this object that keeps Variable/Expression.
-    string var_name; //at this point we know that the variable is in Cache
+    Variable* variable;
+    Expression* exp; //expression is the value the variable is assigned
 };
 
 class Return : public Statement {
@@ -510,7 +517,6 @@ struct flowchart {
     int first_block; // num of stmts in the first block (if in if and the only block in while)
     int second_block; // num of stmts in else
 };
-
 
 
 #endif // AST_CLASSES_HPP

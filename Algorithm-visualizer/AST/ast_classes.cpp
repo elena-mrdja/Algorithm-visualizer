@@ -286,10 +286,17 @@ Value* ValuesList::get_head(){return head;};
 Value* ValuesList::get_tail(){return tail;};
 void ValuesList::set_head(Value* h){head = h;};
 void ValuesList::set_tail(Value* t){tail = t;};
+bool ValuesList::is_empty(){return head == nullptr;};
 void ValuesList::add_value(Value* v){
-    tail->next = v;
-    v->prev = tail;
-    tail = v;
+    if (is_empty()){
+        head = v;
+        tail = v;
+    }
+    else {
+        tail->next = v;
+        v->prev = tail;
+        tail = v;
+    }
 };
 
 flowchart read_statement(Statement* stmt, int i, list<map<Variable*, ValuesList*>*>* variables){

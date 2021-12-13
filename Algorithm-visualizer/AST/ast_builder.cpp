@@ -1,15 +1,10 @@
 #include "ast_builder.hpp"
 
-//the function that finalizes the building of the AST:
-list<Statement> ast(list<string>);
-//input: output of team 1 that gives us all the elements we need easily accessible
-//output: the AST
-
 string create_ast_from_parse(string pre_ast) {
     //UnOp
     if (pre_ast[1] == '!'){
         Negation ast;
-        ast.expression* = pre_ast[0];
+        ast.set_expression(pre_ast[0]*);
     }
 
     //BinOp
