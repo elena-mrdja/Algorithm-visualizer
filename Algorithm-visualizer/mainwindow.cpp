@@ -40,7 +40,7 @@ void MainWindow::on_variables_clicked()
 //}
 
 //void MainWindow::draw()
-//{
+//{ §
   //  update();
 //}
 

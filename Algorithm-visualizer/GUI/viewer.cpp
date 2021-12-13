@@ -8,11 +8,13 @@
 #include <QFontMetrics>
 
 
+
 Viewer::Viewer(QWidget *parent) : QWidget(parent), mBackgroundColor(0,0,255),mShapeColor(255,255,255),mShape(Process)
 {
     on_shape_changed();
 
     set_background();
+
     //manual_flowchart();
 
     //scene = new QGraphicsScene(this);
@@ -212,7 +214,6 @@ void Viewer::manual_flowchart()
 
 
     //position text(it fails every time, it doesn't work nice, we need to find other solution
-    //text->setPos(350, -300);
 
 
 
@@ -221,8 +222,14 @@ void Viewer::manual_flowchart()
     //QFont numberFont = QFont("Helvetica [Cronyx]", 20);
     //painter->setFont(numberFont);
 
-    text = scene->addText(".", QFont("Arial", 30)); // if u remove this line, the whole flowchart will be f***ed up cuz coordinates change if it is not here????? I have no idea why it happens
+    //text = scene->addText("START", QFont("Arial", 30)); // if u remove this line, the whole flowchart will be f***ed up cuz coordinates change if it is not here????? I have no idea why it happens
+    //text->setPos(350, -300);
     ellipse = scene->addEllipse(320, -300, 300, 60, outlinePen, whiteBrush);
+
+    //Mina trying out stuff, don't deletebe before consulting her!
+    //scene -> addItem(ellipse);
+    //QGraphicsTextItem *text = scene->addText("Start");
+    //text->setPos(320,-300);
 
     //draw elements with add_____(x,y,w,h,pen,brush)
     for(int i = 0; i < 2; i++){
