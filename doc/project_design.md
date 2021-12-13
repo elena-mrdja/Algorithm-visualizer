@@ -92,13 +92,13 @@ Algorithm Visualizer will be a tool where user will be able to input C++ code in
     * Virgile - Jump, UnOp classes
     * Elsa - Negation, Print claases 
     * Stefan - ArrayType (start upgrading our grammar)
-    * Matea - 
-    * Dasha - 
-    * Evdokia - 
+    * Matea -  Finish new cache, write function that reads while, add tracking to walker.
+    * Dasha - Merge backend with Milena.
+    * Evdokia - Write a function that reads Ifelse.
     * Elena - Test the variableTracker cell for VarDec, Assign, While and If/else. Find a solution for nested loops (work with John).
     * John - Figure out how to position text in shapes. Implement lines to connect shapes (while/if special challenge work with Elena).
     * Katia - Do the AST class, make sure other team members are respecting the deadlines. Work on merging the textEditor with Mina. Fix the bug with childrensize in block with Elsa.
-    * Milena - 
+    * Milena - Merge backend.
     * Mina - Write all of the limitations of our porgram for the user. Write down the ANTLR guideline in the README. Test the shapes drawing. Merge text editor with Katia and test.
  
 
