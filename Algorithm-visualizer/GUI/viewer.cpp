@@ -2,6 +2,10 @@
 #include "math.h"
 #include <QPaintEvent>
 #include <QPainter>
+#include <QWheelEvent>
+#include <QLabel>
+#include <iostream>
+#include <QFontMetrics>
 
 
 Viewer::Viewer(QWidget *parent) : QWidget(parent), mBackgroundColor(0,0,255),mShapeColor(255,255,255),mShape(Process)
@@ -122,7 +126,9 @@ void Viewer::compute_start(double x, double y, double l, double w)
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
     ellipse = scene ->addEllipse(x, y, l, w,blackpen, redbrush);
-    //10,10,100,100
+    auto text = this->createText("START", x,y,l,w);
+    scene->addItem(ellipse);
+    scene->addItem(text);
 }
 
 
@@ -164,7 +170,7 @@ void Viewer::WheelEvent(QWheelEvent *event)
 {
     view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     double scaleFactor = 1.15;
-    if (event->delta() > 0)
+    if (event->angleDelta().y() > 0)
     {
         item->setTransform(QTransform::fromScale(scaleFactor, scaleFactor), true);
 
@@ -263,6 +269,19 @@ void Viewer::set_background()
     rectangle = scene->addRect(10000, 0, 100, 20, black_pen, blackBrush);
     rectangle = scene->addRect(10000, 10000, 100, 20, black_pen, blackBrush);
     rectangle = scene->addRect(0, 0, 100, 20, black_pen, blackBrush);
+}
+
+QGraphicsSimpleTextItem* Viewer::createText(QString str, int x, int y, int w, int l)
+{
+    //auto str = QString("HELLO");
+    auto text = new QGraphicsSimpleTextItem(str);
+    text->setBrush(QBrush(Qt::white));
+    text->setPen(QPen(QPen(Qt::white)));
+    QFontMetrics font = QFontMetrics(text->font());
+    int length = font.horizontalAdvance(str);
+    int height = font.height();
+    text->setPos(x + w/2 - length/2,y + l/2 - height/2);
+    return text;
 }
 
 

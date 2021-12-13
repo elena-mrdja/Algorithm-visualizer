@@ -76,6 +76,7 @@ private:
 
 protected:
     virtual void WheelEvent(QWheelEvent *event);
+    QGraphicsSimpleTextItem* createText(QString str, int x, int y, int w, int l);
 
 signals:
 
