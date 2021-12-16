@@ -5,6 +5,7 @@
 #include <list>
 #include <map>
 using namespace std;
+const int MAX_LINES = 100;
 
 //CACHE
 class CacheList;
@@ -380,6 +381,20 @@ public:
 private:
     Value* head;
     Value* tail;
+};
+
+class Cache{
+public:
+    Cache(int number);
+    ~Cache();
+    void new_var(Variable* var, int num);
+    ValuesList* get_var(Variable* var);
+    void add_new_value(Variable* var, double value);
+
+
+private:
+    int num_lines;
+    std::map<Variable*, ValuesList*> *variables[MAX_LINES];
 };
 
 /*

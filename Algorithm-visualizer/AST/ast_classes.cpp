@@ -282,8 +282,15 @@ ValuesList::ValuesList(Value* h, Value* t){
     head = h;
     tail = t;
 };
+
+ValuesList::ValuesList(){
+    head = new Value();
+    tail = head;
+}
+
 Value* ValuesList::get_head(){return head;};
 Value* ValuesList::get_tail(){return tail;};
+
 void ValuesList::set_head(Value* h){head = h;};
 void ValuesList::set_tail(Value* t){tail = t;};
 void ValuesList::add_value(Value* v){
@@ -291,6 +298,25 @@ void ValuesList::add_value(Value* v){
     v->prev = tail;
     tail = v;
 };
+
+bool ValuesList::is_empty(){
+    if (head == nullptr && tail == nullptr){
+        return true;
+    }
+    return false;
+}
+
+
+Cache::Cache(int number){
+    num_lines = number;
+}
+void Cache::new_var(Variable* var, int line_num){
+    // Finish
+    std::map<Variable*, ValuesList*> dict = *variables[line_num];
+    dict[var] = new ValuesList();
+    dict[var]->
+
+}
 
 flowchart read_statement(Statement* stmt, int i, list<map<Variable*, ValuesList*>*>* variables){
     //returns a flowchart corresponding to the given statement
