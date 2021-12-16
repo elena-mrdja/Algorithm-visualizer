@@ -306,12 +306,6 @@ void ValuesList::add_value(Value* v){
     }
 };
 
-bool ValuesList::is_empty(){
-    if (head == nullptr && tail == nullptr){
-        return true;
-    }
-    return false;
-}
 
 
 Cache::Cache(int number){
@@ -321,8 +315,13 @@ void Cache::new_var(Variable* var, int line_num){
     // Finish
     std::map<Variable*, ValuesList*> dict = *variables[line_num];
     dict[var] = new ValuesList();
-    dict[var]->
+    dict[var]->get_head()->value = var->get_value();
 
+};
+
+void Cache::add_new_value(Variable *var, Value* value, int line){
+    std::map<Variable*, ValuesList*> dict = *variables[line];
+    dict[var]->add_value(value);
 }
 
 flowchart read_statement(Statement* stmt, int i, list<map<Variable*, ValuesList*>*>* variables){

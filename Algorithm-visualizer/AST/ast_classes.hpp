@@ -396,7 +396,7 @@ public:
     ~Cache();
     void new_var(Variable* var, int num);
     ValuesList* get_var(Variable* var);
-    void add_new_value(Variable* var, double value);
+    void add_new_value(Variable* var, Value* value, int line);
 
 
 private:
