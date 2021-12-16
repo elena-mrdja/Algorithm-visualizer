@@ -21,6 +21,7 @@ SOURCES += \
     AST/decision.cpp \
     AST/declaration.cpp \
     AST/expression.cpp \
+    AST/first_graphics_test.cpp \
     AST/ifelse.cpp \
     AST/ifrest.cpp \
     AST/jump.cpp \
