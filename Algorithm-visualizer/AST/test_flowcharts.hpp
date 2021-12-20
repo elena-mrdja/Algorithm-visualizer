@@ -13,7 +13,7 @@ two.first_block = 1;
 two.second_block = 0;
 
 flowchart three;
-three.shape = 1;
+three.shape = 2;
 three.text = "x + 4";
 
 #endif // TEST_FLOWCHARTS_HPP
