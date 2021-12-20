@@ -58,6 +58,7 @@ HEADERS += \
     AST/print.hpp \
     AST/shapes.hpp \
     AST/statement.hpp \
+    AST/test_flowcharts.hpp \
     AST/tracking.hpp \
     AST/unop.hpp \
     AST/variable.hpp \
