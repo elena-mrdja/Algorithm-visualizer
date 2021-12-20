@@ -97,7 +97,7 @@ whileStmt: WHILE LP cond=exp RP body=block;
 
 returnStmt: RETURN val = exp SEMICOLON;
 
-negation: MINUS integerType | MINUS doubleType;
+negation: MINUS exp;
 
 //good below
 block: LCB stmts* RCB;
