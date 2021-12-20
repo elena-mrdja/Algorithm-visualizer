@@ -137,10 +137,10 @@ public:
 };
 
 
-class Block {
+class AST {
 public :
-    Block(AlgoParser::BlockContext* ctx/*, pass down cache*/ );
-    Block();
+    AST(AlgoParser::BlockContext* ctx/*, pass down cache*/ );
+    AST();
     //~Block();
     Statement* get_children(){return children;}
     Statement get_child(int i){return children[i];} //returns a child by index

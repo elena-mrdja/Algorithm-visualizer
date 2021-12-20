@@ -28,8 +28,8 @@ int main(int argc, const char* argv[]) {
     AlgoParser::FileContext *tree = parser.file();
 
     std::cout << tree->toStringTree(&parser) << std::endl;
-    Block block(tree->mainStmt()->block());
-    std::cout << block.get_child(1).get_child()->get_value()->get_child()->get_value()<< std::endl;
+    AST ast(tree->mainStmt()->block());
+    std::cout << ast.get_child(1).get_child()->get_value()->get_child()->get_value()<< std::endl;
     //ImageVisitor visitor;
     //Scene scene = visitor.visitFile(tree).as<Scene>();
     //scene.draw();

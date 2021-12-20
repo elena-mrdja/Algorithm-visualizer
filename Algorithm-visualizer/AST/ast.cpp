@@ -109,6 +109,8 @@ std::string BinOp::get_value(){
 Expression::Expression(AlgoParser::ExpContext* ctx){
     if (ctx -> binOp()){
         child = new BinOp(ctx);
+    }else if (ctx -> exp(0)){
+        child = Expression(ctx->exp(0)).get_child();
     }else{
         child = new SingleOutput(ctx);
     }
@@ -149,16 +151,17 @@ Statement::Statement(AlgoParser::StmtsContext* ctx){
     }
 }
 
-Block::Block(AlgoParser::BlockContext* ctx) {
-    size = ctx->children.size();
+AST::AST(AlgoParser::BlockContext* ctx) {
+    size = 0;
     children = new Statement[size];
     int idx = 0;
     //cache constructor
     for (auto i: ctx->stmts()){
-         Statement child(i); // child to cache
-         children[idx] = child;
-         idx++;
-}
+        Statement child(i); // child to cache
+        children[idx] = child;
+        size++;
+        idx++;
+    }
 }
 
 
