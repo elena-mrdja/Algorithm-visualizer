@@ -49,14 +49,14 @@ class Statement : public AST {
 public :
     Statement();
     ~Statement();
-    types get_type();
-    Variable* get_variable();
-    string get_name();
-    Expression* get_condition();
+    virtual types get_type();
+    virtual Variable* get_variable();
+    virtual string get_name();
+    virtual Expression* get_condition();
     Block* block_stmt;
     IfRest* else_stmt;
-    Expression* get_assign_exp();
-    double get_assign_value();
+    virtual Expression* get_assign_exp();
+    virtual double get_assign_value();
 };
 
 //BLOCK
@@ -85,9 +85,9 @@ public :
     Expression();
     ~Expression();
     types get_type();
-    virtual double get_value() = 0;
-    virtual exp_type get_exp_type() = 0;
-    string get_text();
+    virtual double get_value();
+    virtual exp_type get_exp_type();
+    virtual string get_text();
 };
 
 
@@ -276,15 +276,15 @@ class Declaration : public Statement {
 public:
     Declaration();
     ~Declaration();
-    void set_variable(Variable var){variable = var;};
-    double get_value(){return variable.get_value();};
-    void set_value(double v){variable.set_value(v);};
-    void set_value(bool v){variable.set_value(v);};
-    Variable get_variable(){return variable;};
+    void set_variable(Variable* var){variable = var;};
+    double get_value(){return variable->get_value();};
+    void set_value(double v){variable->set_value(v);};
+    void set_value(bool v){variable->set_value(v);};
+    Variable* get_variable(){return variable;};
     subtypes get_subtype(){return declaration;};
   //void add_variable_to_list(){Block variables; variables.insert({variable, value});};
 protected:
-    Variable variable;
+    Variable* variable;
 };
 
 class Assignment : public Statement {
@@ -403,122 +403,6 @@ private:
     int num_lines;
     std::map<Variable*, ValuesList*> *variables[MAX_LINES];
 };
-
-/*
-class VarNode; //one line declaration
-class CacheNode{
-public:
-    CacheNode(); // Empty constructor
-    CacheNode(double v, CacheNode* p){ //Constructor when you now the value and the previous node
-        value = v;
-        prev = p;
-
-    };
-    CacheNode( CacheNode* p){ //Constructor to create an empty linked node
-        prev = p;
-
-    };
-    CacheNode* get_prev(){
-        return prev;
-    };
-    CacheNode* get_next(){
-        return next;
-    };
-    void set_prev(CacheNode* p){
-        prev = p;
-    };
-    void set_next(CacheNode* n){
-        next = n;
-    };
-    double get_value(){
-        return value;
-    };
-    void set_value(double v){
-        value = v;
-    };
-    ~CacheNode();
-private:
-    //Previous node
-    CacheNode* prev;
-    //Next node
-    CacheNode* next;
-    //Value stored at this node
-    double value;
-    VarNode* variables;
-    string name;
-
-};
-
-class CacheList{
-public:
-    CacheList();
-    // You initialize a CacheList for a new variable, size of number of lines, where each node represents a the value of x at a certain line
-    CacheList(int lines){
-        // Declare the head
-        CacheNode new_head = CacheNode();
-        head = &new_head;
-        CacheNode* current = head;
-        for (int i = 0; i<lines - 1; i++){
-           // Create an empty node linked to the previous one
-           CacheNode new_node = CacheNode(current);
-           // Link the previous to the new node
-           current->set_next(&new_node);
-           current = &new_node;
-        }
-    };
-    CacheNode* get_head(){
-        return head;
-    };
-    CacheNode* get_tail(){
-        return tail;
-    };
-    void set_head(CacheNode* h){
-        head = h;
-    };
-    void set_tail(CacheNode* t){
-        tail = t;
-    };
-    CacheNode* get(int i){
-        // return the node at postion i
-        CacheNode* current = head;
-        for (int j = 0; j<i; j++){
-            current = current->get_next();
-    }
-        return current;
-    }
-    void add_value(double v, int i){
-        // set the value at position i
-        CacheNode* current = (*this).get(i);
-        current->set_value(v);
-    };
-    ~CacheList();
-private:
-    CacheNode* head;
-    CacheNode* tail;
-};
-
-class VarNode{
-public:
-    VarNode();
-    VarNode(string n, double v){
-        name = n;
-        value = v;
-    };
-    ~VarNode();
-    void set_name(string n){name = n;};
-    void set_value(double v){value = v;};
-    string get_name(){return name;};
-    double get_value(){return value;};
-private:
-    string name;
-    double value;
-    VarNode* next;
-    CacheNode* line;
-};
-
-
-class Cache; //TBC
-*/
 
 enum chart_shape {
     rectangle = 0,
