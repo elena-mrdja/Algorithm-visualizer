@@ -19,7 +19,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_Visualize_clicked()
 {
-    this->ui->widget_3->setShape(Viewer::Process);
+    this->ui->widget_3->setShape(Viewer::Decision);
     this->ui->widget_3->compute(300, 20, 300, 60);
     this->ui->widget_4->readIn();
 }

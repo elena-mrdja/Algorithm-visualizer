@@ -139,7 +139,7 @@ void Viewer::compute_start(double x, double y, double l, double w)
 
     auto text = this->createText(words, x,y,l,w);
     ellipse = scene ->addEllipse(x, y, l, w,blackpen, redbrush);
-    scene->addItem(ellipse);
+    //scene->addItem(ellipse);
     scene->addItem(text);
 }
 
@@ -154,12 +154,19 @@ void Viewer::compute_decision(double x, double y, double l, double w)
         words = "if " + condition;
     }
     else words = "while " + condition;
-
+    x += 50;
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    diamond = scene ->addRect(x, y, l, w,blackpen, redbrush);
-    auto text = this->createText(words, x,y,l,w);
-    scene->addItem(ellipse);
+    diamond = scene->addRect(x, y, 100, 100,blackpen, redbrush);
+    auto text = this->createText(words, x,y,100,100);
+    diamond->setTransformOriginPoint(QPoint(x + w/2, y + l/2));
+    diamond->setRotation(45);
+    if (diamond->rotation() == 45) {
+        diamond->setPos(-56, -42);
+    }
+
+
+
     scene->addItem(text);
     //diamond -> setRotation(45);
     //0,0,100,100
