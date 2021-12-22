@@ -216,7 +216,7 @@ void Viewer::manual_flowchart()
     //QFont numberFont = QFont("Helvetica [Cronyx]", 20);
     //painter->setFont(numberFont);
 
-    //text = scene->addText("START", QFont("Arial", 30)); // if u remove this line, the whole flowchart will be f***ed up cuz coordinates change if it is not here????? I have no idea why it happens
+    text = scene->addText(".", QFont("Arial", 30)); // if u remove this line, the whole flowchart will be f***ed up cuz coordinates change if it is not here????? I have no idea why it happens
     //text->setPos(350, -300);
     ellipse = scene->addEllipse(320, -300, 300, 60, outlinePen, whiteBrush);
 

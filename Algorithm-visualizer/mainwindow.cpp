@@ -20,7 +20,9 @@ MainWindow::~MainWindow()
 void MainWindow::on_Visualize_clicked()
 {
     this->ui->widget_3->setShape(Viewer::Start);
-    this->ui->widget_3->compute(300, 20, 300, 60);
+    for (int i = 1; i < 10; i++) {
+        this->ui->widget_3->compute(300, 20 + i*80, 300, 60);
+    }
     this->ui->widget_4->readIn();
 }
 
