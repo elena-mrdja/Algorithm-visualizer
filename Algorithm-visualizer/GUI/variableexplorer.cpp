@@ -11,9 +11,10 @@ void VariableExplorer::wheelEvent(QWheelEvent *event)
     setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     double scaleFactor = 1.15;
 
-    if (event->delta() > 0) {
+    if (event->angleDelta().y() > 0) {
 
-        scale(scaleFactor,scaleFactor);
+//        scale(scaleFactor,scaleFactor);
+
     }
 
     else {
