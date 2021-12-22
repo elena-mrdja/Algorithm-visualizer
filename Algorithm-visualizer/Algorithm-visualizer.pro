@@ -13,6 +13,7 @@ SOURCES += \
     GUI/highlighter.cpp \
     GUI/linenumberarea.cpp \
     GUI/textblockdata.cpp \
+    GUI/test_flowchart.cpp \
     GUI/variableexplorer.cpp \
     GUI/viewer.cpp \
     main.cpp \
@@ -23,6 +24,7 @@ HEADERS += \
     GUI/highlighter.h \
     GUI/linenumberarea.h \
     GUI/textblockdata.h \
+    GUI/test_flowchart.hpp \
     GUI/variableexplorer.h \
     GUI/viewer.h \
     mainwindow.h \
