@@ -50,8 +50,10 @@ void MainWindow::on_Visualize_clicked()
     int current_y = 20;
 
     this->ui->widget_3->setShape(Viewer::Start);
-    this->ui->widget_3->compute(current_x, current_y, 300, 60);
+    this->ui->widget_3->compute(current_x, current_y, 300, 60); //any string suffices
 
+
+    //create a list of structs
     flowchart arr[4] = {{0, "Declare x", 0, 0},
                         {1, "If x = 1", 1, 0},
                         {0, "Assign x", 0, 0},
@@ -79,22 +81,25 @@ void MainWindow::on_Visualize_clicked()
         //if we have a diamond
         if (arr[i].chart_shape == 1) {
             current_x = 350;
+            c = arr[i].first_block; //will be used for indentation
+
+            //set y
             if (arr[i-1].chart_shape == 1){current_y += 125;}
             if (arr[i-1].chart_shape == 0){current_y += 80;}
+
+            //draw
             this->ui->widget_3->setShape(Viewer::Decision);
             this->ui->widget_3->compute(current_x, current_y, 300, 60);
-
-            c = arr[i].first_block;
         }
     }
 
-    //fix good coordinates for the ending shape
+    //fix x and y
     if(arr[-1].chart_shape == 0) {current_y += 80;}
     else {current_y += 125;}
     current_x = 300;
 
     //draw end
-    this->ui->widget_3->setShape(Viewer::Start);
+    this->ui->widget_3->setShape(Viewer::End);
     this->ui->widget_3->compute(current_x, current_y, 300, 60);
 }
 
@@ -115,6 +120,22 @@ void MainWindow::on_variables_clicked()
 {
     this->ui->widget_4->writeOut(QString("Btn"));
 }
+
+
+
+void MainWindow::on_Done_clicked()
+{
+    this->ui->widget_4->writeOut(QString("Btn"));
+}
+
+
+void MainWindow::on_Upload_clicked()
+{
+    this->ui->widget_4->readIn();
+}
+
+
+
 
 //void MainWindow::draw_shape(QPaintEvent *)
 //{

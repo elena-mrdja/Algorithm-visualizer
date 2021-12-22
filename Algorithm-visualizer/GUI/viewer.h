@@ -12,6 +12,11 @@
 #include <QPainter>
 #include <Qt>
 
+
+#include <iostream>
+#include <string>
+using namespace std;
+
 class Viewer : public QWidget
 {
     Q_OBJECT
@@ -22,7 +27,7 @@ public:
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
     //declaring all the shapes we will use
-    enum ShapeType {Vertical, Horizontal, Decision, Process, Start};
+    enum ShapeType {Vertical, Horizontal, Decision, Process, Start, End};
 
     void setBackgroundColor(QColor color){mBackgroundColor=color;} //setter function
     QColor backgroudColor() const {return mBackgroundColor; }  //getter, const function so that it doesn't modify the class variables
@@ -57,10 +62,12 @@ public:
 
 
     void compute_start(double x, double y, double l, double w);
-    void compute_horizontal(double x, double y, double l, double w);
-    void compute_vertical(double x, double y, double l, double w);
+    void compute_end(double x, double y, double l, double w);
     void compute_decision(double x, double y, double l, double w);
     void compute_process(double x, double y, double l, double w);
+
+    void compute_horizontal(double x, double y, double l, double w);
+    void compute_vertical(double x, double y, double l, double w);
     void on_shape_changed();
     void compute(double x, double y, double l , double w); //dispatch function based on mShape type
 

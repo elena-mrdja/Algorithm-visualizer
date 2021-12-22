@@ -96,6 +96,11 @@ void Viewer::compute(double x, double y, double l, double w)
             return compute_decision(x, y, l, w);
             break;
 
+        case End:
+            //mBackgroundColor = Qt::yellow;
+            return compute_end(x, y, l, w);
+            break;
+
         default:
           break;
         }
@@ -147,6 +152,8 @@ void Viewer::compute_start(double x, double y, double l, double w)
 void Viewer::compute_decision(double x, double y, double l, double w)
 {
     QString words;
+
+    //QString(str);
     QString condition = "x > 0"; // The variable condition will actually be passed to the function as argument (condition gotten from backend)
     bool value = 1; // The variable value will actually be passed to the function as argument (it tells us if it's IF or WHILE)
     if (value)
@@ -154,6 +161,7 @@ void Viewer::compute_decision(double x, double y, double l, double w)
         words = "if " + condition;
     }
     else words = "while " + condition;
+
     x += 50;
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
@@ -175,6 +183,7 @@ void Viewer::compute_decision(double x, double y, double l, double w)
 void Viewer::compute_process(double x, double y, double l, double w)
 {
     QString words;
+
     QString varName = "x "; // The variable condition will actually be passed to the function as argument (var name gotten from backend)
     bool value = 1; // The variable value will actually be passed to the function as argument (it tells us if it's DECLARE or ASSIGN)
     if (value)
@@ -182,6 +191,7 @@ void Viewer::compute_process(double x, double y, double l, double w)
         words = "DECLARE " + varName;
     }
     else words = "ASSIGN " + varName;
+
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
     rectangle = scene ->addRect(x, y, l, w, blackpen, redbrush);
@@ -190,6 +200,33 @@ void Viewer::compute_process(double x, double y, double l, double w)
     scene->addItem(text);
     //20,20,100,100
 }
+
+
+void Viewer::compute_end(double x, double y, double l, double w)
+{
+    QString words;
+    bool value = 0; // The variable value will actually be passed to the function as argument (it tells us if it's END or START)
+    if (value)
+    {
+        words = "START";
+    }
+    else words = "END";
+
+
+    /*float cos_t = cos(t);
+    float sin_t = sin(t);
+    float x = cos_t;
+    float y = sin_t;
+    return QPointF(x,y);*/
+    QBrush redbrush(Qt::red);
+    QPen blackpen(Qt::black);
+
+    auto text = this->createText(words, x,y,l,w);
+    ellipse = scene ->addEllipse(x, y, l, w,blackpen, redbrush);
+    //scene->addItem(ellipse);
+    scene->addItem(text);
+}
+
 
 void Viewer::paintEvent(QPaintEvent *event) //draw function
 {

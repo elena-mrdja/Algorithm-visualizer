@@ -53,6 +53,78 @@
          <property name="styleSheet">
           <string notr="true"/>
          </property>
+         <widget class="QPushButton" name="Done">
+          <property name="geometry">
+           <rect>
+            <x>290</x>
+            <y>650</y>
+            <width>121</width>
+            <height>32</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+	border-radius: 30px;
+	background-color: rgb(107, 142, 183);
+	color : rgb(0,0,0);
+}
+
+
+QPushButton:hover{
+	background-color: rgb(188, 211, 231);
+}
+
+
+QPushButton:clicked {
+	color: rgb(241, 255, 253);
+}</string>
+          </property>
+          <property name="text">
+           <string>Done with code</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="Upload">
+          <property name="geometry">
+           <rect>
+            <x>290</x>
+            <y>600</y>
+            <width>121</width>
+            <height>32</height>
+           </rect>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+	border-radius: 30px;
+	background-color: rgb(107, 142, 183);
+	color : rgb(0,0,0);
+}
+
+
+QPushButton:hover{
+	background-color: rgb(188, 211, 231);
+}
+
+
+QPushButton:clicked {
+	color: rgb(241, 255, 253);
+}</string>
+          </property>
+          <property name="text">
+           <string>Upload .cpp file</string>
+          </property>
+         </widget>
         </widget>
        </item>
        <item>
@@ -175,7 +247,7 @@ QPushButton:clicked {
      <x>0</x>
      <y>0</y>
      <width>825</width>
-     <height>24</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
