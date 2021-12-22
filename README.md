@@ -17,22 +17,22 @@ Algorithm Visualizer is a tool that will help you see the visual representation 
 
 # Teams:
 
-## Parsing team
-This team will be working on the tokenization and the lexical analysis of the code.
+## Parsing/AST team
+This team will be working on the tokenization and the lexical analysis of the code. They will after construct the AST needed for the interpreter team.
 * Ekaterina Borisova
 *	Stefan Vayln
 *	Virgile Martin
 * Elsa Bismuth
 
-## AST team 
-This team will be working on creating the AST.
+## AST/Interpreter team 
+This team will be working on AST classes, but mostly on the way we will interpret the code. They will make two interfaces: one will use for drawing toe flowchart and on the other that we will use for tracking the variables.
 *	Milena Nedeljkovic
 *	Matea Gjika
 *	Darya Todoskova
 *	Evdokia Guenievna
 
 ## GUI
-This is the frontend team that will code the interface part of the project which the user will directly interact with.
+This is the frontend team that will code the interface part of the project which the user will directly interact with. 
 *	Elena Mrdja
 *	John Levy
 *	Mina Goranovic
