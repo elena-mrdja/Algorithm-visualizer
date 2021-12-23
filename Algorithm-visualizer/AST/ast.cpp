@@ -21,6 +21,7 @@ SingleOutput::SingleOutput(AlgoParser::ExpContext* ctx){
         val_type = "variable";
     }
 }
+
 BinOp::BinOp(AlgoParser::ExpContext* ctx){
     AlgoParser::ExpContext* left_node = ctx->exp(0);
     AlgoParser::ExpContext* right_node = ctx->exp(1);
@@ -55,39 +56,39 @@ BinOp::BinOp(AlgoParser::ExpContext* ctx){
     AlgoParser::BinOpContext *i = ctx->binOp();
 
     if(i->PLUS()){
-        operation = 0;
+        operation = addition;
     }else if(i->MINUS()){
-        operation = 1;
+        operation = subtraction;
     }else if(i->TIMES()){
-        operation = 2;
+        operation = multiplication;
     }else if(i->DIV()){
-        operation = 3;
+        operation = division;
     }else if(i->MOD()){
-        operation = 4;
+        operation = modulo;
     }else if(i->XAND()){
-        operation = 5;
+        operation = conj;
     }else if(i->XOR()){
-        operation = 6;
+        operation = disj;
     }else if(i->EQQ()){
-        operation = 7;
+        operation = eqeq;
     }else if(i->NOTEQQ()){
-        operation = 8;
+        operation = noteq;
     }else if(i->LT()){
-        operation = 9;
+        operation = lthan;
     }else if(i->MT()){
-        operation = 10;
+        operation = mthan;
     }else if(i->LEQ()){
-        operation = 11;
+        operation = leq;
     }else if(i->MEQ()){
-        operation = 12;
+        operation = meq;
     }else {
-        operation = 13;
+        operation = unknown_op;
     }
 }
-std::string BinOp::get_value(){
-    std::string a = get_left_expression()->get_value();
+std::string BinOp::get_text(){
+    std::string a = get_left_expression()->get_text();
     std::string op = get_operation();
-    std::string b = right_exp->get_value();
+    std::string b = right_exp->get_text();
     std::string res;
 
     if (left_brakets){
