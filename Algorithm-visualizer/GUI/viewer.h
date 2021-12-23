@@ -64,6 +64,8 @@ public:
     void on_shape_changed();
     void compute(double x, double y, double l , double w); //dispatch function based on mShape type
 
+    QGraphicsSimpleTextItem* createText(QString str, int x, int y, int w, int l);
+
 private:
     QColor mBackgroundColor;
     QColor mShapeColor;
@@ -76,7 +78,7 @@ private:
 
 protected:
     virtual void WheelEvent(QWheelEvent *event);
-    QGraphicsSimpleTextItem* createText(QString str, int x, int y, int w, int l);
+
 
 signals:
 

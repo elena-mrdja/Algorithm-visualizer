@@ -30,7 +30,27 @@ void MainWindow::on_Visualize_clicked()
 
 void MainWindow::on_variables_clicked()
 {
+    vector<char> order;
+    vector<unordered_map<char, vector<double>>::iterator> vec;
+
+    unordered_map<char, vector<double>> mapa;
+    mapa['z'].push_back(4);
+    mapa['z'].push_back(5);
+    mapa['x'].push_back(1);
+    mapa['y'].push_back(2);
+    mapa['y'].push_back(3);
+    order.push_back('z');
+    order.push_back('x');
+    order.push_back('y');
+
+    for(unordered_map<char, vector<double>>::iterator it=mapa.begin();it!=mapa.end();it++)
+    {
+        vec.push_back(it);
+    }
+
     this->ui->widget_4->writeOut(QString("Btn"));
+    this->ui->widget_5->track(mapa, order, 3);
+    //this->ui->widget_5->track2(vec);
 }
 
 

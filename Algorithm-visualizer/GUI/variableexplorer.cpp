@@ -50,3 +50,53 @@ void VariableExplorer::set_background()
 }
 
 
+
+void VariableExplorer::track(std::unordered_map<char, std::vector<double>> mp, std::vector<char> order, int index)
+{
+    string words="";
+    vector<pair<char, double>> written;
+    for(int i=0;i<index;i++)
+    {
+        written.push_back({order[i], mp[order[i]][mp[order[i]].size()-1]});
+        for(int j=0; j<written.size(); j++)
+        {
+            words = words + written[j].first + "=" + std::to_string(written[j].second);
+            //cout<<written[j].first<<"="<<written[j].second;
+            if(j!=written.size()-1)
+                words = words + ", ";
+        }
+        words = words + "\n";
+    }
+    QString word = QString::fromStdString(words);
+    auto text = this->createText2(word, 1,1,100,100);
+    scene->addItem(text);
+}
+
+
+/*void VariableExplorer::track2(vector<unordered_map<char, vector<double>>::iterator> v);
+{
+    vector<pair<char, double>> written;
+    for (int i=0;i<v.size();i++)
+    {
+        written.push_back({v[i]->first, v[i]->second[v[i]->second.size()-1]});
+        for(int i=0;i<written.size();i++)
+        {
+            cout<<written[i].first<<"="<<written[i].second;
+            if(i!=written.size()-1)
+                cout<<", ";
+        }
+        cout<<"\n";
+    }
+}*/
+
+QGraphicsSimpleTextItem* VariableExplorer::createText2(QString str, int x, int y, int w, int l)
+{
+    auto text = new QGraphicsSimpleTextItem(str);
+    text->setBrush(QBrush(Qt::white));
+    text->setPen(QPen(QPen(Qt::white)));
+    QFontMetrics font = QFontMetrics(text->font());
+    int length = font.horizontalAdvance(str);
+    int height = font.height();
+    text->setPos(x + w/2 - length/2,y + l/2 - height/2);
+    return text;
+}
