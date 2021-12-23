@@ -65,6 +65,44 @@ private:
     bool right_brakets = false;
 };
 
+class UnOp : public BinOpExp{
+public:
+    UnOp(AlgoParser::ExpContext* ctx);
+    //~UnOp();
+    std::string get_operation(){ //returns binOp operation
+        switch(operation) {
+        case 0: return "++";
+        case 1: return "--";
+        default: return "unknown operation";
+        }
+    }
+    BinOpExp* get_left_expression(){return left_exp;}; //return the number to which we add or subtract 1
+    std::string get_val_type(){return "UnOperation";};
+    std::string get_value();
+    std::string get_type(){return "UnOp";};
+private:
+    int operation;
+    BinOpExp* left_exp;
+};
+
+
+class Jump : public BinOpExp{
+public:
+    Jump(AlgoParser::JumpContext* ctx);
+    //~UnOp();
+    std::string get_val_type(){
+        switch(jumper) {
+        case 0: return "Break";
+        case 1: return "Continue";
+        default: return "unknown operation";
+        }
+    }
+    std::string get_type(){return "Jump";};
+private:
+    int jumper;
+};
+
+
 class Expression {
 public :
     Expression(AlgoParser::ExpContext* ctx);

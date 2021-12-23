@@ -106,6 +106,37 @@ std::string BinOp::get_value(){
     }
     return res;
 }
+
+
+UnOp::UnOp(AlgoParser::ExpContext* ctx){
+    AlgoParser::ExpContext* left_node = ctx->exp(0);
+    AlgoParser::UnopContext *i = ctx->unop();
+    if(i->PLUSPLUS()){
+        operation = 0;
+    }else if(i->MINUSMINUS()){
+        operation = 1;
+    }else {
+        operation = 2;
+    }
+}
+std::string UnOp::get_value(){
+    std::string a = get_left_expression()->get_value();
+    std::string op = get_operation();
+    std::string res;
+    res = a + op;
+    return res;
+}
+
+Jump::Jump(AlgoParser::JumpContext* ctx){
+    if(ctx->CONT()){
+        jumper = 0;
+    }else if(ctx->BREAK()){
+        jumper = 1;
+    }else {
+        jumper = 2;
+    }
+}
+
 Expression::Expression(AlgoParser::ExpContext* ctx){
     if (ctx -> binOp()){
         child = new BinOp(ctx);
