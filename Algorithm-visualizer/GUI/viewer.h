@@ -61,15 +61,15 @@ public:
     //Ui::Viewer *ui;
 
 
-    void compute_start(double x, double y, double l, double w);
-    void compute_end(double x, double y, double l, double w);
-    void compute_decision(double x, double y, double l, double w);
-    void compute_process(double x, double y, double l, double w);
+    void compute_start(double x, double y, double l, double w, std::string str);
+    void compute_end(double x, double y, double l, double w, std::string str);
+    void compute_decision(double x, double y, double l, double w, std::string str);
+    void compute_process(double x, double y, double l, double w, std::string str);
 
     void compute_horizontal(double x, double y, double l, double w);
     void compute_vertical(double x, double y, double l, double w);
     void on_shape_changed();
-    void compute(double x, double y, double l , double w); //dispatch function based on mShape type
+    void compute(double x, double y, double l , double w, std::string str=""); //dispatch function based on mShape type
 
     QGraphicsSimpleTextItem* createText(QString str, int x, int y, int w, int l);
 
