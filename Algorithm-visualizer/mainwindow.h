@@ -23,6 +23,11 @@ public slots:
 
     void on_Visualize_clicked();
 
+private slots:
+    void on_Done_clicked();
+
+    void on_Upload_clicked();
+
 private:
     Ui::MainWindow *ui;
 
