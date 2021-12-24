@@ -30,12 +30,12 @@ enum chart_shape {
     circle = 2
     };
 
-struct flowchart {
-    int chart_shape;
-    string text;
-    int first_block; // num of stmts in the first block (if in if and the only block in while)
-    int second_block; // num of stmts in else
-};
+//struct flowchart {
+//    int chart_shape;
+//    string text;
+//    int first_block; // num of stmts in the first block (if in if and the only block in while)
+//    int second_block; // num of stmts in else
+//};
 
 
 //flowchart one = {0, "Declare x"};
@@ -73,51 +73,66 @@ void MainWindow::on_Visualize_clicked()
 
 
     //create a list of structs
-    flowchart arr[8] = {{0, "Declare x", 0, 0},
-                        {1, "If x > 1", 2, 0},
-                        {0, "Assign x", 0,0},
-                        {0, "Assign x", 0,0},
-                        {2, "While x >1",2,0}};
+//    flowchart arr[8] = {{0, "Declare x", 0, 0},
+//                        {1, "If x > 1", 4, 0},
+//                        {0, "Assign z", 0,0},
+//                        {1, "If x >2", 2,0},
+//                        {1, "If x < 4", 1, 0},
 //                        {0, "Assign x", 0, 0},
-//                        {0, "Assign x", 1, 0},
 //                        {0, "Assign y", 0, 0}};
 
-    int c = 0; // counter for num of statements in block
+    flowchart arr[7] = {{0, "Declare x", 0, 0},
+                        {1, "If x > 1", 5, 0},
+                        {1, "If x >3", 4,0},
+                        {0, "Assign ghj", 0,0},
+                        {1, "If x < 2", 2,0},
+                        {1, "If x > 3", 1,0},
+                        {0, "Assign y", 0,0}};
 
-    for (int i = 0; i < 8; i++) {
+
+    int numberStatements = 0; // counter for num of statements in block
+
+    for (int i = 0; i < 7; i++) {
         std::string str = arr[i].text;
-        if (c > 0) {nbIndents += 1; c --;}
+        //if (c > 0) {nbIndents += 1; c --;}
+        //if(c == 0 && nbIndents > 1) {nbIndents --;}
         //if we have a rectangle
         if (arr[i].chart_shape == 0) {
 
             //indentation
-            if (arr[i-1].chart_shape == 2){
-                Y += spacing;
-            }
+//            if (arr[i-1].chart_shape == 2){
+//                Y += spacing;
+//            }
             //draw
             this->ui->widget_3->setShape(Viewer::Process);
             this->ui->widget_3->compute(X + nbIndents * indentation, Y, L, W, str);
-            if(nbIndents == 0){this->ui->widget_3->compute_vertical(X+L/2, Y+W,X+L/2, Y+W+spacing);}
+            //if(nbIndents == 0){this->ui->widget_3->compute_vertical(X+L/2, Y+W,X+L/2, Y+W+spacing);}
             //if (nbIndents > 0) {nbIndents --;}
         }
 
         //if we have a diamond
         if (arr[i].chart_shape > 0) {
             Y += spacing;
+            numberStatements = arr[i].first_block;
+            flowchart process_arr[numberStatements+1];
             if(arr[i].chart_shape == 1){
-                c = arr[i].first_block; //will be used for indentation
-            }
+                for (int j = 0;j<numberStatements+1 ;j++ ) {
+                    process_arr[j] = arr[i+j];
+                }
+                i += numberStatements+1;
 
+               // if (c > 0) {nbIndents += 1; c --;}
+               //nbIndents++;
+            }
             //draw
             this->ui->widget_3->setShape(Viewer::Decision);
-            this->ui->widget_3->compute(X+ nbIndents * indentation, Y, L, W, str);
+            this->ui->widget_3->compute(X, Y, L, W, str, process_arr);
         }
         Y += W + spacing;
-        if (nbIndents > 0) {nbIndents --;}
     }
     //draw end
     this->ui->widget_3->setShape(Viewer::End);
-    this->ui->widget_3->compute(X, Y, L, W);
+    this->ui->widget_3->compute(X, Y+500, L, W);
 }
 
 

@@ -17,6 +17,14 @@
 #include <string>
 using namespace std;
 
+struct flowchart {
+    int chart_shape;
+    string text;
+    int first_block; // num of stmts in the first block (if in if and the only block in while)
+    int second_block; // num of stmts in else
+};
+
+
 class Viewer : public QWidget
 {
     Q_OBJECT
@@ -61,19 +69,19 @@ public:
     //Ui::Viewer *ui;
 
 
-    void compute_start(double x, double y, double l, double w, std::string str);
-    void compute_end(double x, double y, double l, double w, std::string str);
+    int compute_start(double x, double y, double l, double w, std::string str);
+    int compute_end(double x, double y, double l, double w, std::string str);
 
-    void compute_decision(double x, double y, double l, double w, std::string str);
-    void compute_if(double x, double y, double l, double w, int spacing, int numberStatements);
-    void compute_while(double x, double y, double l, double w, int spacing, int numberStatements, int numberLoops);
+    int compute_decision(double x, double y, double l, double w, std::string str, flowchart *process_arr);
+    int compute_if(double x, double y, double l, double w, int spacing, flowchart *if_arr);
+    int compute_while(double x, double y, double l, double w, int spacing, int numberStatements, int numberLoops);
 
-    void compute_process(double x, double y, double l, double w, std::string str);
+    int compute_process(double x, double y, double l, double w, std::string str);
 
-    void compute_horizontal(double x, double y, double l, double w);
-    void compute_vertical(double x, double y, double l, double w);
+    int compute_horizontal(double x, double y, double l, double w);
+    int compute_vertical(double x, double y, double l, double w);
     void on_shape_changed();
-    void compute(double x, double y, double l , double w, std::string str=""); //dispatch function based on mShape type
+    int compute(double x, double y, double l , double w, std::string str="", flowchart *process_arr=nullptr); //dispatch function based on mShape type
 
     QGraphicsSimpleTextItem* createText(QString str, int x, int y, int w, int l);
 
