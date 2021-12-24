@@ -317,4 +317,26 @@ private:
 };
 
 
+//below is stuff for the AST walker
+enum chart_shape {
+    rectangle = 0,
+    diamond = 1,
+    circle = 2
+};
+
+enum chart_type {
+    process = 0,
+    if_else = 1,
+    while_chart = 2
+};
+
+struct flowchart {
+    chart_shape shape;
+    chart_type type;
+    string text;
+    int first_block; // num of stmts in the first block (if in if and the only block in while)
+    int second_block; // num of stmts in else
+};
+
+
 
