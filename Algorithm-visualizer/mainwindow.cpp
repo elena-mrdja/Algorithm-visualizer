@@ -57,9 +57,6 @@ struct flowchart {
 
 void MainWindow::on_Visualize_clicked()
 {
-    int current_x = 300;
-    int current_y = 20;
-
     //JOHN TRYING SOME STUFF
     const int X = 300;
     int Y = 20;
@@ -76,58 +73,49 @@ void MainWindow::on_Visualize_clicked()
 
 
     //create a list of structs
-    flowchart arr[6] = {{0, "Declare x", 0, 0},
-                        {1, "If x = 1", 1, 0},
-                        {0, "Assign x", 0, 0},
-                        {1, "Else", 0, 1},
-                        {0, "Assign y", 0, 0},
-                        {0, "Assign z", 0, 0},};
+    flowchart arr[8] = {{0, "Declare x", 0, 0},
+                        {1, "If x > 1", 2, 0},
+                        {0, "Assign x", 0,0},
+                        {0, "Assign x", 0,0},
+                        {2, "While x >1",2,0}};
+//                        {0, "Assign x", 0, 0},
+//                        {0, "Assign x", 1, 0},
+//                        {0, "Assign y", 0, 0}};
 
     int c = 0; // counter for num of statements in block
 
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 8; i++) {
         std::string str = arr[i].text;
+        if (c > 0) {nbIndents += 1; c --;}
         //if we have a rectangle
         if (arr[i].chart_shape == 0) {
 
-            //fix x coord
-            if (c > 0) {nbIndents += 1; c --;}
-            else {current_x = 300;}
-
-            //fix y coord
-            if (arr[i-1].chart_shape == 1){current_y += 125;}
-            if (arr[i-1].chart_shape == 0){current_y += 80;}
-
+            //indentation
+            if (arr[i-1].chart_shape == 2){
+                Y += spacing;
+            }
             //draw
             this->ui->widget_3->setShape(Viewer::Process);
             this->ui->widget_3->compute(X + nbIndents * indentation, Y, L, W, str);
-            if (nbIndents > 0) {nbIndents --;}
+            if(nbIndents == 0){this->ui->widget_3->compute_vertical(X+L/2, Y+W,X+L/2, Y+W+spacing);}
+            //if (nbIndents > 0) {nbIndents --;}
         }
 
         //if we have a diamond
-        if (arr[i].chart_shape == 1) {
+        if (arr[i].chart_shape > 0) {
             Y += spacing;
-            current_x = 350;
-            c = arr[i].first_block; //will be used for indentation
-
-            //set y
-            if (arr[i-1].chart_shape == 1){Y += 125;}
-            if (arr[i-1].chart_shape == 0){current_y += 80;}
+            if(arr[i].chart_shape == 1){
+                c = arr[i].first_block; //will be used for indentation
+            }
 
             //draw
             this->ui->widget_3->setShape(Viewer::Decision);
-            this->ui->widget_3->compute(X, Y, L, W, str);
+            this->ui->widget_3->compute(X+ nbIndents * indentation, Y, L, W, str);
         }
         Y += W + spacing;
-        std::cout << "y" << Y << std::endl;
+        if (nbIndents > 0) {nbIndents --;}
     }
-    //fix x and y
-    if(arr[-1].chart_shape == 0) {current_y += 80;}
-    else {current_y += 125;}
-    current_x = 300;
-
     //draw end
-    std::cout << Y;
     this->ui->widget_3->setShape(Viewer::End);
     this->ui->widget_3->compute(X, Y, L, W);
 }

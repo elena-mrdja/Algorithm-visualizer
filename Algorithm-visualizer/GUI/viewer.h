@@ -63,7 +63,11 @@ public:
 
     void compute_start(double x, double y, double l, double w, std::string str);
     void compute_end(double x, double y, double l, double w, std::string str);
+
     void compute_decision(double x, double y, double l, double w, std::string str);
+    void compute_if(double x, double y, double l, double w, int spacing, int numberStatements);
+    void compute_while(double x, double y, double l, double w, int spacing, int numberStatements, int numberLoops);
+
     void compute_process(double x, double y, double l, double w, std::string str);
 
     void compute_horizontal(double x, double y, double l, double w);

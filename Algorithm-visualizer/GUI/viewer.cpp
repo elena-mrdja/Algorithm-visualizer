@@ -148,17 +148,53 @@ void Viewer::compute_decision(double x, double y, double l, double w, std::strin
     auto text = this->createText(words, x,y,w,l);
     diamond->setTransformOriginPoint(QPoint(x+l/2, y+w/2));
     diamond->setRotation(45);
-
-
-
     scene->addItem(text);
-
-    int line_size = 150;
-    compute_horizontal(x+l+20, y+w/2, x+l+20 + line_size, y+w/2);
-    compute_vertical(x+l+20 + line_size, y+w/2, x+l+20 + line_size, y+w+30);
-    compute_vertical(x+l/2, y+w+20, x+l/2, y+w+20+spacing + 60);
-    compute_horizontal(x+l/2, y+w+20+spacing + 60, x+l+20 + line_size, y+w+20+spacing + 60);
+    if (str.find("If") != std::string::npos)
+    {
+        compute_if(x,y,l,w,spacing, 2);
+    }
+    else if (str.find("While") != std::string::npos)
+    {
+        compute_while(x,y,l,w,spacing, 2, 0);
+    }
 }
+
+void Viewer::compute_if(double x, double y, double l, double w, int spacing, int numberStatements)
+{
+    const int shapeWidth = 60;
+    int x_bottom_diamond = x + l/2; int y_bottom_diamond = y +w+20;
+    compute_vertical(x_bottom_diamond, y_bottom_diamond,
+                     x_bottom_diamond, y_bottom_diamond + numberStatements * (shapeWidth + spacing));
+    for (int i = 0;i<numberStatements ; i++) {
+        compute_horizontal(x_bottom_diamond, y_bottom_diamond + shapeWidth/2 + i*(shapeWidth + spacing),
+                           x_bottom_diamond + l/2 +20, y_bottom_diamond + shapeWidth/2 + i*(shapeWidth + spacing));
+    }
+}
+
+void Viewer::compute_while(double x, double y, double l, double w, int spacing, int numberStatements, int numberLoops)
+{
+    const int shapeWidth = 60;
+    const int line_size = 150;
+    int x_bottom_diamond = x + l/2; int y_bottom_diamond = y +w+20;
+    compute_vertical(x_bottom_diamond, y_bottom_diamond,
+                     x_bottom_diamond, y_bottom_diamond + numberStatements * (shapeWidth + spacing));
+
+    int x_loop = x+l+20 + (numberLoops+1) * line_size;
+
+    compute_horizontal(x +l + 20, y+w/2,
+                       x_loop, y+w/2);
+    compute_vertical(x_loop, y+w/2,
+                     x_loop, y_bottom_diamond + numberStatements * (shapeWidth + spacing) + (spacing * 1/2));
+
+
+
+    compute_horizontal(x +l/2, y_bottom_diamond + numberStatements * (shapeWidth + spacing) + (spacing * 1/2),
+                       x_loop, y_bottom_diamond + numberStatements * (shapeWidth + spacing) + (spacing * 1/2));
+
+}
+
+
+
 
 void Viewer::compute_process(double x, double y, double l, double w, std::string str)
 {
@@ -168,29 +204,20 @@ void Viewer::compute_process(double x, double y, double l, double w, std::string
     QPen blackpen(Qt::black);
     rectangle = scene ->addRect(x, y, l, w, blackpen, redbrush);
     auto text = this->createText(words, x,y,l,w);
-    compute_vertical(x + l/2 ,y+w,x + l/2,y + w + spacing);
     scene->addItem(text);
-    //20,20,100,100
 }
 
 
 void Viewer::compute_end(double x, double y, double l, double w, std::string str)
 {
     QString words = QString::fromStdString(str);
-    /*float cos_t = cos(t);
-    float sin_t = sin(t);
-    float x = cos_t;
-    float y = sin_t;
-    return QPointF(x,y);*/
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
 
     auto text = this->createText(words, x,y,l,w);
     ellipse = scene ->addEllipse(x, y, l, w,blackpen, redbrush);
-    //scene->addItem(ellipse);
     scene->addItem(text);
 }
-
 
 void Viewer::paintEvent(QPaintEvent *event) //draw function
 {
