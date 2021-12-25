@@ -385,6 +385,7 @@ public:
     void set_tail(Value* t);
     void add_value(Value* v);
     bool is_empty(); //fill in
+    double get_last_value();
 private:
     Value* head;
     Value* tail;
@@ -394,14 +395,15 @@ class Cache{
 public:
     Cache(int number);
     ~Cache();
-    void new_var(Variable* var, int num);
-    ValuesList* get_var(Variable* var);
-    void add_new_value(Variable* var, Value* value, int line);
+    void new_var(std::string var, int num, double value);
+    ValuesList* get_var(std::string var);
+    void add_new_value(std::string var, Value* value, int line);
+    double get_previous_value(std::string var, int line);
 
 
 private:
     int num_lines;
-    std::map<Variable*, ValuesList*> *variables[MAX_LINES];
+    std::map<std::string, ValuesList*> *variables[MAX_LINES];
 };
 
 /*

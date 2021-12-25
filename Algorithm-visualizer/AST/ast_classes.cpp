@@ -295,36 +295,69 @@ void ValuesList::set_head(Value* h){head = h;};
 void ValuesList::set_tail(Value* t){tail = t;};
 bool ValuesList::is_empty(){return head == nullptr;};
 void ValuesList::add_value(Value* v){
+    // If the list is empty, it makes the Value the head and tail of the list
     if (is_empty()){
         head = v;
         tail = v;
     }
+    // Else it adds the Value to the tail, making the new value the tail of the list.
     else {
         tail->next = v;
         v->prev = tail;
         tail = v;
     }
 };
+double ValuesList::get_last_value(){
+    // Will be used to get the last changed value of the variable, whether that was through Declaration or Assignment
+    // This function assumes it will be called on a non-empty ValuesList
+    return tail->value;
+}
+
 
 
 
 Cache::Cache(int number){
+    // Initialises a new Cache insance, with a line number necessarily under MAX_LINES = 100
+    // This will allow us to iterate through the necessary dictionaries
     num_lines = number;
 }
-void Cache::new_var(Variable* var, int line_num){
-    // Finish
-    std::map<Variable*, ValuesList*> dict = *variables[line_num];
+void Cache::new_var(std::string var, int line_num, double value){
+    // When a new variable is declared, we first store a pointer to the dictionary of the line we are working on
+    std::map<std::string, ValuesList*> dict = *variables[line_num];
+    // We add an entry keyed by the variables name and we initialise the values list
     dict[var] = new ValuesList();
-    dict[var]->get_head()->value = var->get_value();
+    // Initialise new Value* to store the value
+    Value* val = new Value();
+    // Assing its value attribute to the double
+    val->value = value;
+    // Add it to the ValueList
+    dict[var]->add_value(val);
 
 };
 
-void Cache::add_new_value(Variable *var, Value* value, int line){
-    std::map<Variable*, ValuesList*> dict = *variables[line];
+void Cache::add_new_value(std::string var, Value* value, int line){
+    // Adds a value to an already existing entry in a list, used for while loops
+    std::map<std::string, ValuesList*> dict = *variables[line];
     dict[var]->add_value(value);
 }
 
-flowchart read_statement(Statement* stmt, int i, list<map<Variable*, ValuesList*>*>* variables){
+double Cache::get_previous_value(std::string var, int line){
+    // This function assumes line > 0
+    std::map<std::string, ValuesList*> dict = *variables[line - 1];
+    if (!dict[var]->is_empty()){
+        return dict[var]->get_last_value();
+    }
+    else{
+        while (dict[var]->is_empty()){
+            line--;
+            dict = *variables[line - 1];
+        }
+        return dict[var]->get_last_value();
+
+    }
+}
+
+flowchart read_statement(Statement* stmt, int line_num, list<map<Variable*, ValuesList*>*>* variables, Cache* cache){
     //returns a flowchart corresponding to the given statement
     //this function is supposed to be used within the walker i will keep the line of the statement being read
     //(so, if stmt is in the 20th line, i = 20)
