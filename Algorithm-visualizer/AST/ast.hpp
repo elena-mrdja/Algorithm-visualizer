@@ -271,7 +271,6 @@ public:
     std::string get_name(){return name;}; // returns the name of the variable
     //std::string get_array_size(){return array_size;};
     std::string get_type(){return "Declaration";};
-
 private:
     variable_type var_type = unknown_var;
     //std::string array_size;
@@ -282,7 +281,7 @@ class Assignment : public AssignDec {
 public:
     Assignment(AlgoParser::AssignContext* ctx);
     //~Assignment();
-    Expression* get_value(){return value;}; // returns the object of class which corresponds to the value
+    Expression* get_exp(){return value;}; // returns the object of class which corresponds to the value
     //Expression* get_index(){return index;};
     //void set_index(Expression* i){index = i;};
     std::string get_name(){return name;}; // returns the name of the variable
