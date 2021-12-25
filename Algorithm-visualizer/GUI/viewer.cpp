@@ -143,10 +143,10 @@ int Viewer::compute_decision(double x, double y, double l, double w, std::string
 {
     int spacing = 80;
     QString words = QString::fromStdString(str);
-    x = x +100;
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
     y = y-20;
+    x = x +100;
     diamond = scene->addRect(x, y, w, l,blackpen, redbrush);
     auto text = this->createText(words, x,y,w,l);
     diamond->setTransformOriginPoint(QPoint(x+l/2, y+w/2));
@@ -154,24 +154,20 @@ int Viewer::compute_decision(double x, double y, double l, double w, std::string
     scene->addItem(text);
     if (str.find("If") != std::string::npos)
     {
-         return compute_if(x,y,l,w,spacing, process_arr);
+        return compute_if(x,y,l,w,spacing, process_arr);
     }
-//    else if (str.find("While") != std::string::npos)
-//    {
-//        compute_while(x,y,l,w,spacing, numberStatements, numberLoops);
-//    }
+    else if (str.find("While") != std::string::npos)
+    {
+        x = x-100;
+        compute_while(x,y,l,w,spacing, process_arr);
+    }
 
 }
-
-//{{0, "Declare x", 0, 0},
-//                        {1, "If x > 1", 1, 0},
-//                        {0, "Assign ghj", 0,0}};
-
 
 int Viewer::compute_if(double x, double y, double l, double w, int spacing, flowchart *process_arr)
 {
     int numberIndents = 1;
-    int indentation = 120;
+    int indentation = 130;
     int numberStatements = process_arr[0].first_block;
     const int shapeWidth = 60;
     const int L = 300;
@@ -194,10 +190,9 @@ int Viewer::compute_if(double x, double y, double l, double w, int spacing, flow
             setShape(Process);
             pos = compute(x_bottom_diamond + indentation, y_bottom_diamond + i * spacing + (i-1) * shapeWidth/2, L, W, str);
         }
-        else if (process_arr[i].chart_shape == 1){
+        else if (process_arr[i].chart_shape > 0){
             setShape(Decision);
             newNumberStatements = process_arr[i].first_block;
-            std::cout << "In decision inside compute_if"<< newNumberStatements;
             flowchart if_arr[newNumberStatements+1];
             for (int j = 0;j<newNumberStatements+1 ;j++ ){
                     if_arr[j] = process_arr[i+j];
@@ -210,31 +205,59 @@ int Viewer::compute_if(double x, double y, double l, double w, int spacing, flow
 }
 
 
-
-
-
-
-
-
-int Viewer::compute_while(double x, double y, double l, double w, int spacing, int numberStatements, int numberLoops)
+int Viewer::compute_while(double x, double y, double l, double w, int spacing, flowchart *process_arr)
 {
+    const int lineSize = 150;
+    int numberIndents = 1;
+    int indentation = 120;
+    int numberStatements = process_arr[0].first_block;
     const int shapeWidth = 60;
-    const int line_size = 150;
-    int x_bottom_diamond = x + l/2; int y_bottom_diamond = y +w+20;
+    const int L = 300;
+    const int W = 60;
+    int x_right = x+100 + 120;
+    int c = 1;
+    int line = 0;
+
+    int x_bottom_diamond = x + l/2 + 100; int y_bottom_diamond = y +w+20;
     compute_vertical(x_bottom_diamond, y_bottom_diamond,
-                     x_bottom_diamond, y_bottom_diamond + numberStatements * (shapeWidth + spacing));
+                     x_bottom_diamond, y_bottom_diamond + (numberStatements+1) * (shapeWidth/2 + spacing) + spacing
+                     );
 
-    int x_loop = x+l+20 + (numberLoops+1) * line_size;
+    int newNumberStatements = 0;
+    for (int i = 1; i < numberStatements+1; i++){
+        std::string str = process_arr[i].text;
+        if(process_arr[i].chart_shape == 0){
+            setShape(Process);
+            compute(x, y_bottom_diamond + i * spacing + (i-1) * shapeWidth/2, L, W, str);
+        }
+        else if (process_arr[i].chart_shape > 0){
+            c++;
+            setShape(Decision);
+            newNumberStatements = process_arr[i].first_block;
+            flowchart while_arr[newNumberStatements+1];
+            for (int j = 0;j<newNumberStatements+1 ;j++ ){
+                    while_arr[j] = process_arr[i+j];
+            }
+            this->compute(x, y_bottom_diamond + i * spacing + (i-1) * shapeWidth/2, L, W, str, while_arr) ;
+            i += newNumberStatements+1;
+            line += shapeWidth * 1/2 + spacing;
 
-    compute_horizontal(x +l + 20, y+w/2,
-                       x_loop, y+w/2);
-    compute_vertical(x_loop, y+w/2,
-                     x_loop, y_bottom_diamond + numberStatements * (shapeWidth + spacing) + (spacing * 1/2));
+        }
+  }
+    compute_horizontal(x_right, y + sqrt(2 * pow(100,2)) / 2 - 20,
+                       x_right + c * lineSize ,y + sqrt(2 * pow(l,2)) / 2 - 20);
+
+    compute_vertical(x_right + c * lineSize, y + sqrt(2 * pow(l,2)) / 2 - 20,
+                     x_right + c * lineSize, y_bottom_diamond + line + numberStatements * (shapeWidth + spacing) + spacing
+                     );
+
+    compute_horizontal(x_right + c * lineSize, y_bottom_diamond + line + numberStatements * (shapeWidth + spacing) + spacing,
+                       x_bottom_diamond,y_bottom_diamond + line + numberStatements * (shapeWidth + spacing) + spacing
+                       );
 
 
-
-    compute_horizontal(x +l/2, y_bottom_diamond + numberStatements * (shapeWidth + spacing) + (spacing * 1/2),
-                       x_loop, y_bottom_diamond + numberStatements * (shapeWidth + spacing) + (spacing * 1/2));
+//    compute_horizontal(x +l/2, y_bottom_diamond + numberStatements * (shapeWidth + spacing) + (spacing * 1/2),
+//                       x_loop, y_bottom_diamond + numberStatements * (shapeWidth + spacing) + (spacing * 1/2));
 
 }
 

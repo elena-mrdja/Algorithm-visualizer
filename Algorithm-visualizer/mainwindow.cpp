@@ -90,23 +90,27 @@ void MainWindow::on_Visualize_clicked()
 //                        {1, "If x > 3", 1,0},
 //                        {0, "Assign y", 0,0}};
 
-//    flowchart arr[3] = {{1, "If x < 2", 2,0},
+//    flowchart arr[5] = {{1, "If x < 2", 3,0},
 //                         {0, "Declar dfghj", 0,0},
 //                         {1, "If x > 3", 1,0},
-//                         {0, "Assign y", 0,0}};
+//                         {0, "Assign y", 0,0},
+//                         {0, "Assign hahaha", 0,0}};
 
 
-    flowchart arr[3] = {{2, "While x >1", 2, 0},
-                        {2, "While x >0", 1, 0},
-                        {0, "Assign x hh", 0,0}
+    flowchart arr[5] = {{2, "While x >1", 3, 0},
+                        {2, "While jsp", 2, 0},
+                        {2, "While jjj", 1, 0},
+                        {0, "Assign x hh", 0,0},
+                        {0, "Declare fuck off", 0,0}
                        };
 
     int numberStatements = 0; // counter for num of statements in block
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 5; i++) {
         std::string str = arr[i].text;
         //if we have a rectangle
         if (arr[i].chart_shape == 0) {
+            std::cout << arr[i].text;
 
             //draw
             this->ui->widget_3->setShape(Viewer::Process);
@@ -118,17 +122,19 @@ void MainWindow::on_Visualize_clicked()
             Y += spacing;
             numberStatements = arr[i].first_block;
             flowchart process_arr[numberStatements+1];
-            if(arr[i].chart_shape == 1){
-                for (int j = 0;j<numberStatements+1 ;j++ ) {
-                    process_arr[j] = arr[i+j];
-                }
-                i += numberStatements+1;
+            for (int j = 0;j<numberStatements+1 ;j++ ) {
+                process_arr[j] = arr[i+j];
             }
             //draw
             this->ui->widget_3->setShape(Viewer::Decision);
             int pos = this->ui->widget_3->compute(X, Y, L, W, str, process_arr);
-            this->ui->widget_3->compute_horizontal(X + L/2, Y+100, X + L/2, Y+100 + pos);
-            std::cout << pos;
+            if(arr[i].chart_shape == 1){
+                this->ui->widget_3->compute_horizontal(X + L/2, Y+100, X + L/2, Y+100 + pos);
+            }
+            Y += (i) * (W+spacing) + numberStatements * (120 + spacing);
+
+            i += numberStatements;
+            std::cout << i;
 
         }
         Y += W + spacing;

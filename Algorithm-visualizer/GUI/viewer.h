@@ -74,7 +74,7 @@ public:
 
     int compute_decision(double x, double y, double l, double w, std::string str, flowchart *process_arr);
     int compute_if(double x, double y, double l, double w, int spacing, flowchart *if_arr);
-    int compute_while(double x, double y, double l, double w, int spacing, int numberStatements, int numberLoops);
+    int compute_while(double x, double y, double l, double w, int spacing, flowchart *while_arr);
 
     int compute_process(double x, double y, double l, double w, std::string str);
 
