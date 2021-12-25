@@ -166,3 +166,45 @@ AST::AST(AlgoParser::BlockContext* ctx) {
 }
 
 
+ValuesList::ValuesList(Value* h, Value* t){
+    head = h;
+    tail = t;
+};
+
+ValuesList::ValuesList(){
+    head = new Value();
+    tail = head;
+}
+
+Value* ValuesList::get_head(){return head;};
+Value* ValuesList::get_tail(){return tail;};
+
+void ValuesList::set_head(Value* h){head = h;};
+void ValuesList::set_tail(Value* t){tail = t;};
+bool ValuesList::is_empty(){return head == nullptr;};
+void ValuesList::add_value(Value* v){
+    if (is_empty()){
+        head = v;
+        tail = v;
+    }
+    else {
+        tail->next = v;
+        v->prev = tail;
+        tail = v;
+    }
+};
+
+
+//variable tracking
+Cache::Cache(int number){
+    num_lines = number;
+}
+void Cache::new_var(Declaration* dec, int line_num){
+    // Finish
+    std::map<string, ValuesList*> dict = *variables[line_num];
+    string var = dec->get_name();
+    dict[var] = new ValuesList();
+    dict[var]->get_head()->value = dec->get_exp()->get_value();
+
+};
+

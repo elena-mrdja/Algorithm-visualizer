@@ -3,10 +3,14 @@
 #include "iostream"
 #include "iomanip"
 #include "sstream"
+#include <map>
+#include <array>
 using namespace std;
 using namespace antlr4;
 using namespace antlrcpptest;
 // IMPORTANT DO NOT DELETE ANY FUNCTION!!! EVEN IF THEY ARE MARKED AS NO NEEDED
+
+const int MAX_LINES = 100;
 
 enum bin_ops {
     addition = 0,
@@ -238,6 +242,7 @@ public :
     BinOpExp* get_child(){return child;}; //return a child of expression (for now only binOp or SingleOutputs)
     std::string get_type(){return "Expression";};
     int num_blocks(){return 0;};
+    virtual double get_value();
 private:
     BinOpExp* child;
 };
@@ -262,7 +267,7 @@ public:
         case unknown_var: return "unknown variable type";
         }
     }
-    Expression* get_value(){return value;}; // returns the object of class which corresponds to the value
+    Expression* get_exp(){return value;}; // returns the object of class which corresponds to the value
     std::string get_name(){return name;}; // returns the name of the variable
     //std::string get_array_size(){return array_size;};
     std::string get_type(){return "Declaration";};
@@ -324,6 +329,43 @@ private:
     Statement* child;
     Statement* children;
     int size;
+};
+
+//the following three classes are for variable tracking
+struct Value{
+    double value;
+    Value* prev;
+    Value* next;
+};
+
+class ValuesList {
+public:
+    ValuesList();
+    ValuesList(Value* h, Value* t);
+    ~ValuesList();
+    Value* get_head();
+    Value* get_tail();
+    void set_head(Value* h);
+    void set_tail(Value* t);
+    void add_value(Value* v);
+    bool is_empty(); //fill in
+private:
+    Value* head;
+    Value* tail;
+};
+
+class Cache{
+public:
+    Cache(int number);
+    ~Cache();
+    void new_var(Declaration* dec, int num);
+    ValuesList* get_var(string var);
+    void add_new_value(string var, Value* value, int line);
+
+
+private:
+    int num_lines;
+    std::map<string, ValuesList*> *variables[MAX_LINES]; //MAX_LINES defined on the top of the file
 };
 
 
