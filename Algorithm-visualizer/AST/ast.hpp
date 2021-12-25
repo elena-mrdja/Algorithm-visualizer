@@ -49,6 +49,7 @@ struct BinOpExp{
     virtual std::string get_text() = 0;
     virtual exp_type get_exp_type();
     virtual double get_value();
+    int num_blocks(){return 0;s};
 };
 class SingleOutput : public BinOpExp{
 public:
@@ -62,6 +63,7 @@ public:
                                                    // possible outputs: 'double', 'integer', 'boolean', 'variable'.
     double get_value(); //returns the actual value of the variable / number as a double
                         //the function isn't implemented right now: we have to deal with Cache access
+    int num_blocks(){return 0;};
 private:
     std::string value;
     std::string val_type;
@@ -235,6 +237,7 @@ public :
     //~Expression();
     BinOpExp* get_child(){return child;}; //return a child of expression (for now only binOp or SingleOutputs)
     std::string get_type(){return "Expression";};
+    int num_blocks(){return 0;};
 private:
     BinOpExp* child;
 };
@@ -244,6 +247,7 @@ struct AssignDec { //needed to unite statement children
     virtual Expression* get_value() = 0;
     virtual std::string get_type() = 0;
     virtual std::string get_var_type() = 0;
+    int num_blocks(){return 0;};
 };
 class Declaration : public AssignDec {
 public:
@@ -296,6 +300,7 @@ public:
     //~Statement();
     private :
     AssignDec* child;
+    virtual int num_blocks();
 
 };
 
@@ -309,6 +314,11 @@ public :
     Statement get_child(int i){return children[i];} //returns a child by index
     int get_size(){return size;} //needed for a for loop
     std::string get_type(){return "Block";};
+    int num_blocks(){
+        int n = 0;
+        //here we have to add walking through the list of statements and adding the blocks
+        return n;
+    };
     //walker function
 private:
     Statement* child;
