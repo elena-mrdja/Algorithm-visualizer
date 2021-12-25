@@ -81,33 +81,36 @@ void MainWindow::on_Visualize_clicked()
 //                        {0, "Assign x", 0, 0},
 //                        {0, "Assign y", 0, 0}};
 
-    flowchart arr[7] = {{0, "Declare x", 0, 0},
-                        {1, "If x > 1", 5, 0},
-                        {1, "If x >3", 4,0},
-                        {0, "Assign ghj", 0,0},
-                        {1, "If x < 2", 2,0},
-                        {1, "If x > 3", 1,0},
-                        {0, "Assign y", 0,0}};
+//    flowchart arr[8] = {{0, "Declare x", 0, 0},
+//                        {1, "If x > 1", 6, 0},
+//                        {1, "If x >3", 5,0},
+//                        {0, "Assign ghj", 0,0},
+//                        {1, "If x < 2", 3,0},
+//                        {0, "Declar dfghj", 0,0},
+//                        {1, "If x > 3", 1,0},
+//                        {0, "Assign y", 0,0}};
 
+//    flowchart arr[3] = {{1, "If x < 2", 2,0},
+//                         {0, "Declar dfghj", 0,0},
+//                         {1, "If x > 3", 1,0},
+//                         {0, "Assign y", 0,0}};
+
+
+    flowchart arr[3] = {{2, "While x >1", 2, 0},
+                        {2, "While x >0", 1, 0},
+                        {0, "Assign x hh", 0,0}
+                       };
 
     int numberStatements = 0; // counter for num of statements in block
 
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 3; i++) {
         std::string str = arr[i].text;
-        //if (c > 0) {nbIndents += 1; c --;}
-        //if(c == 0 && nbIndents > 1) {nbIndents --;}
         //if we have a rectangle
         if (arr[i].chart_shape == 0) {
 
-            //indentation
-//            if (arr[i-1].chart_shape == 2){
-//                Y += spacing;
-//            }
             //draw
             this->ui->widget_3->setShape(Viewer::Process);
             this->ui->widget_3->compute(X + nbIndents * indentation, Y, L, W, str);
-            //if(nbIndents == 0){this->ui->widget_3->compute_vertical(X+L/2, Y+W,X+L/2, Y+W+spacing);}
-            //if (nbIndents > 0) {nbIndents --;}
         }
 
         //if we have a diamond
@@ -120,13 +123,13 @@ void MainWindow::on_Visualize_clicked()
                     process_arr[j] = arr[i+j];
                 }
                 i += numberStatements+1;
-
-               // if (c > 0) {nbIndents += 1; c --;}
-               //nbIndents++;
             }
             //draw
             this->ui->widget_3->setShape(Viewer::Decision);
-            this->ui->widget_3->compute(X, Y, L, W, str, process_arr);
+            int pos = this->ui->widget_3->compute(X, Y, L, W, str, process_arr);
+            this->ui->widget_3->compute_horizontal(X + L/2, Y+100, X + L/2, Y+100 + pos);
+            std::cout << pos;
+
         }
         Y += W + spacing;
     }

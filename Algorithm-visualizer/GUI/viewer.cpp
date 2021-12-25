@@ -154,8 +154,7 @@ int Viewer::compute_decision(double x, double y, double l, double w, std::string
     scene->addItem(text);
     if (str.find("If") != std::string::npos)
     {
-         int posEndIf = compute_if(x,y,l,w,spacing, process_arr);
-         //compute_vertical(x+l/2, y+w+20, x+l/2, posEndIf);
+         return compute_if(x,y,l,w,spacing, process_arr);
     }
 //    else if (str.find("While") != std::string::npos)
 //    {
@@ -165,10 +164,8 @@ int Viewer::compute_decision(double x, double y, double l, double w, std::string
 }
 
 //{{0, "Declare x", 0, 0},
-//{1, "If x > 1", 3, 0},
-//{0, "Assign z", 0,0},
-//{1, "If x < 2", 1,0},
-//{0, "Assign y", 0,0}};
+//                        {1, "If x > 1", 1, 0},
+//                        {0, "Assign ghj", 0,0}};
 
 
 int Viewer::compute_if(double x, double y, double l, double w, int spacing, flowchart *process_arr)
@@ -183,13 +180,7 @@ int Viewer::compute_if(double x, double y, double l, double w, int spacing, flow
 
     int x_bottom_diamond = x + l/2; int y_bottom_diamond = y +w+20;
 
-    //Vertical line going to the end of the if
-//    compute_vertical(x_bottom_diamond, y_bottom_diamond,
-//                     x_bottom_diamond, y_bottom_diamond + numberStatements * (shapeWidth + spacing));
-    //First horizontal line (will always be here)
-//    compute_horizontal(x_bottom_diamond, y_bottom_diamond + shapeWidth/2,
-//                       x_bottom_diamond + indentation, y_bottom_diamond + shapeWidth/2);
-
+    int pos = 0;
     int newNumberStatements = 0;
     for (int i = 1; i < numberStatements+1; i++){
         compute_vertical(x_bottom_diamond, y_bottom_diamond,
@@ -201,7 +192,7 @@ int Viewer::compute_if(double x, double y, double l, double w, int spacing, flow
         std::string str = process_arr[i].text;
         if(process_arr[i].chart_shape == 0){
             setShape(Process);
-            compute(x_bottom_diamond + indentation, y_bottom_diamond + i * spacing + (i-1) * shapeWidth/2, L, W, str);
+            pos = compute(x_bottom_diamond + indentation, y_bottom_diamond + i * spacing + (i-1) * shapeWidth/2, L, W, str);
         }
         else if (process_arr[i].chart_shape == 1){
             setShape(Decision);
@@ -211,23 +202,11 @@ int Viewer::compute_if(double x, double y, double l, double w, int spacing, flow
             for (int j = 0;j<newNumberStatements+1 ;j++ ){
                     if_arr[j] = process_arr[i+j];
             }
-            this->compute(x_bottom_diamond, y_bottom_diamond + i * spacing + (i-1) * shapeWidth/2, L, W, str, if_arr);
+            pos = this->compute(x_bottom_diamond, y_bottom_diamond + i * spacing + (i-1) * shapeWidth/2, L, W, str, if_arr) - 30;
             i += newNumberStatements+1;
         }
     }
-    //compute_vertical(x_bottom_diamond, y_bottom_diamond,
-                    // x_bottom_diamond, y_bottom_diamond + newNumberStatements * spacing + (numberStatements-1) * shapeWidth/2);
-
-
-
-
-
-
-//    for (int i = 0;i<numberStatements ; i++) {
-//        compute_horizontal(x_bottom_diamond, y_bottom_diamond + shapeWidth/2 + i*(shapeWidth + spacing),
-//                           x_bottom_diamond + l/2 +20, y_bottom_diamond + shapeWidth/2 + i*(shapeWidth + spacing));
-//    }
-    return y_bottom_diamond + newNumberStatements * spacing + (numberStatements-1) * shapeWidth/2;
+    return numberStatements * (spacing + shapeWidth/2) + pos;
 }
 
 
@@ -271,7 +250,7 @@ int Viewer::compute_process(double x, double y, double l, double w, std::string 
     rectangle = scene ->addRect(x, y, l, w, blackpen, redbrush);
     auto text = this->createText(words, x,y,l,w);
     scene->addItem(text);
-    return 0;
+    return w/2;
 }
 
 
