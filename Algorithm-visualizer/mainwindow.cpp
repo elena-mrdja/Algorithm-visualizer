@@ -5,6 +5,8 @@
 #include <string>
 using namespace std;
 
+int index;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -13,15 +15,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
-
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-
-
-
 
 //test for flowchart
 enum chart_shape {
@@ -131,13 +128,34 @@ void MainWindow::on_variables_clicked()
     order.push_back('x');
     order.push_back('y');
 
+    unordered_map<char, vector<double>> mapa1;
+    mapa1['a'].push_back(4);
+    mapa1['z'].push_back(5.98);
+    mapa1['b'].push_back(11);
+    mapa1['b'].push_back(24);
+    mapa1['b'].push_back(32);
+
+
+    vector<unordered_map<char, vector<double>>> ve;
+    ve.push_back(mapa);
+    ve.push_back(mapa1);
+
     for(unordered_map<char, vector<double>>::iterator it=mapa.begin();it!=mapa.end();it++)
     {
         vec.push_back(it);
     }
 
+    if (index == ve.size())
+    {
+        index = 1;
+    }
+    else
+    {
+        index++;
+    }
+
     this->ui->widget_4->writeOut(QString("Btn"));
-    this->ui->widget_5->track(mapa, order, 3);
+    this->ui->widget_5->track(ve, index);
     //this->ui->widget_5->track2(vec);
 }
 
