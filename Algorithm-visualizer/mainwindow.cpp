@@ -68,18 +68,21 @@ void MainWindow::on_Visualize_clicked()
 
 
     this->ui->widget_3->setShape(Viewer::Start);
-    this->ui->widget_3->compute(X, Y, L, W); //any string suffices
+    this->ui->widget_3->compute(X, Y); //any string suffices
     Y += W + spacing;
 
 
     //create a list of structs
-//    flowchart arr[8] = {{0, "Declare x", 0, 0},
-//                        {1, "If x > 1", 4, 0},
-//                        {0, "Assign z", 0,0},
-//                        {1, "If x >2", 2,0},
-//                        {1, "If x < 4", 1, 0},
-//                        {0, "Assign x", 0, 0},
-//                        {0, "Assign y", 0, 0}};
+    flowchart arr[8] = {{0, "Declare x", 0, 0},
+                        {1, "If x > 1", 4, 0},
+                        {0, "Assign z", 0,0},
+                        {1, "If x >2", 2,0},
+                        {1, "If x < 4", 1, 0},
+                        {0, "Assign x", 0, 0},
+                        {0, "Assign y", 0, 0},
+                        {0, "Assign LAST",0,0}};
+
+
 
 //    flowchart arr[8] = {{0, "Declare x", 0, 0},
 //                        {1, "If x > 1", 6, 0},
@@ -90,31 +93,29 @@ void MainWindow::on_Visualize_clicked()
 //                        {1, "If x > 3", 1,0},
 //                        {0, "Assign y", 0,0}};
 
-//    flowchart arr[5] = {{1, "If x < 2", 3,0},
-//                         {0, "Declar dfghj", 0,0},
-//                         {1, "If x > 3", 1,0},
-//                         {0, "Assign y", 0,0},
+//    flowchart arr[4] = {{1, "If x < 2", 3,0},
+//                        {1, "If x hshs,", 2,0},
+////                        {0, "Assign x", 0,0},
+//                         {1, "If y", 1,0},
 //                         {0, "Assign hahaha", 0,0}};
 
 
-    flowchart arr[5] = {{2, "While x >1", 3, 0},
-                        {2, "While jsp", 2, 0},
-                        {2, "While jjj", 1, 0},
-                        {0, "Assign x hh", 0,0},
-                        {0, "Declare fuck off", 0,0}
-                       };
+//    flowchart arr[5] = {{2, "While x >1", 3, 0},
+////                        {2, "While jsp", 2, 0},
+//                        {2, "While jjj", 1, 0},
+//                        {0, "Assign x hh", 0,0},
+//                        {0, "Declare fuck off", 0,0}
+//                       };
 
     int numberStatements = 0; // counter for num of statements in block
-
-    for (int i = 0; i < 5; i++) {
+    int y_pos_test = 0;
+    for (int i = 0; i < 8; i++) {
         std::string str = arr[i].text;
         //if we have a rectangle
         if (arr[i].chart_shape == 0) {
-            std::cout << arr[i].text;
-
             //draw
             this->ui->widget_3->setShape(Viewer::Process);
-            this->ui->widget_3->compute(X + nbIndents * indentation, Y, L, W, str);
+            this->ui->widget_3->compute(X, Y, str);
         }
 
         //if we have a diamond
@@ -127,9 +128,11 @@ void MainWindow::on_Visualize_clicked()
             }
             //draw
             this->ui->widget_3->setShape(Viewer::Decision);
-            int pos = this->ui->widget_3->compute(X, Y, L, W, str, process_arr);
+            y_pos_test = this->ui->widget_3->compute(X, Y,str, process_arr);
+            std::cout << "y_pos in mainwindow equal" << y_pos_test;
+            //this->ui->widget_3->compute_vertical(X + 150, Y+(200/sqrt(2)), y_pos_test);
             if(arr[i].chart_shape == 1){
-                this->ui->widget_3->compute_horizontal(X + L/2, Y+100, X + L/2, Y+100 + pos);
+                //this->ui->widget_3->compute_horizontal(X + L/2, Y+100, X + L/2, Y+100 + pos);
             }
             Y += (i) * (W+spacing) + numberStatements * (120 + spacing);
 
@@ -141,7 +144,7 @@ void MainWindow::on_Visualize_clicked()
     }
     //draw end
     this->ui->widget_3->setShape(Viewer::End);
-    this->ui->widget_3->compute(X, Y+500, L, W);
+    this->ui->widget_3->compute(X, Y);
 }
 
 

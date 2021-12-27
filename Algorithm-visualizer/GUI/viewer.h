@@ -69,19 +69,19 @@ public:
     //Ui::Viewer *ui;
 
 
-    int compute_start(double x, double y, double l, double w, std::string str);
-    int compute_end(double x, double y, double l, double w, std::string str);
+    int compute_start(double x, double y, std::string str);
+    int compute_end(double x, double y, std::string str);
 
-    int compute_decision(double x, double y, double l, double w, std::string str, flowchart *process_arr);
-    int compute_if(double x, double y, double l, double w, int spacing, flowchart *if_arr);
-    int compute_while(double x, double y, double l, double w, int spacing, flowchart *while_arr);
+    int compute_decision(double x, double y, std::string str, flowchart *process_arr);
+    int compute_if(double x, double y, std::string str, flowchart *if_arr);
+    int compute_while(double x, double y, std::string str, flowchart *while_arr);
 
-    int compute_process(double x, double y, double l, double w, std::string str);
+    int compute_process(double x, double y,std::string str);
 
-    int compute_horizontal(double x, double y, double l, double w);
-    int compute_vertical(double x, double y, double l, double w);
+    int compute_horizontal(double x, double y, double lenght);
+    int compute_vertical(double x, double y, double length);
     void on_shape_changed();
-    int compute(double x, double y, double l , double w, std::string str="", flowchart *process_arr=nullptr); //dispatch function based on mShape type
+    int compute(double x, double y,std::string str="", flowchart *process_arr=nullptr); //dispatch function based on mShape type
 
     QGraphicsSimpleTextItem* createText(QString str, int x, int y, int w, int l);
 
