@@ -8,7 +8,6 @@
 #include <QFontMetrics>
 
 
-
 Viewer::Viewer(QWidget *parent) : QWidget(parent), mBackgroundColor(0,0,255),mShapeColor(255,255,255),mShape(Process)
 {
     on_shape_changed();
@@ -70,7 +69,7 @@ void Viewer::on_shape_changed()
         }
 }
 
-void Viewer::compute(double x, double y, double l, double w)
+int Viewer::compute(double x, double y, double l, double w, std::string str, flowchart *process_arr)
 {
     switch (mShape) {
         case Horizontal:
@@ -83,22 +82,22 @@ void Viewer::compute(double x, double y, double l, double w)
             break;
 
         case Start:
-            return compute_start(x, y, l, w);
+            return compute_start(x, y, l, w, str="START");
                 break;
 
         case Process:
             //mBackgroundColor = Qt::blue;
-            return compute_process(x, y, l, w);
+            return compute_process(x, y, l, w, str);
             break;
 
         case Decision:
             //mBackgroundColor = Qt::yellow;
-            return compute_decision(x, y, l, w);
+            return compute_decision(x, y, 100, 100, str, process_arr);
             break;
 
         case End:
             //mBackgroundColor = Qt::yellow;
-            return compute_end(x, y, l, w);
+            return compute_end(x, y, l, w, str="END");
             break;
 
         default:
@@ -106,127 +105,189 @@ void Viewer::compute(double x, double y, double l, double w)
         }
 }
 
-void Viewer::compute_vertical(double x, double y, double l, double w)
+int Viewer::compute_vertical(double x, double y, double l, double w)
 {
-    QBrush redbrush(Qt::red);
-    QPen blackpen(Qt::black);
-    vertical_line = scene ->addLine(x, y, l, w);
+    QBrush redbrush(Qt::white);
+    QPen whitepen(Qt::white);
+    vertical_line = scene ->addLine(x, y, l, w, whitepen);
     //10,10,100,100
+    return 0;
 }
 
 
-void Viewer::compute_horizontal(double x, double y, double l, double w)
+int Viewer::compute_horizontal(double x, double y, double l, double w)
 {
     QBrush redbrush(Qt::red);
-    QPen blackpen(Qt::black);
-    horizontal_line = scene ->addLine(x, y, l, w);
+    QPen whitepen(Qt::white);
+    horizontal_line = scene ->addLine(x, y, l, w, whitepen);
     //10,10,100,100
+    return 0;
 }
 
-void Viewer::compute_start(double x, double y, double l, double w)
+int Viewer::compute_start(double x, double y, double l, double w, std::string str)
 {
-    QString words;
-    bool value = 1; // The variable value will actually be passed to the function as argument (it tells us if it's END or START)
-    if (value)
-    {
-        words = "START";
-    }
-    else words = "END";
-
-
-    /*float cos_t = cos(t);
-    float sin_t = sin(t);
-    float x = cos_t;
-    float y = sin_t;
-    return QPointF(x,y);*/
+    int spacing = 40;
+    QString words = QString::fromStdString(str);
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-
     auto text = this->createText(words, x,y,l,w);
     ellipse = scene ->addEllipse(x, y, l, w,blackpen, redbrush);
-    //scene->addItem(ellipse);
+    compute_vertical(x + l/2 ,y+w,x + l/2,y + w + spacing);
     scene->addItem(text);
+
+    return 0;
 }
 
 
-void Viewer::compute_decision(double x, double y, double l, double w)
+int Viewer::compute_decision(double x, double y, double l, double w, std::string str, flowchart *process_arr)
 {
-    QString words;
-
-    //QString(str);
-    QString condition = "x > 0"; // The variable condition will actually be passed to the function as argument (condition gotten from backend)
-    bool value = 1; // The variable value will actually be passed to the function as argument (it tells us if it's IF or WHILE)
-    if (value)
-    {
-        words = "if " + condition;
-    }
-    else words = "while " + condition;
-
-    x += 50;
+    int spacing = 80;
+    QString words = QString::fromStdString(str);
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    diamond = scene->addRect(x, y, 100, 100,blackpen, redbrush);
-    auto text = this->createText(words, x,y,100,100);
-    diamond->setTransformOriginPoint(QPoint(x + w/2, y + l/2));
+    y = y-20;
+    x = x +100;
+    diamond = scene->addRect(x, y, w, l,blackpen, redbrush);
+    auto text = this->createText(words, x,y,w,l);
+    diamond->setTransformOriginPoint(QPoint(x+l/2, y+w/2));
     diamond->setRotation(45);
-    if (diamond->rotation() == 45) {
-        diamond->setPos(-56, -42);
+    scene->addItem(text);
+    if (str.find("If") != std::string::npos)
+    {
+        return compute_if(x,y,l,w,spacing, process_arr);
+    }
+    else if (str.find("While") != std::string::npos)
+    {
+        x = x-100;
+        compute_while(x,y,l,w,spacing, process_arr);
     }
 
-
-
-    scene->addItem(text);
-    //diamond -> setRotation(45);
-    //0,0,100,100
 }
 
-void Viewer::compute_process(double x, double y, double l, double w)
+int Viewer::compute_if(double x, double y, double l, double w, int spacing, flowchart *process_arr)
 {
-    QString words;
+    int numberIndents = 1;
+    int indentation = 130;
+    int numberStatements = process_arr[0].first_block;
+    const int shapeWidth = 60;
+    const int L = 300;
+    const int W = 60;
 
-    QString varName = "x "; // The variable condition will actually be passed to the function as argument (var name gotten from backend)
-    bool value = 1; // The variable value will actually be passed to the function as argument (it tells us if it's DECLARE or ASSIGN)
-    if (value)
-    {
-        words = "DECLARE " + varName;
+
+    int x_bottom_diamond = x + l/2; int y_bottom_diamond = y +w+20;
+
+    int pos = 0;
+    int newNumberStatements = 0;
+    for (int i = 1; i < numberStatements+1; i++){
+        compute_vertical(x_bottom_diamond, y_bottom_diamond,
+                         x_bottom_diamond, y_bottom_diamond + i * (shapeWidth/2 + spacing)
+                         );
+
+        compute_horizontal(x_bottom_diamond, y_bottom_diamond + (i) * (shapeWidth/2 + spacing),
+                           x_bottom_diamond + indentation, y_bottom_diamond + (i) * (shapeWidth/2 + spacing));
+        std::string str = process_arr[i].text;
+        if(process_arr[i].chart_shape == 0){
+            setShape(Process);
+            pos = compute(x_bottom_diamond + indentation, y_bottom_diamond + i * spacing + (i-1) * shapeWidth/2, L, W, str);
+        }
+        else if (process_arr[i].chart_shape > 0){
+            setShape(Decision);
+            newNumberStatements = process_arr[i].first_block;
+            flowchart if_arr[newNumberStatements+1];
+            for (int j = 0;j<newNumberStatements+1 ;j++ ){
+                    if_arr[j] = process_arr[i+j];
+            }
+            pos = this->compute(x_bottom_diamond, y_bottom_diamond + i * spacing + (i-1) * shapeWidth/2, L, W, str, if_arr) - 30;
+            i += newNumberStatements+1;
+        }
     }
-    else words = "ASSIGN " + varName;
+    return numberStatements * (spacing + shapeWidth/2) + pos;
+}
 
+
+int Viewer::compute_while(double x, double y, double l, double w, int spacing, flowchart *process_arr)
+{
+    const int lineSize = 150;
+    int numberIndents = 1;
+    int indentation = 120;
+    int numberStatements = process_arr[0].first_block;
+    const int shapeWidth = 60;
+    const int L = 300;
+    const int W = 60;
+    int x_right = x+100 + 120;
+    int c = 1;
+    int line = 0;
+
+    int x_bottom_diamond = x + l/2 + 100; int y_bottom_diamond = y +w+20;
+    compute_vertical(x_bottom_diamond, y_bottom_diamond,
+                     x_bottom_diamond, y_bottom_diamond + (numberStatements+1) * (shapeWidth/2 + spacing) + spacing
+                     );
+
+    int newNumberStatements = 0;
+    for (int i = 1; i < numberStatements+1; i++){
+        std::string str = process_arr[i].text;
+        if(process_arr[i].chart_shape == 0){
+            setShape(Process);
+            compute(x, y_bottom_diamond + i * spacing + (i-1) * shapeWidth/2, L, W, str);
+        }
+        else if (process_arr[i].chart_shape > 0){
+            c++;
+            setShape(Decision);
+            newNumberStatements = process_arr[i].first_block;
+            flowchart while_arr[newNumberStatements+1];
+            for (int j = 0;j<newNumberStatements+1 ;j++ ){
+                    while_arr[j] = process_arr[i+j];
+            }
+            this->compute(x, y_bottom_diamond + i * spacing + (i-1) * shapeWidth/2, L, W, str, while_arr) ;
+            i += newNumberStatements+1;
+            line += shapeWidth * 1/2 + spacing;
+
+        }
+  }
+    compute_horizontal(x_right, y + sqrt(2 * pow(100,2)) / 2 - 20,
+                       x_right + c * lineSize ,y + sqrt(2 * pow(l,2)) / 2 - 20);
+
+    compute_vertical(x_right + c * lineSize, y + sqrt(2 * pow(l,2)) / 2 - 20,
+                     x_right + c * lineSize, y_bottom_diamond + line + numberStatements * (shapeWidth + spacing) + spacing
+                     );
+
+    compute_horizontal(x_right + c * lineSize, y_bottom_diamond + line + numberStatements * (shapeWidth + spacing) + spacing,
+                       x_bottom_diamond,y_bottom_diamond + line + numberStatements * (shapeWidth + spacing) + spacing
+                       );
+
+
+//    compute_horizontal(x +l/2, y_bottom_diamond + numberStatements * (shapeWidth + spacing) + (spacing * 1/2),
+//                       x_loop, y_bottom_diamond + numberStatements * (shapeWidth + spacing) + (spacing * 1/2));
+
+}
+
+
+
+
+int Viewer::compute_process(double x, double y, double l, double w, std::string str)
+{
+    int spacing = 40;
+    QString words = QString::fromStdString(str);
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
     rectangle = scene ->addRect(x, y, l, w, blackpen, redbrush);
     auto text = this->createText(words, x,y,l,w);
-    scene->addItem(ellipse);
     scene->addItem(text);
-    //20,20,100,100
+    return w/2;
 }
 
 
-void Viewer::compute_end(double x, double y, double l, double w)
+int Viewer::compute_end(double x, double y, double l, double w, std::string str)
 {
-    QString words;
-    bool value = 0; // The variable value will actually be passed to the function as argument (it tells us if it's END or START)
-    if (value)
-    {
-        words = "START";
-    }
-    else words = "END";
-
-
-    /*float cos_t = cos(t);
-    float sin_t = sin(t);
-    float x = cos_t;
-    float y = sin_t;
-    return QPointF(x,y);*/
+    QString words = QString::fromStdString(str);
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
 
     auto text = this->createText(words, x,y,l,w);
     ellipse = scene ->addEllipse(x, y, l, w,blackpen, redbrush);
-    //scene->addItem(ellipse);
     scene->addItem(text);
+    return 0;
 }
-
 
 void Viewer::paintEvent(QPaintEvent *event) //draw function
 {

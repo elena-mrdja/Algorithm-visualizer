@@ -12,12 +12,12 @@ enum chart_shape {
     circle = 2
     };
 
-struct flowchart {
-    int chart_shape;
-    string text;
-    int first_block; // num of stmts in the first block (if in if and the only block in while)
-    int second_block; // num of stmts in else
-};
+//struct flowchart {
+//    int chart_shape;
+//    string text;
+//    int first_block; // num of stmts in the first block (if in if and the only block in while)
+//    int second_block; // num of stmts in else
+//};
 
 flowchart one = {0, "Declare x"};
 flowchart two = {1, "If x = 1", 1};

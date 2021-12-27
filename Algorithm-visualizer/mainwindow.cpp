@@ -27,12 +27,12 @@ enum chart_shape {
     circle = 2
     };
 
-struct flowchart {
-    int chart_shape;
-    string text;
-    int first_block; // num of stmts in the first block (if in if and the only block in while)
-    int second_block; // num of stmts in else
-};
+//struct flowchart {
+//    int chart_shape;
+//    string text;
+//    int first_block; // num of stmts in the first block (if in if and the only block in while)
+//    int second_block; // num of stmts in else
+//};
 
 
 //flowchart one = {0, "Declare x"};
@@ -41,63 +41,104 @@ struct flowchart {
 //flowchart four = {1, "While x > 10", 3};
 
 
+//void MainWindow::on_Visualize_clicked()
+//{
+//    int current_x = 300;
+//    int current_y = 20;
+
+//    this->ui->widget_3->setShape(Viewer::Start);
+//    this->ui->widget_3->compute_decision(300, 20, 100, 100); //any string suffices
+//    this->ui->widget_3->compute_start(300, 20, 300, 60);
+//}
+
+
 void MainWindow::on_Visualize_clicked()
 {
-    int current_x = 300;
-    int current_y = 20;
+    //JOHN TRYING SOME STUFF
+    const int X = 300;
+    int Y = 20;
+    const int L = 300;
+    const int W = 60;
+    const int spacing = 40;
+    int indentation = 220;
+    int nbIndents = 0;
+
 
     this->ui->widget_3->setShape(Viewer::Start);
-    this->ui->widget_3->compute(current_x, current_y, 300, 60); //any string suffices
+    this->ui->widget_3->compute(X, Y, L, W); //any string suffices
+    Y += W + spacing;
 
 
     //create a list of structs
-    flowchart arr[4] = {{0, "Declare x", 0, 0},
-                        {1, "If x = 1", 1, 0},
-                        {0, "Assign x", 0, 0},
-                        {1, "While x > 10", 3, 0}};
+//    flowchart arr[8] = {{0, "Declare x", 0, 0},
+//                        {1, "If x > 1", 4, 0},
+//                        {0, "Assign z", 0,0},
+//                        {1, "If x >2", 2,0},
+//                        {1, "If x < 4", 1, 0},
+//                        {0, "Assign x", 0, 0},
+//                        {0, "Assign y", 0, 0}};
 
-    int c = 0; // counter for num of statements in block
+//    flowchart arr[8] = {{0, "Declare x", 0, 0},
+//                        {1, "If x > 1", 6, 0},
+//                        {1, "If x >3", 5,0},
+//                        {0, "Assign ghj", 0,0},
+//                        {1, "If x < 2", 3,0},
+//                        {0, "Declar dfghj", 0,0},
+//                        {1, "If x > 3", 1,0},
+//                        {0, "Assign y", 0,0}};
 
-    for (int i = 0; i < 4; i++) {
+//    flowchart arr[5] = {{1, "If x < 2", 3,0},
+//                         {0, "Declar dfghj", 0,0},
+//                         {1, "If x > 3", 1,0},
+//                         {0, "Assign y", 0,0},
+//                         {0, "Assign hahaha", 0,0}};
+
+
+    flowchart arr[5] = {{2, "While x >1", 3, 0},
+                        {2, "While jsp", 2, 0},
+                        {2, "While jjj", 1, 0},
+                        {0, "Assign x hh", 0,0},
+                        {0, "Declare fuck off", 0,0}
+                       };
+
+    int numberStatements = 0; // counter for num of statements in block
+
+    for (int i = 0; i < 5; i++) {
+        std::string str = arr[i].text;
         //if we have a rectangle
         if (arr[i].chart_shape == 0) {
-
-            //fix x coord
-            if (c > 0) {current_x = 460; c --;}
-            else {current_x = 300;}
-
-            //fix y coord
-            if (arr[i-1].chart_shape == 1){current_y += 125;}
-            if (arr[i-1].chart_shape == 0){current_y += 80;}
+            std::cout << arr[i].text;
 
             //draw
             this->ui->widget_3->setShape(Viewer::Process);
-            this->ui->widget_3->compute(current_x, current_y, 300, 60);
+            this->ui->widget_3->compute(X + nbIndents * indentation, Y, L, W, str);
         }
 
         //if we have a diamond
-        if (arr[i].chart_shape == 1) {
-            current_x = 350;
-            c = arr[i].first_block; //will be used for indentation
-
-            //set y
-            if (arr[i-1].chart_shape == 1){current_y += 125;}
-            if (arr[i-1].chart_shape == 0){current_y += 80;}
-
+        if (arr[i].chart_shape > 0) {
+            Y += spacing;
+            numberStatements = arr[i].first_block;
+            flowchart process_arr[numberStatements+1];
+            for (int j = 0;j<numberStatements+1 ;j++ ) {
+                process_arr[j] = arr[i+j];
+            }
             //draw
             this->ui->widget_3->setShape(Viewer::Decision);
-            this->ui->widget_3->compute(current_x, current_y, 300, 60);
+            int pos = this->ui->widget_3->compute(X, Y, L, W, str, process_arr);
+            if(arr[i].chart_shape == 1){
+                this->ui->widget_3->compute_horizontal(X + L/2, Y+100, X + L/2, Y+100 + pos);
+            }
+            Y += (i) * (W+spacing) + numberStatements * (120 + spacing);
+
+            i += numberStatements;
+            std::cout << i;
+
         }
+        Y += W + spacing;
     }
-
-    //fix x and y
-    if(arr[-1].chart_shape == 0) {current_y += 80;}
-    else {current_y += 125;}
-    current_x = 300;
-
     //draw end
     this->ui->widget_3->setShape(Viewer::End);
-    this->ui->widget_3->compute(current_x, current_y, 300, 60);
+    this->ui->widget_3->compute(X, Y+500, L, W);
 }
 
 
