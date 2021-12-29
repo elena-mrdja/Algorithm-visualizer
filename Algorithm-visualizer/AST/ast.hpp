@@ -53,21 +53,22 @@ struct BinOpExp{
     virtual std::string get_text() = 0;
     virtual exp_type get_exp_type();
     virtual double get_value();
+    virtual BinOpExp* get_result() = 0;
     int num_blocks(){return 0;s};
 };
 class SingleOutput : public BinOpExp{
 public:
     SingleOutput(AlgoParser::ExpContext* ctx);
     std::string get_text(){return value;}; //returns the value as a string <- IMPORTANT
-    std::string get_type(){return "SignleOutput";};
+    std::string get_type(){return "SingleOutput";};
     std::string get_operation(){return "none";}; //no needed
     BinOpExp* get_left_expression(){return nullptr;}; // no needed
     BinOpExp* get_right_expression(){return nullptr;}; //no needed
     std::string get_val_type(){return val_type;}; // returns a type of a single output
                                                    // possible outputs: 'double', 'integer', 'boolean', 'variable'.
-    double get_value(); //returns the actual value of the variable / number as a double
-                        //the function isn't implemented right now: we have to deal with Cache access
     int num_blocks(){return 0;};
+    std::string get_value(){return value;}; //returns the value as a string <- IMPORTANT
+    BinOpExp* get_result(){return nullptr;};
 private:
     std::string value;
     std::string val_type;
@@ -224,8 +225,9 @@ public:
     BinOpExp* get_right_expression(){return right_exp;}; // returns a node to right expression
     std::string get_val_type(){return "BinOperation";}; //non necessarry function for binOp
     std::string get_text(); //returns an entire binOp line as a string (ex. output: '( 4.0 + x ) * 5')
-    //std::string get_value();
+    std::string get_value(); //returns an entire binOp line as a string (ex. output: '( 4.0 + x ) * 5')
     std::string get_type(){return "BinOp";};
+    BinOpExp* get_result(){return nullptr;};
 private:
     bin_ops operation;
     BinOpExp* left_exp;
@@ -268,6 +270,7 @@ public:
         }
     }
     Expression* get_exp(){return value;}; // returns the object of class which corresponds to the value
+    Expression* get_value(){return value;}; // returns the object of class which corresponds to the value
     std::string get_name(){return name;}; // returns the name of the variable
     //std::string get_array_size(){return array_size;};
     std::string get_type(){return "Declaration";};
@@ -275,13 +278,14 @@ private:
     variable_type var_type = unknown_var;
     //std::string array_size;
     std::string name;
-    Expression* value; // double for now change later
+    Expression* value;
 };
 class Assignment : public AssignDec {
 public:
     Assignment(AlgoParser::AssignContext* ctx);
     //~Assignment();
     Expression* get_exp(){return value;}; // returns the object of class which corresponds to the value
+    Expression* get_value(){return value;}; // returns the object of class which corresponds to the value
     //Expression* get_index(){return index;};
     //void set_index(Expression* i){index = i;};
     std::string get_name(){return name;}; // returns the name of the variable
@@ -289,7 +293,7 @@ public:
     std::string get_var_type(){return "none";}; //assign does not need to return variable type
 private:
     std::string name;
-    Expression* value; // double for now change later
+    Expression* value;
     //Expression* index;
 };
 // double x = 2.0;
@@ -302,10 +306,89 @@ public:
                                             //i.e directs to the actual statement (ex. assign, declaration, return, etc.)
     std::string get_type(){return "Statement";};
     //~Statement();
-    private :
+private :
     AssignDec* child;
     virtual int num_blocks();
 
+};
+
+
+class Block {
+public :
+    Block(AlgoParser::BlockContext* ctx/*, pass down cache*/ );
+    Block();
+    //~Block();
+    Statement* get_children(){return children;}
+    Statement get_child(int i){return children[i];} //returns a child by index
+    int get_size(){return size;} //needed for a for loop
+    std::string get_type(){return "Block";};
+    //walker function
+private:
+    Statement* child;
+    Statement* children;
+    int size;
+};
+
+class Return : public AssignDec{
+public:
+    Return(AlgoParser::ReturnStmtContext* ctx);
+    Return();
+    //~Return();
+    std::string get_type(){return "Return";};
+    std::string get_name(){return " ";};
+    Expression* get_value(){return value;};
+    std::string get_var_type(){return "none";};
+private:
+    Expression* value;
+};
+
+class Print : public AssignDec{
+public:
+    Print(AlgoParser::PrintContext* ctx);
+    Print();
+    //~Print();
+    std::string get_type(){return "Print";};
+    std::string get_name(){return " ";};
+    Expression* get_value(){return value;};
+    std::string get_var_type(){return "none";};
+private:
+    Expression* value;
+};
+
+class Negation : public BinOpExp {
+public:
+    //not sure if this is necessary but putting
+    //it down for now
+    Negation(AlgoParser::NegationContext* ctx){
+        cout << "create negation" << endl;
+        AlgoParser::ExpContext* node = ctx->exp();
+        if (node->binOp()){
+            value = new BinOp(node);
+        }else if(node->LP()){
+            value = new BinOp(node);
+        }else if((node->integerType()) || (node->doubleType()) || (node->boolType())){
+            value = new SingleOutput(node);
+        }else if(node->variable()){
+            value = new SingleOutput(node);
+        }else{
+            std::cout << "something else" <<std::endl;
+        }
+    };
+    std::string get_value(){return "-"+value->get_value();}; //returns the value as a string <- IMPORTANT
+    std::string get_operation(){return "none";}; //no needed
+    BinOpExp* get_left_expression(){return nullptr;}; // no needed
+    BinOpExp* get_right_expression(){return nullptr;}; //no needed
+    std::string get_val_type(){return nullptr;}; // returns a type of a single output
+    //~Negation();
+    std::string get_type(){return "Negation";};
+    std::string get_name(){return " ";};
+    BinOpExp* get_result(){
+        //cout << "try" << endl;
+        return value;
+    };
+    std::string get_var_type(){return "none";};
+private:
+    BinOpExp* value;
 };
 
 
