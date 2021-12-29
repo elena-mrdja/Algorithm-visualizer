@@ -36,6 +36,8 @@ BinOp::BinOp(AlgoParser::ExpContext* ctx){
         left_exp = new SingleOutput(left_node);
     }else if(left_node->variable()){
         left_exp = new SingleOutput(left_node);
+    }else if (left_node->negation()){
+        left_exp = new Negation(left_node->negation());
     }else{
         std::cout << "something else" <<std::endl;
     }
@@ -49,6 +51,8 @@ BinOp::BinOp(AlgoParser::ExpContext* ctx){
         right_exp = new SingleOutput(right_node);
     }else if(right_node->variable()){
         right_exp = new SingleOutput(right_node);
+    }else if (right_node->negation()){
+        right_exp = new Negation(right_node->negation());
     }else{
             std::cout << "something else" <<std::endl;
      }
@@ -112,6 +116,8 @@ Expression::Expression(AlgoParser::ExpContext* ctx){
         child = new BinOp(ctx);
     }else if (ctx -> exp(0)){
         child = Expression(ctx->exp(0)).get_child();
+    }else if (ctx->negation()){
+        child = new Negation(ctx->negation());
     }else{
         child = new SingleOutput(ctx);
     }
@@ -149,8 +155,38 @@ Statement::Statement(AlgoParser::StmtsContext* ctx){
     }else if(ctx->varDec()){
         AlgoParser::VarDecContext* node = ctx->varDec();
         child = new Declaration(node);
+    }else if(ctx->returnStmt()){
+        AlgoParser::ReturnStmtContext* node = ctx->returnStmt();
+        child = new Return(node);
+    }else if(ctx->print()){
+        AlgoParser::PrintContext* node = ctx->print();
+        child = new Print(node);
     }
 }
+
+Block::Block(AlgoParser::BlockContext* ctx) {
+    size = ctx->children.size();
+    children = new Statement[size];
+    int idx = 0;
+    //cache constructor
+    for (auto i: ctx->stmts()){
+         Statement child(i); // child to cache
+         children[idx] = child;
+         idx++;
+    }
+}
+
+
+Return::Return(AlgoParser::ReturnStmtContext* ctx){
+    AlgoParser::ExpContext* node = ctx->exp();
+    value = new Expression(node);
+}
+
+Print::Print(AlgoParser::PrintContext* ctx){
+    AlgoParser::ExpContext* node = ctx->exp();
+    value = new Expression(node);
+}
+
 
 AST::AST(AlgoParser::BlockContext* ctx) {
     size = 0;
