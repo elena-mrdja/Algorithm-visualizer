@@ -82,10 +82,9 @@ public:
     void set_tail(Value* t);
     void add_value(Value* v);
     bool is_empty(); //fill in
-    Value* pop(){
+    void pop(){
         Value* t = get_tail();
         tail = t->prev;
-        return t;
     };
 private:
     Value* head;
@@ -497,17 +496,48 @@ struct flowchart {
     int second_block; // num of stmts in else
 };
 
+struct ValueInt{
+    int value;
+    ValueInt* prev;
+    ValueInt* next;
+};
+
+class ValuesListInt {
+public:
+    ValuesListInt();
+    ValuesListInt(ValueInt* h, ValueInt* t);
+    ~ValuesListInt();
+    ValueInt* get_head(){return head};
+    ValueInt* get_tail(){};
+    void set_head(ValueInt* h);
+    void set_tail(ValueInt* t);
+    void add_value(ValueInt* v);
+    bool is_empty(); //fill in
+    void pop(){
+        ValueInt* t = get_tail();
+        tail = t->prev;
+    };
+private:
+    ValueInt* head;
+    ValueInt* tail;
+};
+
 void fill_cache_names(AST* ast, Cache* cache, int n){
     //When this function is called Cache is an empty array of length n
     //This function will fill in the existing keys in each line of the Cache
     //This means that after this function, we can read which values
     //exist in each line of the program, but not their values
-    int current_block_end = n;
-    int current_block_length = n;
-    int current_block_start = 0;
+    ValuesListInt block_ends = ValuesListInt();
+    ValueInt* first_block_end = new ValueInt;
+    first_block_end->value = n;
+    block_ends.add_value(first_block_end);
+    ValuesListInt block_starts = ValuesListInt();
+    ValueInt* first_block_start = new ValueInt;
+    first_block_start->value = 0;
+    block_ends.add_value(first_block_start);
     int current_line = 0;
     while (current_line < n){
-        if (current_line < current_block_end) {
+        if (current_line < block_ends.get_tail()->value) {
             if (ast->get_child(current_line).get_stmt_type() == declaration) {
                 cache[current_line] = cache[current_line - 1];
                 ValuesList* empty = new ValuesList();
@@ -518,13 +548,34 @@ void fill_cache_names(AST* ast, Cache* cache, int n){
             }
             else {
                 cache[current_line] = cache[current_line - 1];
-                current_block_start = current_line;
-                current_block_length = ast->get_child(current_line).num_stmts();
-                current_block_end = current_line + ast->get_child(current_line).num_stmts();
+                ValueInt* next_block_end = new ValueInt;
+                next_block_end->value = (double)(current_line + ast->get_child(current_line).num_stmts());
+                block_ends.add_value(next_block_end);
+                ValueInt* next_block_start = new ValueInt;
+                next_block_start->value = current_line;
+                block_starts.add_value(next_block_start);
             };
         }
-
-        else {};
+        else {
+            block_ends.pop();
+            cache->get_map()[current_line] = cache->get_map()[block_starts.get_tail()->value - 1];
+            block_starts.pop();
+            if (ast->get_child(current_line).get_stmt_type() == declaration) {
+                ValuesList* empty = new ValuesList();
+                cache->get_map()[current_line][ast->get_child(current_line).get_name()] = empty;
+            }
+            else if (ast->get_child(current_line).get_stmt_type() == assignment) {
+                continue;
+            }
+            else {
+                ValueInt* next_block_end = new ValueInt;
+                next_block_end->value = (double)(current_line + ast->get_child(current_line).num_stmts());
+                block_ends.add_value(next_block_end);
+                ValueInt* next_block_start = new ValueInt;
+                next_block_start->value = current_line;
+                block_starts.add_value(next_block_start);
+            }
+        };
         current_line++;
     };
 
