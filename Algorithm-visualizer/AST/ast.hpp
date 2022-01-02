@@ -44,6 +44,13 @@ enum exp_type {
     unknown_exp_type = 2
 };
 
+enum stmt_type {
+    declaration = 0,
+    assignment = 1,
+    ifelse = 2,
+    ifrest = 3,
+    while_loop = 4
+};
 
 struct BinOpExp{
     virtual std::string get_type() = 0;
@@ -92,6 +99,14 @@ public:
     double get_last_value(string name, int i){
         return variables[i][i][name]->get_tail()->value;
     };
+    map<string, ValuesList*>* get_map(){return *variables;};
+
+private:
+    int num_lines;
+    map<string, ValuesList*>* variables[MAX_LINES]; //MAX_LINES defined on the top of the file
+};
+
+
 
 class SingleOutput : public BinOpExp{
 public:
@@ -315,7 +330,7 @@ public:
     Expression* get_expression(){return value;}; // returns the object of class which corresponds to the value
     string get_name(){return name;}; // returns the name of the variable
     //std::string get_array_size(){return array_size;};
-    string get_type(){return "Declaration";};
+    stmt_type get_stmt_type(){return declaration;};
 private:
     variable_type var_type = unknown_var;
     //std::string array_size;
@@ -331,8 +346,8 @@ public:
     //Expression* get_index(){return index;};
     //void set_index(Expression* i){index = i;};
     std::string get_name(){return name;}; // returns the name of the variable
-    std::string get_type(){return "Assignment";};
     std::string get_var_type(){return "none";}; //assign does not need to return variable type
+    stmt_type get_stmt_type(){return assignment;};
 private:
     std::string name;
     Expression* value;
@@ -347,10 +362,13 @@ public:
     AssignDec* get_child(){return child;}; //return a child of statement,
                                             //i.e directs to the actual statement (ex. assign, declaration, return, etc.)
     std::string get_type(){return "Statement";};
+    virtual int num_stmts();
+    virtual stmt_type get_stmt_type();
+    virtual string get_name();
     //~Statement();
 private :
     AssignDec* child;
-    virtual int num_blocks();
+
 
 };
 
@@ -453,14 +471,6 @@ private:
     int size;
 };
 
-
-
-private:
-    int num_lines;
-    std::map<string, ValuesList*> *variables[MAX_LINES]; //MAX_LINES defined on the top of the file
-};
-
-
 //below is stuff for the AST walker
 enum chart_shape {
     rectangle = 0,
@@ -480,4 +490,37 @@ struct flowchart {
     string text;
     int first_block; // num of stmts in the first block (if in if and the only block in while)
     int second_block; // num of stmts in else
+};
+
+void fill_cache_names(AST* ast, Cache* cache, int n){
+    //When this function is called Cache is an empty array of length n
+    //This function will fill in the existing keys in each line of the Cache
+    //This means that after this function, we can read which values
+    //exist in each line of the program, but not their values
+    int current_block_end = n;
+    int current_block_length = n;
+    int current_block_start = 0;
+    int current_line = 0;
+    while (current_line < n){
+        if (current_line < current_block_end) {
+            if (ast->get_child(current_line).get_stmt_type() == declaration) {
+                cache[current_line] = cache[current_line - 1];
+                ValuesList* empty = new ValuesList();
+                cache->get_map()[current_line][ast->get_child(current_line).get_name()] = empty;
+            }
+            else if (ast->get_child(current_line).get_stmt_type() == assignment) {
+                cache[current_line] = cache[current_line - 1];
+            }
+            else {
+                cache[current_line] = cache[current_line - 1];
+                current_block_start = current_line;
+                current_block_length = ast->get_child(current_line).num_stmts();
+                current_block_end = current_line + ast->get_child(current_line).num_stmts();
+            };
+        }
+
+        else {};
+        current_line++;
+    };
+
 };
