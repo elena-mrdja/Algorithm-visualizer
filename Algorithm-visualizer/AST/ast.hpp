@@ -34,7 +34,8 @@ enum variable_type {
     var_double = 1,
     var_bool = 2,
     var_char = 3,
-    unknown_var = 4
+    num = 4,
+    unknown_var = 5
 };
 
 enum exp_type {
@@ -49,29 +50,71 @@ struct BinOpExp{
     virtual std::string get_operation() = 0;
     virtual BinOpExp* get_left_expression() = 0;
     virtual BinOpExp* get_right_expression() = 0;
-    virtual std::string get_val_type() = 0;
     virtual std::string get_text() = 0;
     virtual exp_type get_exp_type();
     virtual double get_value();
     virtual BinOpExp* get_result() = 0;
-    int num_blocks(){return 0;s};
+    int num_blocks(){return 0;};
 };
+
+//the following three classes are for variable tracking
+struct Value{
+    double value;
+    Value* prev;
+    Value* next;
+};
+
+class ValuesList {
+public:
+    ValuesList();
+    ValuesList(Value* h, Value* t);
+    ~ValuesList();
+    Value* get_head();
+    Value* get_tail();
+    void set_head(Value* h);
+    void set_tail(Value* t);
+    void add_value(Value* v);
+    bool is_empty(); //fill in
+private:
+    Value* head;
+    Value* tail;
+};
+
+class Declaration;
+
+class Cache{
+public:
+    Cache(int number);
+    ~Cache();
+    void new_var(Declaration* dec, int num);
+    ValuesList* get_var(string var);
+    void add_new_value(string var, Value* value, int line);
+    double get_last_value(string name, int i){
+        return variables[i][i][name]->get_tail()->value;
+    };
+
 class SingleOutput : public BinOpExp{
 public:
     SingleOutput(AlgoParser::ExpContext* ctx);
-    std::string get_text(){return value;}; //returns the value as a string <- IMPORTANT
-    std::string get_type(){return "SingleOutput";};
-    std::string get_operation(){return "none";}; //no needed
+    string get_text(){return value;}; //returns the value as a string <- IMPORTANT
+    string get_type(){return "SingleOutput";};
+    string get_operation(){return "none";}; //no needed
     BinOpExp* get_left_expression(){return nullptr;}; // no needed
     BinOpExp* get_right_expression(){return nullptr;}; //no needed
-    std::string get_val_type(){return val_type;}; // returns a type of a single output
+    variable_type get_var_type(){return val_type;}; // returns a type of a single output
                                                    // possible outputs: 'double', 'integer', 'boolean', 'variable'.
     int num_blocks(){return 0;};
-    std::string get_value(){return value;}; //returns the value as a string <- IMPORTANT
+    double get_value(Cache* cache, int i){
+        //i is the line which the SingleOutput is in
+        if (val_type == num) return stod(value);
+        else {
+            return cache->get_last_value(value, i);
+        }
+    }; //returns the value as a string <- IMPORTANT
     BinOpExp* get_result(){return nullptr;};
 private:
-    std::string value;
-    std::string val_type;
+    string value;
+    variable_type val_type;
 };
 
 class BinOp : public BinOpExp{
@@ -223,9 +266,7 @@ public:
     };
     BinOpExp* get_left_expression(){return left_exp;}; //return a node to left expression
     BinOpExp* get_right_expression(){return right_exp;}; // returns a node to right expression
-    std::string get_val_type(){return "BinOperation";}; //non necessarry function for binOp
     std::string get_text(); //returns an entire binOp line as a string (ex. output: '( 4.0 + x ) * 5')
-    std::string get_value(); //returns an entire binOp line as a string (ex. output: '( 4.0 + x ) * 5')
     std::string get_type(){return "BinOp";};
     BinOpExp* get_result(){return nullptr;};
 private:
@@ -245,13 +286,14 @@ public :
     std::string get_type(){return "Expression";};
     int num_blocks(){return 0;};
     virtual double get_value();
+    virtual string get_text();
 private:
     BinOpExp* child;
 };
 
 struct AssignDec { //needed to unite statement children
     virtual std::string get_name() = 0;
-    virtual Expression* get_value() = 0;
+    virtual Expression* get_expression() = 0;
     virtual std::string get_type() = 0;
     virtual std::string get_var_type() = 0;
     int num_blocks(){return 0;};
@@ -270,10 +312,10 @@ public:
         }
     }
     Expression* get_exp(){return value;}; // returns the object of class which corresponds to the value
-    Expression* get_value(){return value;}; // returns the object of class which corresponds to the value
-    std::string get_name(){return name;}; // returns the name of the variable
+    Expression* get_expression(){return value;}; // returns the object of class which corresponds to the value
+    string get_name(){return name;}; // returns the name of the variable
     //std::string get_array_size(){return array_size;};
-    std::string get_type(){return "Declaration";};
+    string get_type(){return "Declaration";};
 private:
     variable_type var_type = unknown_var;
     //std::string array_size;
@@ -285,7 +327,7 @@ public:
     Assignment(AlgoParser::AssignContext* ctx);
     //~Assignment();
     Expression* get_exp(){return value;}; // returns the object of class which corresponds to the value
-    Expression* get_value(){return value;}; // returns the object of class which corresponds to the value
+    Expression* get_expression(){return value;}; // returns the object of class which corresponds to the value
     //Expression* get_index(){return index;};
     //void set_index(Expression* i){index = i;};
     std::string get_name(){return name;}; // returns the name of the variable
@@ -349,8 +391,7 @@ public:
     //~Print();
     std::string get_type(){return "Print";};
     std::string get_name(){return " ";};
-    Expression* get_value(){return value;};
-    std::string get_var_type(){return "none";};
+    Expression* get_expression(){return value;};
 private:
     Expression* value;
 };
@@ -374,11 +415,10 @@ public:
             std::cout << "something else" <<std::endl;
         }
     };
-    std::string get_value(){return "-"+value->get_value();}; //returns the value as a string <- IMPORTANT
+    std::string get_text(){return "-"+value->get_text();}; //returns the value as a string <- IMPORTANT
     std::string get_operation(){return "none";}; //no needed
     BinOpExp* get_left_expression(){return nullptr;}; // no needed
     BinOpExp* get_right_expression(){return nullptr;}; //no needed
-    std::string get_val_type(){return nullptr;}; // returns a type of a single output
     //~Negation();
     std::string get_type(){return "Negation";};
     std::string get_name(){return " ";};
@@ -413,36 +453,6 @@ private:
     int size;
 };
 
-//the following three classes are for variable tracking
-struct Value{
-    double value;
-    Value* prev;
-    Value* next;
-};
-
-class ValuesList {
-public:
-    ValuesList();
-    ValuesList(Value* h, Value* t);
-    ~ValuesList();
-    Value* get_head();
-    Value* get_tail();
-    void set_head(Value* h);
-    void set_tail(Value* t);
-    void add_value(Value* v);
-    bool is_empty(); //fill in
-private:
-    Value* head;
-    Value* tail;
-};
-
-class Cache{
-public:
-    Cache(int number);
-    ~Cache();
-    void new_var(Declaration* dec, int num);
-    ValuesList* get_var(string var);
-    void add_new_value(string var, Value* value, int line);
 
 
 private:
@@ -471,6 +481,3 @@ struct flowchart {
     int first_block; // num of stmts in the first block (if in if and the only block in while)
     int second_block; // num of stmts in else
 };
-
-
-
