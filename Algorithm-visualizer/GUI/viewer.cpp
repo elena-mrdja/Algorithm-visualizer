@@ -86,7 +86,7 @@ void Viewer::on_shape_changed()
         }
 }
 
-int Viewer::compute(double x, double y,std::string str, flowchart *process_arr)
+int *Viewer::compute(double x, double y,std::string str, flowchart *process_arr)
 {
     switch (mShape) {
 //        case Horizontal:
@@ -122,7 +122,7 @@ int Viewer::compute(double x, double y,std::string str, flowchart *process_arr)
         }
 }
 
-int Viewer::compute_vertical(double x, double y, double lenght)
+int *Viewer::compute_vertical(double x, double y, double lenght)
 {
     QBrush redbrush(Qt::white);
     QPen whitepen(Qt::white);
@@ -131,7 +131,7 @@ int Viewer::compute_vertical(double x, double y, double lenght)
 }
 
 
-int Viewer::compute_horizontal(double x, double y, double length)
+int *Viewer::compute_horizontal(double x, double y, double length)
 {
     QBrush redbrush(Qt::red);
     QPen whitepen(Qt::white);
@@ -139,9 +139,8 @@ int Viewer::compute_horizontal(double x, double y, double length)
     return 0;
 }
 
-int Viewer::compute_start(double x, double y, std::string str)
+int *Viewer::compute_start(double x, double y, std::string str)
 {
-    int spacing = 40;
     QString words = QString::fromStdString(str);
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
@@ -154,46 +153,68 @@ int Viewer::compute_start(double x, double y, std::string str)
 }
 
 
-int Viewer::compute_decision(double x, double y, std::string str, flowchart *process_arr)
+int *Viewer::compute_decision(double x, double y, std::string str, flowchart *process_arr)
 {
-//    QString words = QString::fromStdString(str);
-//    QBrush redbrush(Qt::red);
-//    QPen blackpen(Qt::black);
-//    y = y-20;
-//    x = x +100;
-//    diamond = scene->addRect(x, y, decisionLength, decisionWidth,blackpen, redbrush);
-//    auto text = this->createText(words, x,y,decisionLength,decisionWidth);
-//    diamond->setTransformOriginPoint(QPoint(x+decisionLength/2, y+decisionWidth/2));
-//    diamond->setRotation(45);
-//    scene->addItem(text);
-    if (str.find("If") != std::string::npos)
+    if (str.find("If") != std::string::npos) //|| str.find("Else") != std::string::npos)
     {
-        return compute_if(x,y, str, process_arr);
+        if(process_arr[0].second_block >0){
+            int ifStatements = process_arr[0].first_block;
+            int elseStatements = process_arr[0].second_block;
+            //int totalStatemens = ifStatements + elseStatements;
+            flowchart if_arr[ifStatements+1];
+            for(int i = 0; i < ifStatements+1; i++){
+                if_arr[i] = process_arr[i];
+                std::cout << "If arr" << if_arr->text << std::endl;
+            }
+            flowchart else_arr[elseStatements+1];
+            else_arr[0] = process_arr[0];
+            for(int i = 1; i < elseStatements+1; i++){
+                else_arr[i] = process_arr[i+ifStatements];
+                std::cout << "Else arr" << else_arr->text << std::endl;
+
+            }
+            int *tmp = compute_if(x,y, str, if_arr);
+            int ifBlockWidth = tmp[0] +100 + 20;
+            int ifElseSpacing = 40 + processWidth/2;
+            compute_vertical(x+150, y + ifBlockWidth-50, ifElseSpacing);
+            std::cout << "If block width: "<< ifBlockWidth <<std::endl;
+            int *tmp1 = compute_else(x, y+ifBlockWidth+ifElseSpacing-10, "Else", else_arr); //+ 120;
+            int elseBlockWidth = tmp1[0] + 120;
+            std::cout << "VIEWER: elseBlockWidth: " << elseBlockWidth << std::endl;
+            int blockWidth = ifBlockWidth-20 + ifElseSpacing + elseBlockWidth;
+            std::cout << "VIEWER BLOCK WIDTH: " << blockWidth << std::endl;
+            int results[2] = {blockWidth, tmp[1]};
+
+            return results;
+        }
+        else
+        {
+            return compute_if(x,y, str, process_arr);
+        }
     }
     else if (str.find("While") != std::string::npos)
     {
-        x = x-100;
-        compute_while(x,y, str, process_arr);
+        return compute_while(x,y, str, process_arr);
     }
 
 }
 
-int Viewer::compute_if(double x, double y, std::string str, flowchart *if_arr)
+int *Viewer::compute_if(double x, double y, std::string str, flowchart *if_arr)
 {
     //USEFUL VARIABLES
     int numberStatements = if_arr[0].first_block;
 
     int x_bottom_diamond = x  + processLength/2;
     int y_bottom_diamond = y  + squareSize;
-    int x_right_diamond = x + 100 + processLength;
-    int y_right_diamond = y + 20 + processWidth/2;
+    int x_right_diamond = x + 100 + decisionLength;
+    int y_right_diamond = y + 20 + decisionWidth/2;
 
     int y_pos = y_bottom_diamond;
 
     int newNumberStatements = 0;
     int numberProcess = 0;
     int numberWhile = 0;
-    int numberIf = 0;
+    int numberIf = 1;
 
     int returnV = 0;
     int nextShapeWidth = 0;
@@ -209,19 +230,18 @@ int Viewer::compute_if(double x, double y, std::string str, flowchart *if_arr)
     diamond->setRotation(45);
     scene->addItem(text);
     for (int i = 1; i < numberStatements+1; i++){
+        std::cout << "Text at location i:" << if_arr[i].text;
 
         if(if_arr[i+1].chart_shape > 0){nextShapeWidth = decisionWidth;}
         else if (if_arr[i+1].chart_shape == 0){nextShapeWidth = processWidth;}
 
-        compute_vertical(x_bottom_diamond, y_pos , spacing + nextShapeWidth/2 + returnV);
+        compute_vertical(x_bottom_diamond, y_pos , spacing + nextShapeWidth/2);
         y_pos += spacing+ nextShapeWidth/2;
         compute_horizontal(x_bottom_diamond, y_pos, indentation);
         y_pos += 20 - 50;
 
 
         std::string statementString = if_arr[i].text;
-
-
 
         if (if_arr[i].chart_shape == 0)
         {
@@ -241,40 +261,129 @@ int Viewer::compute_if(double x, double y, std::string str, flowchart *if_arr)
             }
             if (if_arr[i].chart_shape == 1)
                {
-                returnV = compute(x_bottom_diamond + indentation - 100, y_pos, statementString, while_arr) + decisionWidth/2;
-                numberIf++;
+                int *tmp_if = compute(x_bottom_diamond + 20+indentation - 100, y_pos, statementString, while_arr);
+                numberIf+= tmp_if[1];
+                returnV = tmp_if[0] + decisionWidth/2;
+                compute_vertical(x_bottom_diamond, y_pos, returnV);
                 y_pos+= returnV;
-                std::cout << "In for loop, i = " << i << "return of writing the if: " << returnV << std::endl;
             }
             else if (if_arr[i].chart_shape == 2)
             {
-                compute(x + indentation, y_pos, statementString, while_arr);
-                numberWhile++;
-                y_pos += decisionWidth/2;
+                int *tmp_while = compute(x_bottom_diamond +20+ indentation -100, y_pos, statementString, while_arr);
+                int line_length = tmp_while[0];
+                compute_vertical(x_bottom_diamond, y_pos+30, line_length);
+                numberWhile+= tmp_while[1];
+                y_pos += line_length+30;
             }
             i += newNumberStatements;
         }
     }
-    compute_vertical(x_bottom_diamond, y_pos - returnV, returnV);
-    return y_pos - y_bottom_diamond + 30;
+    int results[2] = {y_pos - y_bottom_diamond + 30, numberIf};
+    return results;
 }
 
-int Viewer::compute_while(double x, double y, std::string str, flowchart *while_arr)
+int *Viewer::compute_else(double x, double y, std::string str, flowchart *else_arr)
 {
     //USEFUL VARIABLES
-    int numberStatements = while_arr[0].first_block;
+    int numberStatements = else_arr[0].second_block;
 
-    int x_bottom_diamond = x + 100 + processLength/2;
-    int y_bottom_diamond = y + 20+ processWidth;
-    int x_right_diamond = x + 100 + processLength;
-    int y_right_diamond = y + 20 + processWidth/2;
+    int x_bottom_diamond = x  + processLength/2;
+    int y_bottom_diamond = y  + squareSize - 10;
+    int x_right_diamond = x + 100 + decisionLength;
+    int y_right_diamond = y + 20 + decisionWidth/2;
 
     int y_pos = y_bottom_diamond;
 
     int newNumberStatements = 0;
     int numberProcess = 0;
     int numberWhile = 0;
+    int numberIf = 1;
+
+    int returnV = 0;
+    int nextShapeWidth = 0;
+    //END VARIABLES
+
+    //DRAWING FIRST IF
+    QString words = QString::fromStdString(str);
+    QBrush redbrush(Qt::red);
+    QPen blackpen(Qt::black);
+    diamond = scene->addRect(x+100, y-20, squareSize, squareSize,blackpen, redbrush);
+    auto text = this->createText(words, x+100,y-20,squareSize,squareSize);
+    diamond->setTransformOriginPoint(QPoint(x+100+squareSize/2, y-20+squareSize/2));
+    diamond->setRotation(45);
+    scene->addItem(text);
+    for (int i = 1; i < numberStatements+1; i++){
+        std::cout << "Text at location i:" << else_arr[i].text;
+
+        if(else_arr[i+1].chart_shape > 0){nextShapeWidth = decisionWidth;}
+        else if (else_arr[i+1].chart_shape == 0){nextShapeWidth = processWidth;}
+
+        compute_vertical(x_bottom_diamond, y_pos+10 , -10+ spacing + nextShapeWidth/2);
+        y_pos += spacing+ nextShapeWidth/2;
+        compute_horizontal(x_bottom_diamond, y_pos, indentation);
+        y_pos += 20 - 50;
+
+
+        std::string statementString = else_arr[i].text;
+
+        if (else_arr[i].chart_shape == 0)
+        {
+            setShape(Process);
+            compute(x_bottom_diamond + indentation, y_pos, statementString);
+            numberProcess++;
+            y_pos += processWidth/2;
+        }
+        else if (else_arr[i].chart_shape > 0)
+        {
+            setShape(Decision);
+            newNumberStatements = else_arr[i].first_block;
+            flowchart while_arr[newNumberStatements+1];
+            for (int j = 0;j<newNumberStatements+1 ;j++ )
+            {
+                while_arr[j] = else_arr[i+j];
+            }
+            if (else_arr[i].chart_shape == 1)
+               {
+                int *tmp_if = compute(x_bottom_diamond + 20+indentation - 100, y_pos, statementString, while_arr);
+                numberIf+= tmp_if[1];
+                returnV = tmp_if[0] + decisionWidth/2;
+                compute_vertical(x_bottom_diamond, y_pos, returnV);
+                y_pos+= returnV;
+            }
+            else if (else_arr[i].chart_shape == 2)
+            {
+                int *tmp_while = compute(x_bottom_diamond +20+ indentation -100, y_pos, statementString, while_arr);
+                int line_length = tmp_while[0];
+                compute_vertical(x_bottom_diamond, y_pos+30, line_length);
+                numberWhile+= tmp_while[1];
+                y_pos += line_length+30;
+            }
+            i += newNumberStatements;
+        }
+    }
+    int results[2] = {y_pos - y_bottom_diamond + 30, numberIf};
+    return results;
+}
+
+int *Viewer::compute_while(double x, double y, std::string str, flowchart *while_arr)
+{
+    //USEFUL VARIABLES
+    int numberStatements = while_arr[0].first_block;
+
+    int x_bottom_diamond = x + processLength/2;
+    int y_bottom_diamond = y +squareSize;
+    int x_right_diamond = x + 100 + squareSize + 20;
+    int y_right_diamond = y + decisionLength/2 - 40;
+    int y_pos = y_bottom_diamond;
+
+    int newNumberStatements = 0;
+    int numberProcess = 0;
+    int numberWhile = 1;
     int numberIf = 0;
+
+    int returnIf = 0;
+    int returnWhile = 0;
+    int loopsStatements = 0;
     //END VARIABLES
 
     QString words = QString::fromStdString(str);
@@ -286,153 +395,64 @@ int Viewer::compute_while(double x, double y, std::string str, flowchart *while_
     diamond->setRotation(45);
     scene->addItem(text);
 
-    compute_horizontal(x_bottom_diamond, y_bottom_diamond, spacing);
-    y_pos += spacing;
-
     for (int i = 1; i < numberStatements+1; i++)
     {
         std::string statementString = while_arr[i].text;
+
+        compute_vertical(x_bottom_diamond, y_bottom_diamond, spacing);
+        y_pos += spacing;
+
         if (while_arr[i].chart_shape == 0)
         {
             setShape(Process);
-            compute(x, y + i*spacing, statementString);
+            compute(x, y_pos, statementString);
             numberProcess++;
             y_pos += processWidth;
-            compute_vertical(x_bottom_diamond, y_pos, spacing);
+            if(i == numberStatements){compute_vertical(x_bottom_diamond, y_pos, spacing/2);}
+            else{compute_vertical(x_bottom_diamond, y_pos, spacing);}
+
         }
         else if (while_arr[i].chart_shape >0)
         {
             setShape(Decision);
             newNumberStatements = while_arr[i].first_block;
-            flowchart while_arr[newNumberStatements+1];
+            loopsStatements += newNumberStatements;
+            flowchart process_arr[newNumberStatements+1];
             for (int j = 0;j<newNumberStatements+1 ;j++ ){
-                while_arr[j] = while_arr[i+j];
+                process_arr[j] = while_arr[i+j];
             }
-            if (while_arr[i].chart_shape ==1){
-                compute(x, y + (i*spacing), statementString, while_arr);
-                numberIf++;
-                y_pos += decisionWidth;
+            if (while_arr[i].chart_shape ==1)
+            {
+                int * tmp_if = compute(x, y_pos+40, statementString, process_arr);
+                returnIf = tmp_if[0] + decisionWidth ;
+                numberIf = tmp_if[1];
+                y_pos += returnIf -40;
                 compute_vertical(x_bottom_diamond, y_pos, spacing);
-                }
-                else if (while_arr[i].chart_shape == 2){
-                    compute_while(x, y + (i*spacing), statementString, while_arr);
-                    numberWhile++;
-                    y_pos += decisionWidth;
-                    compute_vertical(x_bottom_diamond, y_pos, spacing);
-                }
-                i += newNumberStatements;
             }
+            else if (while_arr[i].chart_shape == 2)
+            {   int * tmp = compute(x, y_pos+40, statementString, process_arr);
+                returnWhile = tmp[0]+ decisionWidth/2;
+                numberWhile += tmp[1] ;
+                y_pos += returnWhile - 40;
+                compute_vertical(x_bottom_diamond, y_pos+spacing/2, spacing/2);
+
+            }
+            i += newNumberStatements;
+
         }
-        compute_horizontal(x_right_diamond, y_right_diamond, whileLine*numberWhile + ((indentation+processWidth/2) * numberIf));
-        compute_vertical(x_right_diamond +whileLine*numberWhile + ((indentation+processWidth/2) * numberIf), y_right_diamond, (numberStatements+1 * spacing) + (numberProcess * processWidth) + ((numberIf+numberWhile) * decisionWidth));
-        compute_horizontal(x_bottom_diamond, y_right_diamond + (numberStatements+1 * spacing) + (numberProcess * processWidth) + ((numberIf+numberWhile) * decisionWidth), whileLine*numberWhile + ((indentation+processWidth/2) * numberIf));
+    }
+    compute_horizontal(x_right_diamond, y_right_diamond, whileLine*numberWhile + ((100 + indentation+processWidth/2) * numberIf));
+
+    int line_length =  decisionWidth/2 + ((numberStatements - loopsStatements) * spacing) + (numberProcess * processWidth) + spacing/2  + returnIf + returnWhile ;
+    compute_vertical(x_right_diamond +whileLine*numberWhile + ((100 + indentation+processWidth/2) * numberIf), y_right_diamond, line_length);
+    compute_horizontal(x_bottom_diamond, y_right_diamond + line_length, whileLine*numberWhile + ((100 + indentation+processWidth/2) * numberIf) + decisionLength/2);
+    compute_vertical(x_bottom_diamond, y_right_diamond+line_length, -(numberWhile * spacing/2));
+    int results[2] = {line_length, numberWhile};
+
+    return results;
 }
 
-
-
-
-
-//int Viewer::compute_if(double x, double y, std::string str, flowchart *process_arr)
-//{
-//    int numberIndents = 1;
-//    int indentation = 130;
-//    int numberStatements = process_arr[0].first_block;
-//    const int shapeWidth = 60;
-//    const int L = 300;
-//    const int W = 60;
-
-
-//    int x_bottom_diamond = x + l/2; int y_bottom_diamond = y +w+20;
-
-//    int pos = 0;
-//    int newNumberStatements = 0;
-//    for (int i = 1; i < numberStatements+1; i++){
-//        compute_vertical(x_bottom_diamond, y_bottom_diamond,
-//                         x_bottom_diamond, y_bottom_diamond + i * (shapeWidth/2 + spacing)
-//                         );
-
-//        compute_horizontal(x_bottom_diamond, y_bottom_diamond + (i) * (shapeWidth/2 + spacing),
-//                           x_bottom_diamond + indentation, y_bottom_diamond + (i) * (shapeWidth/2 + spacing));
-//        std::string str = process_arr[i].text;
-//        if(process_arr[i].chart_shape == 0){
-//            setShape(Process);
-//            pos = compute(x_bottom_diamond + indentation, y_bottom_diamond + i * spacing + (i-1) * shapeWidth/2, L, W, str);
-//        }
-//        else if (process_arr[i].chart_shape > 0){
-//            setShape(Decision);
-//            newNumberStatements = process_arr[i].first_block;
-//            flowchart if_arr[newNumberStatements+1];
-//            for (int j = 0;j<newNumberStatements+1 ;j++ ){
-//                    if_arr[j] = process_arr[i+j];
-//            }
-//            pos = this->compute(x_bottom_diamond, y_bottom_diamond + i * spacing + (i-1) * shapeWidth/2, L, W, str, if_arr) - 30;
-//            i += newNumberStatements+1;
-//        }
-//    }
-//    return numberStatements * (spacing + shapeWidth/2) + pos;
-//}
-
-
-//int Viewer::compute_while(double x, double y, std::string str, flowchart *process_arr)
-//{
-//    const int lineSize = 150;
-//    int numberIndents = 1;
-//    int indentation = 120;
-//    int numberStatements = process_arr[0].first_block;
-//    const int shapeWidth = 60;
-//    const int L = 300;
-//    const int W = 60;
-//    int x_right = x+100 + 120;
-//    int c = 1;
-//    int line = 0;
-
-//    int x_bottom_diamond = x + l/2 + 100; int y_bottom_diamond = y +w+20;
-//    compute_vertical(x_bottom_diamond, y_bottom_diamond,
-//                     x_bottom_diamond, y_bottom_diamond + (numberStatements+1) * (shapeWidth/2 + spacing) + spacing
-//                     );
-
-//    int newNumberStatements = 0;
-//    for (int i = 1; i < numberStatements+1; i++){
-//        std::string str = process_arr[i].text;
-//        if(process_arr[i].chart_shape == 0){
-//            setShape(Process);
-//            compute(x, y_bottom_diamond + i * spacing + (i-1) * shapeWidth/2, L, W, str);
-//        }
-//        else if (process_arr[i].chart_shape > 0){
-//            c++;
-//            setShape(Decision);
-//            newNumberStatements = process_arr[i].first_block;
-//            flowchart while_arr[newNumberStatements+1];
-//            for (int j = 0;j<newNumberStatements+1 ;j++ ){
-//                    while_arr[j] = process_arr[i+j];
-//            }
-//            this->compute(x, y_bottom_diamond + i * spacing + (i-1) * shapeWidth/2, L, W, str, while_arr) ;
-//            i += newNumberStatements+1;
-//            line += shapeWidth * 1/2 + spacing;
-
-//        }
-//  }
-//    compute_horizontal(x_right, y + sqrt(2 * pow(100,2)) / 2 - 20,
-//                       x_right + c * lineSize ,y + sqrt(2 * pow(l,2)) / 2 - 20);
-
-//    compute_vertical(x_right + c * lineSize, y + sqrt(2 * pow(l,2)) / 2 - 20,
-//                     x_right + c * lineSize, y_bottom_diamond + line + numberStatements * (shapeWidth + spacing) + spacing
-//                     );
-
-//    compute_horizontal(x_right + c * lineSize, y_bottom_diamond + line + numberStatements * (shapeWidth + spacing) + spacing,
-//                       x_bottom_diamond,y_bottom_diamond + line + numberStatements * (shapeWidth + spacing) + spacing
-//                       );
-
-
-//    compute_horizontal(x +l/2, y_bottom_diamond + numberStatements * (shapeWidth + spacing) + (spacing * 1/2),
-//                       x_loop, y_bottom_diamond + numberStatements * (shapeWidth + spacing) + (spacing * 1/2));
-
-//}
-
-
-
-
-int Viewer::compute_process(double x, double y,std::string str)
+int *Viewer::compute_process(double x, double y,std::string str)
 {
     int spacing = 40;
     QString words = QString::fromStdString(str);
@@ -441,11 +461,11 @@ int Viewer::compute_process(double x, double y,std::string str)
     rectangle = scene ->addRect(x, y, processLength, processWidth, blackpen, redbrush);
     auto text = this->createText(words, x,y,processLength,processWidth);
     scene->addItem(text);
-    return processWidth/2;
+    return 0;//processWidth/2;
 }
 
 
-int Viewer::compute_end(double x, double y, std::string str)
+int *Viewer::compute_end(double x, double y, std::string str)
 {
     QString words = QString::fromStdString(str);
     QBrush redbrush(Qt::red);

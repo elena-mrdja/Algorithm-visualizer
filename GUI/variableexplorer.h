@@ -33,7 +33,7 @@ public:
     QPainter *painter;
     QGraphicsTextItem *text;
 
-    void track(vector<unordered_map<char, vector<double>>> v, int index);
+    void track(std::unordered_map<char, std::vector<double>> mp, std::vector<char> order, int index);
     void track2(vector<unordered_map<char, vector<double>>::iterator> v);
 protected:
     QGraphicsSimpleTextItem* createText2(QString str, int x, int y, int w, int l);

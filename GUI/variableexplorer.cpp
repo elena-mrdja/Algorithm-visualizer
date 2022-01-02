@@ -51,7 +51,7 @@ void VariableExplorer::set_background()
 
 
 
-/*void VariableExplorer::track(std::unordered_map<char, std::vector<double>> mp, std::vector<char> order, int index)
+void VariableExplorer::track(std::unordered_map<char, std::vector<double>> mp, std::vector<char> order, int index)
 {
     string words="";
     vector<pair<char, double>> written;
@@ -63,56 +63,15 @@ void VariableExplorer::set_background()
             words = words + written[j].first + "=" + std::to_string(written[j].second);
             //cout<<written[j].first<<"="<<written[j].second;
             if(j!=written.size()-1)
-                words = words + "\n" ;
+                words = words + ", ";
         }
-        words = words + "\n" + "_______________"+ "\n";
+        words = words + "\n";
     }
     QString word = QString::fromStdString(words);
-    auto text = this->createText2(word, 0,0,100,100);
-    scene->addItem(text);
-}*/
-
-void VariableExplorer::track(vector<unordered_map<char, vector<double>>> v, int index)
-{
-    string words="";
-    for(int i=0;i<index;i++)
-    {
-        words = words + "line: " + std::to_string(i+1) + "\n";
-        for(auto it : v[i])
-        {
-            for(int j=0;j<it.second.size();j++)
-            {
-                words = words + it.first + "=" + std::to_string(it.second[j]) + "\n";
-            }
-        }
-        words = words + "____________" + "\n";
-    }
-    QString word = QString::fromStdString(words);
-    auto text = this->createText2(word, 0,0,100,100);
+    auto text = this->createText2(word, 1,1,100,100);
     scene->addItem(text);
 }
 
-
-
-/*string words="";
-vector<pair<char, double>> written;
-
-for(int i=0;i<index;i++)
-{
-    unordered_map mp = mp_pointers[i];
-    written.push_back({order[i], mp[order[i]][mp[order[i]].size()-1]});
-    for(int j=0; j<written.size(); j++)
-    {
-        words = words + written[j].first + "=" + std::to_string(written[j].second);
-        //cout<<written[j].first<<"="<<written[j].second;
-        if(j!=written.size()-1)
-            words = words + "\n" ;
-    }
-    words = words + "\n" + "_______________"+ "\n";
-}
-QString word = QString::fromStdString(words);
-auto text = this->createText2(word, 0,0,100,100);
-scene->addItem(text);*/
 
 /*void VariableExplorer::track2(vector<unordered_map<char, vector<double>>::iterator> v);
 {

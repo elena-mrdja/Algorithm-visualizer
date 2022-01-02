@@ -5,6 +5,20 @@
 #include <string>
 using namespace std;
 
+//GLOBAL VARIABLES
+
+//Process
+int const processLength  = 300;
+int const processWidth = 60;
+
+//Decision
+int const squareSize = 100;
+
+int const decisionLength = sqrt(20000);
+int const decisionWidth = sqrt(20000);
+
+//int index;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -13,15 +27,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
-
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-
-
-
 
 //test for flowchart
 enum chart_shape {
@@ -60,91 +69,167 @@ void MainWindow::on_Visualize_clicked()
     //JOHN TRYING SOME STUFF
     const int X = 300;
     int Y = 20;
-    const int L = 300;
-    const int W = 60;
-    const int spacing = 40;
-    int indentation = 220;
-    int nbIndents = 0;
+    const int spacing = 80;
+
 
 
     this->ui->widget_3->setShape(Viewer::Start);
     this->ui->widget_3->compute(X, Y); //any string suffices
-    Y += W + spacing;
+    Y += processWidth + spacing;
 
 
     //create a list of structs
-    flowchart arr[8] = {{0, "Declare x", 0, 0},
-                        {1, "If x > 1", 4, 0},
-                        {0, "Assign z", 0,0},
-                        {1, "If x >2", 2,0},
-                        {1, "If x < 4", 1, 0},
-                        {0, "Assign x", 0, 0},
-                        {0, "Assign y", 0, 0},
-                        {0, "Assign LAST",0,0}};
-
-
-
 //    flowchart arr[8] = {{0, "Declare x", 0, 0},
-//                        {1, "If x > 1", 6, 0},
+//                        {1, "If x > 1", 4, 0},
+//                        {0, "Assign z", 0,0},
+//                        {1, "If x >2", 2,0},
+//                        {1, "If x < 4", 1, 0},
+//                        {0, "Assign x", 0, 0},
+//                        {0, "Assign y", 0, 0},
+//                        {0, "Assign LAST",0,0}};
+
+
+
+//    flowchart arr[8] = {
+//                        {1, "If x > 1", 7, 0},
 //                        {1, "If x >3", 5,0},
 //                        {0, "Assign ghj", 0,0},
 //                        {1, "If x < 2", 3,0},
 //                        {0, "Declar dfghj", 0,0},
 //                        {1, "If x > 3", 1,0},
-//                        {0, "Assign y", 0,0}};
+//                        {0, "Assign y", 0,0},
+//                        {0, "Declare x", 0, 0}};
 
-//    flowchart arr[4] = {{1, "If x < 2", 3,0},
-//                        {1, "If x hshs,", 2,0},
+//    flowchart arr[5] = {{1, "If x < 2", 3,0},
+///*                        {1, "If x hshs,", 2,0},*/
 ////                        {0, "Assign x", 0,0},
 //                         {1, "If y", 1,0},
-//                         {0, "Assign hahaha", 0,0}};
+//                         {0, "Assign hahaha", 0,0},
+//                        {0, "ASSIGN LAST", 0,0}};
 
 
-//    flowchart arr[5] = {{2, "While x >1", 3, 0},
-////                        {2, "While jsp", 2, 0},
-//                        {2, "While jjj", 1, 0},
-//                        {0, "Assign x hh", 0,0},
-//                        {0, "Declare fuck off", 0,0}
+//    flowchart arr[6] = {{1, "If x >1", 4, 0},
+//                        {2, "While jsp", 2, 0},
+//                        {0, "ASSIGN while", 0, 0},
+//                        {0, "ASSIGN while 2", 0,0},
+//                        {0, "ASSIGN if 1", 0,0},
+//                        {0, "ASSIGN nothing", 0,0}
 //                       };
 
+
+//    flowchart arr[8] = {{2, "While somth", 4, 0},
+//                        {2, "While smth else", 3, 0},
+////                        {2, "While False", 2, 0},
+//                        {2, "While True", 1, 0},
+//                        {0, "Assign HAHAHAH", 0,0},
+//                        {0, "Declare lol", 0,0},
+//                        {0, "TEST",0,0},
+//                        {0, "END TEST", 0,0}
+//                       };
+
+
+//    flowchart arr[4] = {{2, "While A", 3,0},
+//                    {2, "While B", 1, 0},
+//                    {0, "ASSIGN in B", 0,0},
+//                    {0, "ASSIGN in A", 0,0}};
+
+//    flowchart arr[5] = {{2, "While", 4, 0},
+//                       {1, "If 1", 2, 0},
+//                       {1,"If 2", 1,0},
+//                       {0, "STATEMENT 1", 0,0},
+//                       {0, "STATEMENT 2", 0,0}};
+//    flowchart arr[3] = {{0, "STATEMENT 1", 0, 0},
+//                        {0, "STATEMENT 2", 0,0},
+//                        {0, "STATEMENT 3", 0, 0}};
+
+
+    /*THIS FLOWCHART DOESNT WORK */
+//    flowchart arr[6] = {{1, "If 1", 1,1},
+//                        {1, "If 2", 1,1},
+//                        {0, "STATEMENT IF 2", 0,0},
+//                        {0, "STATEMENT ELSE 2", 0,0},
+//                        {0, "STATEMENT ELSE 1", 0,0}
+//                       };
+
+    flowchart arr[3] = {{1, "If 1", 1,1},
+                        {0, "STATEMENT IF 1", 0,0},
+                        {0, "STATEMENT ELSE 1", 0,0}
+
+    };
+
+
+//    flowchart arr[12] = {{2, "While 1", 10, 0},
+//                         {1, "If 1", 7, 0},
+//                         {1, "If 2", 6,0},
+//                         {2, "While 2", 2, 0},
+//                         {2, "While 3", 1, 0},
+//                         {0, "STATEMENT 1", 0,0},
+//                         {1, "If 3", 1, 0},
+//                         {0, "STATEMENT 2", 0,0},
+//                         {0, "STATEMENT 3", 0,0},
+//                         {2, "While 4", 1, 0},
+//                         {0, "STATEMENT 4",0,0},
+//                         {0, "FINAL STATEMENT", 0,0}};
+
+
+    /*IF THE PROGRAM FAILS TO BUILD MAYBE CHECK THE VALUE BOUDING i
+     * IT HAS TO BE THE SAME AS THE NUMBER OF STATEMENTS IN THE ARRAY*/
+
     int numberStatements = 0; // counter for num of statements in block
-    int y_pos_test = 0;
-    for (int i = 0; i < 8; i++) {
+    int elseStatements = 0;
+    for (int i = 0; i < 3; i++) {
         std::string str = arr[i].text;
+        std::cout << "Y = "<< Y << std::endl;
+
         //if we have a rectangle
         if (arr[i].chart_shape == 0) {
             //draw
             this->ui->widget_3->setShape(Viewer::Process);
             this->ui->widget_3->compute(X, Y, str);
+            Y += processWidth;
+            this->ui->widget_3->compute_vertical(X+processLength/2, Y, spacing);
+            Y += spacing;
         }
 
         //if we have a diamond
+
         if (arr[i].chart_shape > 0) {
-            Y += spacing;
-            numberStatements = arr[i].first_block;
+            //Y += spacing;
+            elseStatements = arr[i].second_block;
+            numberStatements = arr[i].first_block + elseStatements;
+            std::cout << "Number of statements:" << numberStatements << std::endl;
             flowchart process_arr[numberStatements+1];
+
             for (int j = 0;j<numberStatements+1 ;j++ ) {
-                process_arr[j] = arr[i+j];
+                if (elseStatements > 0)
+                {
+                    std::cout << "WE HAVE AND ELSE"<< std::endl;
+                    process_arr[j] = arr[j];
+
+                }
+                else
+                {
+                    process_arr[j] = arr[i+j];
+                }
             }
+
             //draw
             this->ui->widget_3->setShape(Viewer::Decision);
-            y_pos_test = this->ui->widget_3->compute(X, Y,str, process_arr);
-            std::cout << "y_pos in mainwindow equal" << y_pos_test;
-            //this->ui->widget_3->compute_vertical(X + 150, Y+(200/sqrt(2)), y_pos_test);
-            if(arr[i].chart_shape == 1){
-                //this->ui->widget_3->compute_horizontal(X + L/2, Y+100, X + L/2, Y+100 + pos);
-            }
-            Y += (i) * (W+spacing) + numberStatements * (120 + spacing);
-
+            std::cout << "Iteration i=" << i << "Y = " << Y << "Y-40 = " << Y-40 << std::endl;
+            int * tmp = this->ui->widget_3->compute(X, Y+20,str, process_arr);
+            int ifBlockWidth = tmp[0] -processWidth/2;
+            std::cout << "MAIN WINDOW BLOCK WIDTH: " << ifBlockWidth;
+            Y+= ifBlockWidth;
+            this->ui->widget_3->compute_vertical(X+processLength/2, Y, spacing);
+            Y+= spacing;
             i += numberStatements;
             std::cout << i;
 
         }
-        Y += W + spacing;
     }
     //draw end
     this->ui->widget_3->setShape(Viewer::End);
-    this->ui->widget_3->compute(X, Y);
+    this->ui->widget_3->compute(X, Y+500);
 }
 
 
@@ -160,30 +245,51 @@ void MainWindow::on_Visualize_clicked()
 //}
 
 
-void MainWindow::on_variables_clicked()
-{
-    vector<char> order;
-    vector<unordered_map<char, vector<double>>::iterator> vec;
+void MainWindow::on_variables_clicked(){}
+//{
+//    vector<char> order;
+//    vector<unordered_map<char, vector<double>>::iterator> vec;
 
-    unordered_map<char, vector<double>> mapa;
-    mapa['z'].push_back(4);
-    mapa['z'].push_back(5);
-    mapa['x'].push_back(1);
-    mapa['y'].push_back(2);
-    mapa['y'].push_back(3);
-    order.push_back('z');
-    order.push_back('x');
-    order.push_back('y');
+//    unordered_map<char, vector<double>> mapa;
+//    mapa['z'].push_back(4);
+//    mapa['z'].push_back(5);
+//    mapa['x'].push_back(1);
+//    mapa['y'].push_back(2);
+//    mapa['y'].push_back(3);
+//    order.push_back('z');
+//    order.push_back('x');
+//    order.push_back('y');
 
-    for(unordered_map<char, vector<double>>::iterator it=mapa.begin();it!=mapa.end();it++)
-    {
-        vec.push_back(it);
-    }
+//    unordered_map<char, vector<double>> mapa1;
+//    mapa1['a'].push_back(4);
+//    mapa1['z'].push_back(5.98);
+//    mapa1['b'].push_back(11);
+//    mapa1['b'].push_back(24);
+//    mapa1['b'].push_back(32);
 
-    this->ui->widget_4->writeOut(QString("Btn"));
-    this->ui->widget_5->track(mapa, order, 3);
-    //this->ui->widget_5->track2(vec);
-}
+
+//    vector<unordered_map<char, vector<double>>> ve;
+//    ve.push_back(mapa);
+//    ve.push_back(mapa1);
+
+//    for(unordered_map<char, vector<double>>::iterator it=mapa.begin();it!=mapa.end();it++)
+//    {
+//        vec.push_back(it);
+//    }
+
+//    if (index == ve.size())
+//    {
+//        index = 1;
+//    }
+//    else
+//    {
+//        index++;
+//    }
+
+//    this->ui->widget_4->writeOut(QString("Btn"));
+//    this->ui->widget_5->track(ve, index);
+//    //this->ui->widget_5->track2(vec);
+//}
 
 
 
