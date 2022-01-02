@@ -82,6 +82,11 @@ public:
     void set_tail(Value* t);
     void add_value(Value* v);
     bool is_empty(); //fill in
+    Value* pop(){
+        Value* t = get_tail();
+        tail = t->prev;
+        return t;
+    };
 private:
     Value* head;
     Value* tail;
