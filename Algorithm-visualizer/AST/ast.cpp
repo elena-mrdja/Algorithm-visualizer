@@ -207,6 +207,12 @@ Block::Block(AlgoParser::BlockContext* ctx) {
     }
 }
 
+WhileStmt::WhileStmt(AlgoParser::WhileStmtContext* ctx){
+   condition = new Expression(ctx->exp());
+   block_stmt = new Block(ctx->block());
+}
+
+
 
 Return::Return(AlgoParser::ReturnStmtContext* ctx){
     AlgoParser::ExpContext* node = ctx->exp();

@@ -430,6 +430,20 @@ private:
     Statement* children;
     int size;
 };
+class WhileStmt : public AssignDec {
+public:
+    WhileStmt(AlgoParser::WhileStmtContext* ctx);
+    //~WhileStmt();
+    void set_condition(Expression* c){condition = c;};
+    Expression* get_condition(){return condition;};
+    Block* get_block(){return block_stmt;};
+    void set_block_stmt(Block* stmt){block_stmt = stmt;};
+    std::string get_type(){return "While";};
+    //attributes: condition, block
+private:
+    Expression* condition;
+    Block* block_stmt;
+};
 
 class Return : public AssignDec{
 public:
