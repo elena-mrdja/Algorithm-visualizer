@@ -507,7 +507,7 @@ public:
     ValuesListInt();
     ValuesListInt(ValueInt* h, ValueInt* t);
     ~ValuesListInt();
-    ValueInt* get_head(){return head};
+    ValueInt* get_head(){return head;};
     ValueInt* get_tail(){};
     void set_head(ValueInt* h);
     void set_tail(ValueInt* t);
