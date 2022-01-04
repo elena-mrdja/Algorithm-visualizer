@@ -89,15 +89,6 @@ void Viewer::on_shape_changed()
 int *Viewer::compute(double x, double y,std::string str, flowchart *process_arr)
 {
     switch (mShape) {
-//        case Horizontal:
-//        return compute_horizontal(x, y, );
-//            break;
-
-//        case Vertical:
-//            //mBackgroundColor = Qt::green;
-//            return compute_vertical(x, y, l, w);
-//            break;
-
         case Start:
             return compute_start(x, y, str="START");
                 break;
@@ -122,21 +113,19 @@ int *Viewer::compute(double x, double y,std::string str, flowchart *process_arr)
         }
 }
 
-int *Viewer::compute_vertical(double x, double y, double lenght)
+void Viewer::compute_vertical(double x, double y, double lenght)
 {
     QBrush redbrush(Qt::white);
     QPen whitepen(Qt::white);
     vertical_line = scene ->addLine(x, y, x, y+lenght, whitepen);
-    return 0;
 }
 
 
-int *Viewer::compute_horizontal(double x, double y, double length)
+void Viewer::compute_horizontal(double x, double y, double length)
 {
     QBrush redbrush(Qt::red);
     QPen whitepen(Qt::white);
     horizontal_line = scene ->addLine(x, y, x+length, y, whitepen);
-    return 0;
 }
 
 int *Viewer::compute_start(double x, double y, std::string str)
@@ -155,41 +144,48 @@ int *Viewer::compute_start(double x, double y, std::string str)
 
 int *Viewer::compute_decision(double x, double y, std::string str, flowchart *process_arr)
 {
-    if (str.find("If") != std::string::npos) //|| str.find("Else") != std::string::npos)
+    if (str.find("If") != std::string::npos)
     {
+        //In the case there is an else associated to the If we are drawing, 
+        //we seperate the statements in if and else in two seperate arrays and call two different function 
         if(process_arr[0].second_block >0){
             int ifStatements = process_arr[0].first_block;
             int elseStatements = process_arr[0].second_block;
-            //int totalStatemens = ifStatements + elseStatements;
+
             flowchart if_arr[ifStatements+1];
-            for(int i = 0; i < ifStatements+1; i++){
-                if_arr[i] = process_arr[i];
-                std::cout << "If arr" << if_arr->text << std::endl;
-            }
+            if_arr[0] = process_arr[0];
+
             flowchart else_arr[elseStatements+1];
             else_arr[0] = process_arr[0];
-            for(int i = 1; i < elseStatements+1; i++){
-                else_arr[i] = process_arr[i+ifStatements];
-                std::cout << "Else arr" << else_arr->text << std::endl;
 
+            for(int i = 1; i < ifStatements+1; i++)
+            {
+                if_arr[i] = process_arr[i];
             }
-            int *tmp = compute_if(x,y, str, if_arr);
-            int ifBlockWidth = tmp[0] +100 + 20;
-            int ifElseSpacing = 40 + processWidth/2;
-            compute_vertical(x+150, y + ifBlockWidth-50, ifElseSpacing);
-            std::cout << "If block width: "<< ifBlockWidth <<std::endl;
-            int *tmp1 = compute_else(x, y+ifBlockWidth+ifElseSpacing-10, "Else", else_arr); //+ 120;
-            int elseBlockWidth = tmp1[0] + 120;
-            std::cout << "VIEWER: elseBlockWidth: " << elseBlockWidth << std::endl;
-            int blockWidth = ifBlockWidth-20 + ifElseSpacing + elseBlockWidth;
-            std::cout << "VIEWER BLOCK WIDTH: " << blockWidth << std::endl;
-            int results[2] = {blockWidth, tmp[1]};
 
+            for(int i = 1; i < elseStatements+1; i++)
+            {
+                else_arr[i] = process_arr[i+ifStatements];
+            }
+
+
+            int *tmp = compute_if(x,y, str, if_arr);
+            int ifBlockWidth = tmp[0] - 20; // -20 because the diamond shape forming the if is drawn at y-20 and then rotated 90° to be centered on the same spot if it had been drawn at (x,y)
+
+            int ifElseSpacing = 30 + processWidth/2;
+            compute_vertical(x+150, y + ifBlockWidth, ifElseSpacing);
+
+            int *tmp1 = compute_else(x, y+ifBlockWidth+ifElseSpacing, "Else", else_arr);
+            int elseBlockWidth = tmp1[0];
+
+            int blockWidth = ifBlockWidth+ ifElseSpacing + elseBlockWidth;
+            int results[2] = {blockWidth, 1+tmp[1]};
             return results;
         }
         else
         {
             return compute_if(x,y, str, process_arr);
+
         }
     }
     else if (str.find("While") != std::string::npos)
@@ -212,11 +208,13 @@ int *Viewer::compute_if(double x, double y, std::string str, flowchart *if_arr)
     int y_pos = y_bottom_diamond;
 
     int newNumberStatements = 0;
+
     int numberProcess = 0;
     int numberWhile = 0;
     int numberIf = 1;
 
     int returnV = 0;
+
     int nextShapeWidth = 0;
     //END VARIABLES
 
@@ -229,20 +227,22 @@ int *Viewer::compute_if(double x, double y, std::string str, flowchart *if_arr)
     diamond->setTransformOriginPoint(QPoint(x+100+squareSize/2, y-20+squareSize/2));
     diamond->setRotation(45);
     scene->addItem(text);
-    for (int i = 1; i < numberStatements+1; i++){
-        std::cout << "Text at location i:" << if_arr[i].text;
 
-        if(if_arr[i+1].chart_shape > 0){nextShapeWidth = decisionWidth;}
-        else if (if_arr[i+1].chart_shape == 0){nextShapeWidth = processWidth;}
+    //Looping over all statements to be drawn in the if block
+    for (int i = 1; i < numberStatements+1; i++)
+    {
+
+        if(if_arr[i].chart_shape > 0){nextShapeWidth = decisionWidth;}
+        else if (if_arr[i].chart_shape == 0){nextShapeWidth = processWidth;}
 
         compute_vertical(x_bottom_diamond, y_pos , spacing + nextShapeWidth/2);
         y_pos += spacing+ nextShapeWidth/2;
         compute_horizontal(x_bottom_diamond, y_pos, indentation);
-        y_pos += 20 - 50;
-
+        y_pos -= nextShapeWidth/2;
 
         std::string statementString = if_arr[i].text;
 
+        //If we have a process
         if (if_arr[i].chart_shape == 0)
         {
             setShape(Process);
@@ -250,18 +250,24 @@ int *Viewer::compute_if(double x, double y, std::string str, flowchart *if_arr)
             numberProcess++;
             y_pos += processWidth/2;
         }
+        //If we have a decision, we call the same function recursively but only with an array containing the statements in the nested decision
         else if (if_arr[i].chart_shape > 0)
         {
             setShape(Decision);
-            newNumberStatements = if_arr[i].first_block;
-            flowchart while_arr[newNumberStatements+1];
+            int ifStatements = if_arr[i].first_block;
+            int elseStatements = if_arr[i].second_block;
+            newNumberStatements = ifStatements + elseStatements;
+
+            //Copying the statements in a new array
+            flowchart process_arr[newNumberStatements+1];
             for (int j = 0;j<newNumberStatements+1 ;j++ )
             {
-                while_arr[j] = if_arr[i+j];
+                process_arr[j] = if_arr[i+j];
             }
+            //Recursive calls depending on the type of block : if/else or while
             if (if_arr[i].chart_shape == 1)
-               {
-                int *tmp_if = compute(x_bottom_diamond + 20+indentation - 100, y_pos, statementString, while_arr);
+            {
+                int *tmp_if = compute(x_bottom_diamond + 20+indentation - 100, y_pos+40, statementString, process_arr);
                 numberIf+= tmp_if[1];
                 returnV = tmp_if[0] + decisionWidth/2;
                 compute_vertical(x_bottom_diamond, y_pos, returnV);
@@ -269,7 +275,7 @@ int *Viewer::compute_if(double x, double y, std::string str, flowchart *if_arr)
             }
             else if (if_arr[i].chart_shape == 2)
             {
-                int *tmp_while = compute(x_bottom_diamond +20+ indentation -100, y_pos, statementString, while_arr);
+                int *tmp_while = compute(x_bottom_diamond +20+ indentation -100, y_pos+40, statementString, process_arr);
                 int line_length = tmp_while[0];
                 compute_vertical(x_bottom_diamond, y_pos+30, line_length);
                 numberWhile+= tmp_while[1];
@@ -278,28 +284,32 @@ int *Viewer::compute_if(double x, double y, std::string str, flowchart *if_arr)
             i += newNumberStatements;
         }
     }
-    int results[2] = {y_pos - y_bottom_diamond + 30, numberIf};
+    int results[2] = {y_pos  - y_bottom_diamond + decisionWidth -20, numberIf};
     return results;
 }
 
 int *Viewer::compute_else(double x, double y, std::string str, flowchart *else_arr)
 {
+    //This function behaves similarly to the one to compute an if block above
+
     //USEFUL VARIABLES
     int numberStatements = else_arr[0].second_block;
 
     int x_bottom_diamond = x  + processLength/2;
-    int y_bottom_diamond = y  + squareSize - 10;
+    int y_bottom_diamond = y  + squareSize + 20;
     int x_right_diamond = x + 100 + decisionLength;
     int y_right_diamond = y + 20 + decisionWidth/2;
 
     int y_pos = y_bottom_diamond;
 
     int newNumberStatements = 0;
+
     int numberProcess = 0;
     int numberWhile = 0;
     int numberIf = 1;
 
     int returnV = 0;
+
     int nextShapeWidth = 0;
     //END VARIABLES
 
@@ -307,21 +317,22 @@ int *Viewer::compute_else(double x, double y, std::string str, flowchart *else_a
     QString words = QString::fromStdString(str);
     QBrush redbrush(Qt::red);
     QPen blackpen(Qt::black);
-    diamond = scene->addRect(x+100, y-20, squareSize, squareSize,blackpen, redbrush);
-    auto text = this->createText(words, x+100,y-20,squareSize,squareSize);
-    diamond->setTransformOriginPoint(QPoint(x+100+squareSize/2, y-20+squareSize/2));
+    diamond = scene->addRect(x+100, y, squareSize, squareSize,blackpen, redbrush);
+    auto text = this->createText(words, x+100,y,squareSize,squareSize);
+    diamond->setTransformOriginPoint(QPoint(x+100+squareSize/2, y+squareSize/2));
     diamond->setRotation(45);
     scene->addItem(text);
-    for (int i = 1; i < numberStatements+1; i++){
-        std::cout << "Text at location i:" << else_arr[i].text;
 
-        if(else_arr[i+1].chart_shape > 0){nextShapeWidth = decisionWidth;}
-        else if (else_arr[i+1].chart_shape == 0){nextShapeWidth = processWidth;}
+    for (int i = 1; i < numberStatements+1; i++)
+    {
 
-        compute_vertical(x_bottom_diamond, y_pos+10 , -10+ spacing + nextShapeWidth/2);
-        y_pos += spacing+ nextShapeWidth/2;
+        if(else_arr[i].chart_shape > 0){nextShapeWidth = decisionWidth;}
+        else if (else_arr[i].chart_shape == 0){nextShapeWidth = processWidth;}
+
+        compute_vertical(x_bottom_diamond, y_pos , spacing + nextShapeWidth/2 -10);
+        y_pos += spacing+ nextShapeWidth/2-10;
         compute_horizontal(x_bottom_diamond, y_pos, indentation);
-        y_pos += 20 - 50;
+        y_pos -= nextShapeWidth/2;
 
 
         std::string statementString = else_arr[i].text;
@@ -336,15 +347,17 @@ int *Viewer::compute_else(double x, double y, std::string str, flowchart *else_a
         else if (else_arr[i].chart_shape > 0)
         {
             setShape(Decision);
-            newNumberStatements = else_arr[i].first_block;
-            flowchart while_arr[newNumberStatements+1];
+            int ifStatements = else_arr[i].first_block;
+            int elseStatements = else_arr[i].second_block;
+            newNumberStatements = ifStatements + elseStatements;
+            flowchart process_arr[newNumberStatements+1];
             for (int j = 0;j<newNumberStatements+1 ;j++ )
             {
-                while_arr[j] = else_arr[i+j];
+                process_arr[j] = else_arr[i+j];
             }
             if (else_arr[i].chart_shape == 1)
                {
-                int *tmp_if = compute(x_bottom_diamond + 20+indentation - 100, y_pos, statementString, while_arr);
+                int *tmp_if = compute(x_bottom_diamond + 20+indentation - 100, y_pos+40, statementString, process_arr);
                 numberIf+= tmp_if[1];
                 returnV = tmp_if[0] + decisionWidth/2;
                 compute_vertical(x_bottom_diamond, y_pos, returnV);
@@ -352,7 +365,7 @@ int *Viewer::compute_else(double x, double y, std::string str, flowchart *else_a
             }
             else if (else_arr[i].chart_shape == 2)
             {
-                int *tmp_while = compute(x_bottom_diamond +20+ indentation -100, y_pos, statementString, while_arr);
+                int *tmp_while = compute(x_bottom_diamond + 20 +  indentation -100, y_pos+40, statementString, process_arr);
                 int line_length = tmp_while[0];
                 compute_vertical(x_bottom_diamond, y_pos+30, line_length);
                 numberWhile+= tmp_while[1];
@@ -361,12 +374,14 @@ int *Viewer::compute_else(double x, double y, std::string str, flowchart *else_a
             i += newNumberStatements;
         }
     }
-    int results[2] = {y_pos - y_bottom_diamond + 30, numberIf};
+    int results[2] = {y_pos  - y_bottom_diamond + decisionWidth -20, numberIf};
     return results;
 }
 
 int *Viewer::compute_while(double x, double y, std::string str, flowchart *while_arr)
 {
+    //This function behaves similarly to the ones above but it is adapted to drawing the while 
+
     //USEFUL VARIABLES
     int numberStatements = while_arr[0].first_block;
 
@@ -377,12 +392,14 @@ int *Viewer::compute_while(double x, double y, std::string str, flowchart *while
     int y_pos = y_bottom_diamond;
 
     int newNumberStatements = 0;
+
     int numberProcess = 0;
     int numberWhile = 1;
     int numberIf = 0;
 
     int returnIf = 0;
     int returnWhile = 0;
+
     int loopsStatements = 0;
     //END VARIABLES
 
@@ -397,43 +414,44 @@ int *Viewer::compute_while(double x, double y, std::string str, flowchart *while
 
     for (int i = 1; i < numberStatements+1; i++)
     {
-        std::string statementString = while_arr[i].text;
-
-        compute_vertical(x_bottom_diamond, y_bottom_diamond, spacing);
+        compute_vertical(x_bottom_diamond, y_pos, spacing);
         y_pos += spacing;
-
+        std::string statementString = while_arr[i].text;
         if (while_arr[i].chart_shape == 0)
         {
             setShape(Process);
             compute(x, y_pos, statementString);
             numberProcess++;
             y_pos += processWidth;
-            if(i == numberStatements){compute_vertical(x_bottom_diamond, y_pos, spacing/2);}
-            else{compute_vertical(x_bottom_diamond, y_pos, spacing);}
-
         }
         else if (while_arr[i].chart_shape >0)
         {
             setShape(Decision);
-            newNumberStatements = while_arr[i].first_block;
+            int ifStatements = while_arr[i].first_block;
+            int elseStatements = while_arr[i].second_block;
+            newNumberStatements = ifStatements + elseStatements;
+
             loopsStatements += newNumberStatements;
+
             flowchart process_arr[newNumberStatements+1];
-            for (int j = 0;j<newNumberStatements+1 ;j++ ){
+            for (int j = 0;j<newNumberStatements+1 ;j++ )
+            {
                 process_arr[j] = while_arr[i+j];
             }
+            //Recursive calls 
             if (while_arr[i].chart_shape ==1)
             {
                 int * tmp_if = compute(x, y_pos+40, statementString, process_arr);
-                returnIf = tmp_if[0] + decisionWidth ;
+                returnIf = tmp_if[0] ;
                 numberIf = tmp_if[1];
-                y_pos += returnIf -40;
+                y_pos += returnIf ;
                 compute_vertical(x_bottom_diamond, y_pos, spacing);
             }
             else if (while_arr[i].chart_shape == 2)
             {   int * tmp = compute(x, y_pos+40, statementString, process_arr);
-                returnWhile = tmp[0]+ decisionWidth/2;
+                returnWhile = tmp[0];//+ decisionWidth/2;
                 numberWhile += tmp[1] ;
-                y_pos += returnWhile - 40;
+                y_pos += returnWhile; //- 49;
                 compute_vertical(x_bottom_diamond, y_pos+spacing/2, spacing/2);
 
             }
@@ -441,13 +459,18 @@ int *Viewer::compute_while(double x, double y, std::string str, flowchart *while
 
         }
     }
+
+    //Drawing the lines to represent the loop circling until the loop invariant is false
     compute_horizontal(x_right_diamond, y_right_diamond, whileLine*numberWhile + ((100 + indentation+processWidth/2) * numberIf));
 
     int line_length =  decisionWidth/2 + ((numberStatements - loopsStatements) * spacing) + (numberProcess * processWidth) + spacing/2  + returnIf + returnWhile ;
+
     compute_vertical(x_right_diamond +whileLine*numberWhile + ((100 + indentation+processWidth/2) * numberIf), y_right_diamond, line_length);
     compute_horizontal(x_bottom_diamond, y_right_diamond + line_length, whileLine*numberWhile + ((100 + indentation+processWidth/2) * numberIf) + decisionLength/2);
+
+    if (while_arr[numberStatements].chart_shape == 0 && numberWhile !=1) {numberWhile--;}
     compute_vertical(x_bottom_diamond, y_right_diamond+line_length, -(numberWhile * spacing/2));
-    int results[2] = {line_length, numberWhile};
+    int results[2] = {decisionWidth/2 + line_length -20, numberWhile};
 
     return results;
 }
@@ -614,6 +637,124 @@ QGraphicsSimpleTextItem* Viewer::createText(QString str, int x, int y, int w, in
     int height = font.height();
     text->setPos(x + w/2 - length/2,y + l/2 - height/2);
     return text;
+}
+
+flowchart *Viewer::switchflowchart(int number)
+{
+    if(number == 1){
+        flowchart arr[3] = {{0, "Statement 1", 0,0},
+                            {0, "Statement 2", 0,0},
+                            {0, "Statement 2", 0,0}};
+        return arr;
+    }
+    else if (number == 2){
+        flowchart arr[3] = {{1, "If n°1", 2,0},
+                            {0, "Statement 1", 0,0},
+                            {0, "Statement 2", 0,0}};
+        return arr;
+    }
+    else if (number == 3){
+        flowchart arr[5] = {{1, "If n°1", 2,2},
+                            {0, "Statement 1 in if", 0,0},
+                            {0, "Statement 2 in if", 0,0},
+                            {0, "Statement 1 in else", 0,0},
+                            {0, "Statement 2 in else", 0,0}};
+        return arr;
+    }
+    else if (number == 4){
+        flowchart arr[3] = {{2, "While n°1", 2,0},
+                            {0, "Statement 1", 0,0},
+                            {0, "Statement 2", 0,0}};
+        return arr;
+    }
+    else if (number == 5){
+        flowchart arr[6] = {{1, "If n°1", 4, 1},
+                            {0, "Statement in if n°1", 0,0},
+                            {1, "If n°2", 1, 1},
+                            {0, "Statement in if n°2", 0,0},
+                            {0, "Statement in else n°2", 0,0},
+                            {0, "Statement in else n°1", 0,0}};
+        return arr;
+
+    } else if (number == 6){
+        flowchart arr[9] = {{1, "If n°1", 4, 4},
+                            {0, "Statement in if n°1", 0,0},
+                            {1, "If n°2", 1, 1},
+                            {0, "Statement in if n°2", 0,0},
+                            {0, "Statement in else n°2", 0,0},
+                            {0, "Statement in else n°1", 0,0},
+                            {1, "If n°3", 1, 1},
+                            {0, "Statement in if n°3", 0,0},
+                            {0, "Statement in else n°3", 0,0}};
+        return arr;
+
+    } else if (number == 7){
+        flowchart arr[6] = {{2, "While n°1", 5, 0},
+                            {0, "Statement 1 in while n°1",0,0},
+                            {2, "While n°2", 2, 0},
+                            {0, "Statement 1 in while n°2", 0,0},
+                            {0, "Statement 2 in while n°2", 0,0},
+                            {0, "Statement 2 in while n°1",0,0}};
+        return arr;
+
+    } else if (number == 8){
+        flowchart arr[12] = {{2, "While n°1", 11, 0},
+                             {0, "Statement 1 in while n°1", 0,0},
+                             {1, "If n°1", 4, 4},
+                             {0, "Statement in if n°1", 0,0},
+                             {1, "If n°2", 1, 1},
+                             {0, "Statement in if n°2", 0,0},
+                             {0, "Statement in else n°2", 0,0},
+                             {0, "Statement in else n°1", 0,0},
+                             {1, "If n°3", 1, 1},
+                             {0, "Statement in if n°3", 0,0},
+                             {0, "Statement in else n°3", 0,0},
+                             {0, "Statement 2 in while n°1", 0,0}};
+        return arr;
+
+    } else if (number == 9){
+        flowchart arr[17] = {{1, "If n°1", 8,8},
+                             {0, "Statement 1 in if n°1", 0,0},
+                             {2, "While n°1", 5, 0},
+                             {0, "Statement 1 in while n°1",0,0},
+                             {1, "If n°2", 1, 1},
+                             {0, "Statement 1 in if n°2", 0,0},
+                             {0, "Statement 2 in else n°2", 0,0},
+                             {0, "Statement 2 in while n°1",0,0},
+                             {0, "Statement 2 in if n°1", 0,0},
+                             {0, "Statement 1 in else n°1", 0,0},
+                             {2, "While n°2", 5, 0},
+                             {0, "Statement 1 in while n°2",0,0},
+                             {1, "If n°2", 1, 1},
+                             {0, "Statement 1 in if n°2", 0,0},
+                             {0, "Statement 2 in else n°2", 0,0},
+                             {0, "Statement 2 in while n°2",0,0},
+                             {0, "Statement 2 in else n°1", 0,0}};
+        return arr;
+
+    } else if (number == 10) {
+        flowchart arr[17] = {{1, "If n°1", 8,8},
+                             {0, "Statement 1 in if n°1", 0,0},
+                             {2, "While n°1", 5, 0},
+                             {0, "Statement 1 in while n°1",0,0},
+                             {2, "While n°2", 2, 0},
+                             {0, "Statement 1 in while n°2", 0,0},
+                             {0, "Statement 2 in while n°2", 0,0},
+                             {0, "Statement 2 in while n°1",0,0},
+                             {0, "Statement 2 in if n°1", 0,0},
+                             {0, "Statement 1 in else n°1", 0,0},
+                             {2, "While n°3", 5, 0},
+                             {0, "Statement 1 in while n°3",0,0},
+                             {2, "While n°4", 2, 0},
+                             {0, "Statement 1 in while n°4", 0,0},
+                             {0, "Statement 2 in while n°4", 0,0},
+                             {0, "Statement 2 in while n°3",0,0},
+                             {0, "Statement 2 in else n°1", 0,0}};
+        return arr;
+    } else{
+        flowchart arr[1] = {{0, "ERROOOOORRR", 0,0}};
+        return arr;
+    }
 }
 
 

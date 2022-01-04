@@ -79,12 +79,13 @@ public:
 
     int *compute_process(double x, double y,std::string str);
 
-    int *compute_horizontal(double x, double y, double lenght);
-    int *compute_vertical(double x, double y, double length);
+    void compute_horizontal(double x, double y, double lenght);
+    void compute_vertical(double x, double y, double length);
     void on_shape_changed();
     int *compute(double x, double y,std::string str="", flowchart *process_arr=nullptr); //dispatch function based on mShape type
 
     QGraphicsSimpleTextItem* createText(QString str, int x, int y, int w, int l);
+    flowchart *switchflowchart(int number);
 
 private:
     QColor mBackgroundColor;
