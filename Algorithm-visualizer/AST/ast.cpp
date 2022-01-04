@@ -21,6 +21,7 @@ SingleOutput::SingleOutput(AlgoParser::ExpContext* ctx){
         val_type = "variable";
     }
 }
+
 BinOp::BinOp(AlgoParser::ExpContext* ctx){
     AlgoParser::ExpContext* left_node = ctx->exp(0);
     AlgoParser::ExpContext* right_node = ctx->exp(1);
@@ -35,6 +36,8 @@ BinOp::BinOp(AlgoParser::ExpContext* ctx){
         left_exp = new SingleOutput(left_node);
     }else if(left_node->variable()){
         left_exp = new SingleOutput(left_node);
+    }else if (left_node->negation()){
+        left_exp = new Negation(left_node->negation());
     }else{
         std::cout << "something else" <<std::endl;
     }
@@ -48,6 +51,8 @@ BinOp::BinOp(AlgoParser::ExpContext* ctx){
         right_exp = new SingleOutput(right_node);
     }else if(right_node->variable()){
         right_exp = new SingleOutput(right_node);
+    }else if (right_node->negation()){
+        right_exp = new Negation(right_node->negation());
     }else{
             std::cout << "something else" <<std::endl;
      }
@@ -55,39 +60,39 @@ BinOp::BinOp(AlgoParser::ExpContext* ctx){
     AlgoParser::BinOpContext *i = ctx->binOp();
 
     if(i->PLUS()){
-        operation = 0;
+        operation = addition;
     }else if(i->MINUS()){
-        operation = 1;
+        operation = subtraction;
     }else if(i->TIMES()){
-        operation = 2;
+        operation = multiplication;
     }else if(i->DIV()){
-        operation = 3;
+        operation = division;
     }else if(i->MOD()){
-        operation = 4;
+        operation = modulo;
     }else if(i->XAND()){
-        operation = 5;
+        operation = conj;
     }else if(i->XOR()){
-        operation = 6;
+        operation = disj;
     }else if(i->EQQ()){
-        operation = 7;
+        operation = eqeq;
     }else if(i->NOTEQQ()){
-        operation = 8;
+        operation = noteq;
     }else if(i->LT()){
-        operation = 9;
+        operation = lthan;
     }else if(i->MT()){
-        operation = 10;
+        operation = mthan;
     }else if(i->LEQ()){
-        operation = 11;
+        operation = leq;
     }else if(i->MEQ()){
-        operation = 12;
+        operation = meq;
     }else {
-        operation = 13;
+        operation = unknown_op;
     }
 }
-std::string BinOp::get_value(){
-    std::string a = get_left_expression()->get_value();
+std::string BinOp::get_text(){
+    std::string a = get_left_expression()->get_text();
     std::string op = get_operation();
-    std::string b = right_exp->get_value();
+    std::string b = right_exp->get_text();
     std::string res;
 
     if (left_brakets){
@@ -142,6 +147,8 @@ Expression::Expression(AlgoParser::ExpContext* ctx){
         child = new BinOp(ctx);
     }else if (ctx -> exp(0)){
         child = Expression(ctx->exp(0)).get_child();
+    }else if (ctx->negation()){
+        child = new Negation(ctx->negation());
     }else{
         child = new SingleOutput(ctx);
     }
@@ -179,8 +186,38 @@ Statement::Statement(AlgoParser::StmtsContext* ctx){
     }else if(ctx->varDec()){
         AlgoParser::VarDecContext* node = ctx->varDec();
         child = new Declaration(node);
+    }else if(ctx->returnStmt()){
+        AlgoParser::ReturnStmtContext* node = ctx->returnStmt();
+        child = new Return(node);
+    }else if(ctx->print()){
+        AlgoParser::PrintContext* node = ctx->print();
+        child = new Print(node);
     }
 }
+
+Block::Block(AlgoParser::BlockContext* ctx) {
+    size = ctx->children.size();
+    children = new Statement[size];
+    int idx = 0;
+    //cache constructor
+    for (auto i: ctx->stmts()){
+         Statement child(i); // child to cache
+         children[idx] = child;
+         idx++;
+    }
+}
+
+
+Return::Return(AlgoParser::ReturnStmtContext* ctx){
+    AlgoParser::ExpContext* node = ctx->exp();
+    value = new Expression(node);
+}
+
+Print::Print(AlgoParser::PrintContext* ctx){
+    AlgoParser::ExpContext* node = ctx->exp();
+    value = new Expression(node);
+}
+
 
 AST::AST(AlgoParser::BlockContext* ctx) {
     size = 0;
@@ -195,4 +232,46 @@ AST::AST(AlgoParser::BlockContext* ctx) {
     }
 }
 
+
+ValuesList::ValuesList(Value* h, Value* t){
+    head = h;
+    tail = t;
+};
+
+ValuesList::ValuesList(){
+    head = new Value();
+    tail = head;
+}
+
+Value* ValuesList::get_head(){return head;};
+Value* ValuesList::get_tail(){return tail;};
+
+void ValuesList::set_head(Value* h){head = h;};
+void ValuesList::set_tail(Value* t){tail = t;};
+bool ValuesList::is_empty(){return head == nullptr;};
+void ValuesList::add_value(Value* v){
+    if (is_empty()){
+        head = v;
+        tail = v;
+    }
+    else {
+        tail->next = v;
+        v->prev = tail;
+        tail = v;
+    }
+};
+
+
+//variable tracking
+Cache::Cache(int number){
+    num_lines = number;
+}
+void Cache::new_var(Declaration* dec, int line_num){
+    // Finish
+    std::map<string, ValuesList*> dict = *variables[line_num];
+    string var = dec->get_name();
+    dict[var] = new ValuesList();
+    dict[var]->get_head()->value = dec->get_exp()->get_value();
+
+};
 
