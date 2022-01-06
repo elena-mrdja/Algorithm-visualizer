@@ -26,14 +26,13 @@ enum bin_ops {
     mthan = 10,
     leq = 11,
     meq = 12,
-    unknown_op = 13
+    unknown_binop = 13
 };
 
 enum un_ops {
     minusminus = 0,
     plusplus = 1,
-    negation = 2,
-    unknown_unop = 3
+    unknown_unop = 2
 };
 
 enum variable_type {
@@ -47,8 +46,8 @@ enum variable_type {
 
 enum value_type {
     boolean = 0,
-    number = 1, //the actual value is always a double
-    unknown_exp_type = 2
+    double_value = 1,
+    unknown_value_type = 2
 };
 
 enum stmt_type {
@@ -59,10 +58,26 @@ enum stmt_type {
     while_loop = 4
 };
 
+enum exp_type {
+    unop = 0,
+    binop = 1,
+    binop_exp = 2,
+    neg = 3,
+    variable = 4,
+    number = 5,
+    unknown_exp_type = 5
+};
+
+enum types {
+    statement = 0,
+    expression = 1,
+    block = 2
+};
+
 class Cache;
 
 struct BinOpExp{
-    virtual std::string get_type();
+    virtual exp_type get_exp_type(){return binop_exp;};
     virtual std::string get_operation();
     virtual BinOpExp* get_left_expression();
     virtual BinOpExp* get_right_expression();
@@ -120,20 +135,25 @@ private:
 
 
 
-class SingleOutput : public BinOpExp{
+class SingleOutput : public BinOpExp {
 public:
     SingleOutput(AlgoParser::ExpContext* ctx);
-    string get_text(){return value;}; //returns the value as a string <- IMPORTANT
-    string get_type(){return "SingleOutput";};
+    ~SingleOutput();
+    exp_type get_exp_type(){
+        if (val_type == num) return number;
+        return variable;
+    };
+    string get_text(){return value;}; //returns the value as a string
+
     string get_operation(){return "none";}; //no needed
     BinOpExp* get_left_expression(){return nullptr;}; // no needed
     BinOpExp* get_right_expression(){return nullptr;}; //no needed
-    variable_type get_var_type(){return var_type;}; // returns a type of a single output
+    variable_type get_var_type(){return val_type;}; // returns a type of a single output
                                                    // possible outputs: 'double', 'integer', 'boolean', 'variable'.
     int num_blocks(){return 0;};
     double get_value(Cache* cache, int i){
         //i is the line which the SingleOutput is in
-        if (var_type == num) return stod(value);
+        if (val_type == num) return stod(value);
         else {
             return cache->get_last_value(value, i);
         }
@@ -141,13 +161,31 @@ public:
     BinOpExp* get_result(){return nullptr;};
 private:
     string value;
-    variable_type var_type;
+    variable_type val_type;
 };
 
 class BinOp : public BinOpExp{
 public:
     BinOp(AlgoParser::ExpContext* ctx);
-    //~BinOp();
+    ~BinOp();
+    exp_type get_exp_type(){return binop;};
+    string get_text(){
+        if (left_exp->get_exp_type() == number or left_exp->get_exp_type() == variable) {
+            if (right_exp->get_exp_type() == number or right_exp->get_exp_type() == variable)
+            {
+                return left_exp->get_text() + " " + get_operation() + " " + right_exp->get_text();
+            }
+            else {
+                return left_exp->get_text() + " " + get_operation() + " (" + right_exp->get_text() + ")";
+            }
+        }
+        else {
+            if (right_exp->get_exp_type() == number or right_exp->get_exp_type() == variable) {
+                return "(" + left_exp->get_text() + ") " + get_operation() + " " + right_exp->get_text();
+            }
+        }
+        return "(" + left_exp->get_text() + ") " + get_operation() + " (" + right_exp->get_text() + ")";
+    }; //returns an entire binOp line as a string (ex. output: '( 4.0 + x ) * 5')
     std::string get_operation(){ //returns binOp operation
         switch(operation) {
         case addition: return "+";
@@ -168,11 +206,11 @@ public:
     };
     value_type get_value_type(){
         switch(operation) {
-        case addition: return number;
-        case subtraction: return number;
-        case multiplication: return number;
-        case division: return number;
-        case modulo: return number;
+        case addition: return double_value;
+        case subtraction: return double_value;
+        case multiplication: return double_value;
+        case division: return double_value;
+        case modulo: return double_value;
         case conj: return boolean;
         case disj: return boolean;
         case eqeq: return boolean;
@@ -181,7 +219,7 @@ public:
         case mthan: return boolean;
         case leq: return boolean;
         case meq: return boolean;
-        default: return unknown_exp_type;
+        default: return unknown_value_type;
         }
     };
     double get_value(Cache* cache, int i){
@@ -293,9 +331,7 @@ public:
     };
     BinOpExp* get_left_expression(){return left_exp;}; //return a node to left expression
     BinOpExp* get_right_expression(){return right_exp;}; // returns a node to right expression
-    std::string get_text(); //returns an entire binOp line as a string (ex. output: '( 4.0 + x ) * 5')
-    std::string get_type(){return "BinOp";};
-    BinOpExp* get_result(){return nullptr;};
+    bin_ops get_binop(){return operation;};
 private:
     bin_ops operation;
     BinOpExp* left_exp;
@@ -307,8 +343,13 @@ private:
 class UnOp : public BinOpExp{
 public:
     UnOp(AlgoParser::ExpContext* ctx);
-    //~UnOp();
-    std::string get_operation(){ //returns binOp operation
+    ~UnOp();
+    exp_type get_exp_type(){return unop;};
+    un_ops get_unop(){return operation;};
+    string get_text(){
+        return get_left_expression()->get_text() + get_operation();
+    };
+    string get_operation(){ //returns binOp operation
         switch(operation) {
         case plusplus: return "++";
         case minusminus: return "--";
@@ -316,7 +357,7 @@ public:
         }
     }
     BinOpExp* get_left_expression(){return left_exp;}; //return the number to which we add or subtract 1
-    std::string get_type(){return "UnOp";};
+
 private:
     un_ops operation;
     BinOpExp* left_exp;
@@ -339,6 +380,37 @@ private:
     int jumper;
 };
 
+class Negation : public BinOpExp {
+public:
+    //not sure if this is necessary but putting
+    //it down for now
+    Negation(AlgoParser::NegationContext* ctx){
+        cout << "create negation" << endl;
+        AlgoParser::ExpContext* node = ctx->exp();
+        if (node->binOp()){
+            value = new BinOp(node);
+        }else if(node->LP()){
+            value = new BinOp(node);
+        }else if((node->integerType()) || (node->doubleType()) || (node->boolType())){
+            value = new SingleOutput(node);
+        }else if(node->variable()){
+            value = new SingleOutput(node);
+        }else{
+            std::cout << "something else" <<std::endl;
+        }
+    };
+    ~Negation();
+    exp_type get_exp_type(){return neg;};
+    std::string get_text(){return "-"+value->get_text();}; //returns the value as a string <- IMPORTANT
+    BinOpExp* get_result(){
+        //cout << "try" << endl;
+        return value;
+    };
+    std::string get_var_type(){return "none";};
+private:
+    BinOpExp* value;
+};
+
 
 class Expression {
 public :
@@ -346,10 +418,9 @@ public :
     Expression();
     //~Expression();
     BinOpExp* get_child(){return child;}; //return a child of expression (for now only binOp or SingleOutputs)
-    std::string get_type(){return "Expression";};
-    int num_blocks(){return 0;};
+    types get_type(){return expression;};
     virtual double get_value(Cache* cache, int i);
-    virtual string get_text();
+    virtual string get_text(){return child->get_text();};
 private:
     BinOpExp* child;
 };
@@ -359,7 +430,7 @@ struct AssignDec { //needed to unite statement children
     virtual Expression* get_expression() = 0;
     virtual std::string get_type() = 0;
     virtual std::string get_var_type() = 0;
-    int num_blocks(){return 0;};
+    int num_stmts(){return 0;};
 };
 class Declaration : public AssignDec {
 public:
@@ -401,21 +472,19 @@ private:
 };
 // double x = 2.0;
 // x = x + 2
-class Statement{
+class Statement {
 public:
     Statement(AlgoParser::StmtsContext* ctx);
     Statement(){child = nullptr;};
     AssignDec* get_child(){return child;}; //return a child of statement,
                                             //i.e directs to the actual statement (ex. assign, declaration, return, etc.)
-    std::string get_type(){return "Statement";};
-    virtual int num_stmts();
+    virtual int num_stmts(){return child->num_stmts();};
     virtual stmt_type get_stmt_type();
     virtual string get_name();
+    types get_type(){return statement;};
     //~Statement();
 private :
     AssignDec* child;
-
-
 };
 
 class Block {
@@ -426,7 +495,7 @@ public :
     Statement* get_children(){return children;}
     Statement get_child(int i){return children[i];} //returns a child by index
     int get_size(){return size;} //needed for a for loop
-    std::string get_type(){return "Block";};
+    types get_type(){return block;};
     //walker function
 private:
     Statement* child;
@@ -448,7 +517,7 @@ private:
     Block* block_stmt;
 };
 
-class Return : public AssignDec{
+class Return : public AssignDec {
 public:
     Return(AlgoParser::ReturnStmtContext* ctx);
     Return();
@@ -473,40 +542,6 @@ private:
     Expression* value;
 };
 
-class Negation : public BinOpExp {
-public:
-    //not sure if this is necessary but putting
-    //it down for now
-    Negation(AlgoParser::NegationContext* ctx){
-        cout << "create negation" << endl;
-        AlgoParser::ExpContext* node = ctx->exp();
-        if (node->binOp()){
-            value = new BinOp(node);
-        }else if(node->LP()){
-            value = new BinOp(node);
-        }else if((node->integerType()) || (node->doubleType()) || (node->boolType())){
-            value = new SingleOutput(node);
-        }else if(node->variable()){
-            value = new SingleOutput(node);
-        }else{
-            std::cout << "something else" <<std::endl;
-        }
-    };
-    std::string get_text(){return "-"+value->get_text();}; //returns the value as a string <- IMPORTANT
-    std::string get_operation(){return "none";}; //no needed
-    //~Negation();
-    std::string get_type(){return "Negation";};
-    std::string get_name(){return " ";};
-    BinOpExp* get_result(){
-        //cout << "try" << endl;
-        return value;
-    };
-    std::string get_var_type(){return "none";};
-private:
-    BinOpExp* value;
-};
-
-
 class AST {
 public :
     AST(AlgoParser::BlockContext* ctx/*, pass down cache*/ );
@@ -515,7 +550,7 @@ public :
     Statement* get_children(){return children;}
     Statement get_child(int i){return children[i];} //returns a child by index
     int get_size(){return size;} //needed for a for loop
-    std::string get_type(){return "Block";};
+    types get_type(){return block;};
     int num_blocks(){
         int n = 0;
         //here we have to add walking through the list of statements and adding the blocks

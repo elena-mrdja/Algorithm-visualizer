@@ -124,13 +124,6 @@ UnOp::UnOp(AlgoParser::ExpContext* ctx){
         operation = 2;
     }
 }
-std::string UnOp::get_value(){
-    std::string a = get_left_expression()->get_value();
-    std::string op = get_operation();
-    std::string res;
-    res = a + op;
-    return res;
-}
 
 Jump::Jump(AlgoParser::JumpContext* ctx){
     if(ctx->CONT()){
@@ -272,12 +265,3 @@ void ValuesList::add_value(Value* v){
 Cache::Cache(int number){
     num_lines = number;
 }
-void Cache::new_var(Declaration* dec, int line_num){
-    // Finish
-    std::map<string, ValuesList*> dict = *variables[line_num];
-    string var = dec->get_name();
-    dict[var] = new ValuesList();
-    dict[var]->get_head()->value = dec->get_exp()->get_value();
-
-};
-
