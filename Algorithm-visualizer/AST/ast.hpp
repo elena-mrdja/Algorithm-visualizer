@@ -85,6 +85,7 @@ struct BinOpExp{
     virtual value_type get_value_type();
     virtual double get_value(Cache* cache, int i);
     int num_blocks(){return 0;};
+    int get_jump_length(){return 1;};
 };
 
 //the following three classes are for variable tracking
@@ -421,9 +422,12 @@ public :
     types get_type(){return expression;};
     virtual double get_value(Cache* cache, int i);
     virtual string get_text(){return child->get_text();};
+    int get_jump_length(){return 1;};
 private:
     BinOpExp* child;
 };
+
+class Block;
 
 struct AssignDec { //needed to unite statement children
     virtual std::string get_name() = 0;
@@ -431,6 +435,8 @@ struct AssignDec { //needed to unite statement children
     virtual std::string get_type() = 0;
     virtual std::string get_var_type() = 0;
     int num_stmts(){return 0;};
+    int get_jump_length(){return 1;};
+    virtual Block* get_block();
 };
 class Declaration : public AssignDec {
 public:
@@ -472,6 +478,7 @@ private:
 };
 // double x = 2.0;
 // x = x + 2
+
 class Statement {
 public:
     Statement(AlgoParser::StmtsContext* ctx);
@@ -486,6 +493,7 @@ public:
     virtual Expression* get_expression(){return nullptr;};
     virtual Expression* get_condition(){return nullptr;};
     virtual Block* get_block(){return nullptr;};
+    int get_jump_length(){return 1;};
 private :
     AssignDec* child;
 };
@@ -514,6 +522,7 @@ public:
     Block* get_block(){return block_stmt;};
     void set_block_stmt(Block* stmt){block_stmt = stmt;};
     std::string get_type(){return "While";};
+    int get_jump_length(){return block_stmt->get_size() + 1;};
     //attributes: condition, block
 private:
     Expression* condition;
@@ -548,6 +557,7 @@ public:
     std::string get_name(){return nullptr;}
     std::string get_var_type(){return nullptr;}
     AssignDec* get_ifrest(){return else_stmt;}
+    int get_jump_length(){return block->get_size() + else_stmt->get_block()->get_size() + 1;};
 private:
     Expression* condition;
     Block* block;
@@ -563,6 +573,7 @@ public:
     std::string get_name(){return " ";};
     Expression* get_expression(){return value;};
     std::string get_var_type(){return "none";};
+    int get_jump_length(){return 1;};
 private:
     Expression* value;
 };
@@ -575,6 +586,7 @@ public:
     std::string get_type(){return "Print";};
     std::string get_name(){return " ";};
     Expression* get_expression(){return value;};
+    int get_jump_length(){return 1;};
 private:
     Expression* value;
 };

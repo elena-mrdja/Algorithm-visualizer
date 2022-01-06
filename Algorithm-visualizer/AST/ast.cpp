@@ -357,7 +357,7 @@ void fill_cache_names(Block* ast, Cache* cache, int n){
         //if (current_line < block_ends.get_tail()->value) {
             //with our constraints, the first line has to be a declaration
         fill_statement(ast->get_child(current_line), cache, current_line, ast->get_child(current_line).get_block(), ast->get_child(current_line).get_condition());
-        int next_line = current_line + 1 + ast->get_child(current_line).get_block().get_size();
+        int next_line = current_line + ast->get_child(current_line).get_jump_length();
         //next_line : in case of stmts with no blocks, the line increases by only 1
         cache->get_map()[next_line] = cache->get_map()[current_line];
         //add the case of if/else
