@@ -427,7 +427,7 @@ private:
 
 struct AssignDec { //needed to unite statement children
     virtual std::string get_name() = 0;
-    virtual Expression* get_expression() = 0;
+    virtual Expression* get_expression();
     virtual std::string get_type() = 0;
     virtual std::string get_var_type() = 0;
     int num_stmts(){return 0;};
@@ -452,21 +452,21 @@ public:
 private:
     variable_type var_type = unknown_var;
     //std::string array_size;
-    std::string name;
+    string name;
     Expression* value;
 };
 class Assignment : public AssignDec {
 public:
     Assignment(AlgoParser::AssignContext* ctx);
-    //~Assignment();
+    ~Assignment();
     Expression* get_expression(){return value;}; // returns the object of class which corresponds to the value
     //Expression* get_index(){return index;};
     //void set_index(Expression* i){index = i;};
-    std::string get_name(){return name;}; // returns the name of the variable
-    std::string get_var_type(){return "none";}; //assign does not need to return variable type
+    string get_name(){return name;}; // returns the name of the variable
+    string get_var_type(){return "none";}; //assign does not need to return variable type
     stmt_type get_stmt_type(){return assignment;};
 private:
-    std::string name;
+    string name;
     Expression* value;
     //Expression* index;
 };
@@ -475,6 +475,7 @@ private:
 class Statement {
 public:
     Statement(AlgoParser::StmtsContext* ctx);
+    ~Statement();
     Statement(){child = nullptr;};
     AssignDec* get_child(){return child;}; //return a child of statement,
                                             //i.e directs to the actual statement (ex. assign, declaration, return, etc.)
@@ -482,7 +483,9 @@ public:
     virtual stmt_type get_stmt_type();
     virtual string get_name();
     types get_type(){return statement;};
-    //~Statement();
+    virtual Expression* get_expression(){return nullptr;};
+    virtual Expression* get_condition(){return nullptr;};
+    virtual Block* get_block(){return nullptr;};
 private :
     AssignDec* child;
 };
@@ -491,7 +494,7 @@ class Block {
 public :
     Block(AlgoParser::BlockContext* ctx/*, pass down cache*/ );
     Block();
-    //~Block();
+    ~Block();
     Statement* get_children(){return children;}
     Statement get_child(int i){return children[i];} //returns a child by index
     int get_size(){return size;} //needed for a for loop
@@ -564,25 +567,7 @@ private:
 };
 
 //below is stuff for the AST walker
-enum chart_shape {
-    rectangle = 0,
-    diamond = 1,
-    circle = 2
-};
 
-enum chart_type {
-    process = 0,
-    if_else = 1,
-    while_chart = 2
-};
-
-struct flowchart {
-    chart_shape shape;
-    chart_type type;
-    string text;
-    int first_block; // num of stmts in the first block (if in if and the only block in while)
-    int second_block; // num of stmts in else
-};
 
 struct ValueInt{
     int value;
@@ -610,61 +595,22 @@ private:
     ValueInt* tail;
 };
 
-void fill_cache_names(AST* ast, Cache* cache, int n){
-    //When this function is called Cache is an empty array of length n
-    //This function will fill in the existing keys in each line of the Cache
-    //This means that after this function, we can read which values
-    //exist in each line of the program, but not their values
-    ValuesListInt block_ends = ValuesListInt();
-    ValueInt* first_block_end = new ValueInt;
-    first_block_end->value = n;
-    block_ends.add_value(first_block_end);
-    ValuesListInt block_starts = ValuesListInt();
-    ValueInt* first_block_start = new ValueInt;
-    first_block_start->value = 0;
-    block_ends.add_value(first_block_start);
-    int current_line = 0;
-    while (current_line < n){
-        if (current_line < block_ends.get_tail()->value) {
-            if (ast->get_child(current_line).get_stmt_type() == declaration) {
-                cache[current_line] = cache[current_line - 1];
-                ValuesList* empty = new ValuesList();
-                cache->get_map()[current_line][ast->get_child(current_line).get_name()] = empty;
-            }
-            else if (ast->get_child(current_line).get_stmt_type() == assignment) {
-                cache[current_line] = cache[current_line - 1];
-            }
-            else {
-                cache[current_line] = cache[current_line - 1];
-                ValueInt* next_block_end = new ValueInt;
-                next_block_end->value = (double)(current_line + ast->get_child(current_line).num_stmts());
-                block_ends.add_value(next_block_end);
-                ValueInt* next_block_start = new ValueInt;
-                next_block_start->value = current_line;
-                block_starts.add_value(next_block_start);
-            };
-        }
-        else {
-            block_ends.pop();
-            cache->get_map()[current_line] = cache->get_map()[block_starts.get_tail()->value - 1];
-            block_starts.pop();
-            if (ast->get_child(current_line).get_stmt_type() == declaration) {
-                ValuesList* empty = new ValuesList();
-                cache->get_map()[current_line][ast->get_child(current_line).get_name()] = empty;
-            }
-            else if (ast->get_child(current_line).get_stmt_type() == assignment) {
-                continue;
-            }
-            else {
-                ValueInt* next_block_end = new ValueInt;
-                next_block_end->value = (double)(current_line + ast->get_child(current_line).num_stmts());
-                block_ends.add_value(next_block_end);
-                ValueInt* next_block_start = new ValueInt;
-                next_block_start->value = current_line;
-                block_starts.add_value(next_block_start);
-            }
-        };
-        current_line++;
-    };
+enum chart_shape {
+    rectangle = 0,
+    diamond = 1,
+    circle = 2
+};
 
+enum chart_type {
+    process = 0,
+    if_else = 1,
+    while_chart = 2
+};
+
+struct flowchart {
+    chart_shape shape;
+    chart_type type;
+    string text;
+    int first_block; // num of stmts in the first block (if in if and the only block in while)
+    int second_block; // num of stmts in else
 };
