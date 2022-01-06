@@ -29,6 +29,13 @@ enum bin_ops {
     unknown_op = 13
 };
 
+enum un_ops {
+    minusminus = 0,
+    plusplus = 1,
+    negation = 2,
+    unknown_unop = 3
+};
+
 enum variable_type {
     var_int = 0,
     var_double = 1,
@@ -176,7 +183,7 @@ public:
         default: return unknown_exp_type;
         }
     };
-    double get_value(){
+    double get_value(Cache* cache, int i){
             switch(operation) {
             case addition: {
                 if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean) {return 0;};
@@ -184,7 +191,7 @@ public:
                     cout << "One of the expressions is a boolean";
                     return 0;
                 };
-                return left_exp->get_value() + right_exp->get_value();
+                return left_exp->get_value(cache, i) + right_exp->get_value(cache, i);
             };
             case subtraction: {
                 if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean)
@@ -192,7 +199,7 @@ public:
                     cout << "One of the expressions is a boolean";
                     return 0;
                 };
-                return left_exp->get_value() - right_exp->get_value();
+                return left_exp->get_value(cache, i) - right_exp->get_value(cache, i);
             };
             case multiplication: {
                 if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean)
@@ -200,7 +207,7 @@ public:
                     cout << "One of the expressions is a boolean";
                     return 0;
                 };
-                return left_exp->get_value() * right_exp->get_value();
+                return left_exp->get_value(cache, i) * right_exp->get_value(cache, i);
             };
             case division: {
                 if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean)
@@ -208,12 +215,12 @@ public:
                     cout << "One of the expressions is a boolean";
                     return 0;
                 };
-                if (right_exp->get_value() == 0)
+                if (right_exp->get_value(cache, i) == 0)
                 {
                     cout << "Division by zero";
                     return 0;
                 };
-                return left_exp->get_value() / right_exp->get_value();
+                return left_exp->get_value(cache, i) / right_exp->get_value(cache, i);
             };
             case modulo: {
                 if (left_exp->get_exp_type() == boolean or right_exp->get_exp_type() == boolean)
@@ -221,27 +228,27 @@ public:
                     cout << "One of the expressions is a boolean";
                     return 0;
                 };
-                if (right_exp->get_value() == 0)
+                if (right_exp->get_value(cache, i) == 0)
                 {
                     cout << "Division by zero";
                     return 0;
                 };
-                return (int)left_exp->get_value() % (int)right_exp->get_value();
+                return (int)left_exp->get_value(cache, i) % (int)right_exp->get_value(cache, i);
             };
             case conj: {
-                if (left_exp->get_value() && right_exp->get_value()) return 1;
+                if (left_exp->get_value(cache, i) && right_exp->get_value(cache, i)) return 1;
                 return 0;
             };
             case disj: {
-                if (left_exp->get_value() || right_exp->get_value()) return 1;
+                if (left_exp->get_value(cache, i) || right_exp->get_value(cache, i)) return 1;
                 return 0;
             };
             case eqeq: {
-                if (left_exp->get_value() == right_exp->get_value()) return 1;
+                if (left_exp->get_value(cache, i) == right_exp->get_value(cache, i)) return 1;
                 return 0;
             };
             case noteq: {
-                if (left_exp->get_value() != right_exp->get_value()) return 1;
+                if (left_exp->get_value(cache, i) != right_exp->get_value(cache, i)) return 1;
                 return 0;
             };
             case lthan: {
@@ -250,7 +257,7 @@ public:
                     cout << "One of the expressions is a boolean";
                     return 0;
                 };
-                if (left_exp->get_value() < right_exp->get_value()) return 1;
+                if (left_exp->get_value(cache, i) < right_exp->get_value(cache, i)) return 1;
                 return 0;
             };
             case mthan: {
@@ -259,7 +266,7 @@ public:
                     cout << "One of the expressions is a boolean";
                     return 0;
                 };
-                if (left_exp->get_value() > right_exp->get_value()) return 1;
+                if (left_exp->get_value(cache, i) > right_exp->get_value(cache, i)) return 1;
                 return 0;
             };
             case leq: {
@@ -268,7 +275,7 @@ public:
                     cout << "One of the expressions is a boolean";
                     return 0;
                 };
-                if (left_exp->get_value() <= right_exp->get_value()) return 1;
+                if (left_exp->get_value(cache, i) <= right_exp->get_value(cache, i)) return 1;
                 return 0;
             };
             case meq: {
@@ -277,7 +284,7 @@ public:
                     cout << "One of the expressions is a boolean";
                     return 0;
                 };
-                if (left_exp->get_value() >= right_exp->get_value()) return 1;
+                if (left_exp->get_value(cache, i) >= right_exp->get_value(cache, i)) return 1;
                 return 0;
             };
             default: return 0;
@@ -302,17 +309,16 @@ public:
     //~UnOp();
     std::string get_operation(){ //returns binOp operation
         switch(operation) {
-        case 0: return "++";
-        case 1: return "--";
+        case plusplus: return "++";
+        case minusminus: return "--";
         default: return "unknown operation";
         }
     }
     BinOpExp* get_left_expression(){return left_exp;}; //return the number to which we add or subtract 1
     std::string get_val_type(){return "UnOperation";};
-    std::string get_value();
     std::string get_type(){return "UnOp";};
 private:
-    int operation;
+    un_ops operation;
     BinOpExp* left_exp;
 };
 
@@ -342,7 +348,7 @@ public :
     BinOpExp* get_child(){return child;}; //return a child of expression (for now only binOp or SingleOutputs)
     std::string get_type(){return "Expression";};
     int num_blocks(){return 0;};
-    virtual double get_value();
+    virtual double get_value(Cache* cache, int i);
     virtual string get_text();
 private:
     BinOpExp* child;
@@ -368,7 +374,6 @@ public:
         case unknown_var: return "unknown variable type";
         }
     }
-    Expression* get_exp(){return value;}; // returns the object of class which corresponds to the value
     Expression* get_expression(){return value;}; // returns the object of class which corresponds to the value
     string get_name(){return name;}; // returns the name of the variable
     //std::string get_array_size(){return array_size;};
@@ -383,7 +388,6 @@ class Assignment : public AssignDec {
 public:
     Assignment(AlgoParser::AssignContext* ctx);
     //~Assignment();
-    Expression* get_exp(){return value;}; // returns the object of class which corresponds to the value
     Expression* get_expression(){return value;}; // returns the object of class which corresponds to the value
     //Expression* get_index(){return index;};
     //void set_index(Expression* i){index = i;};
@@ -452,7 +456,7 @@ public:
     //~Return();
     std::string get_type(){return "Return";};
     std::string get_name(){return " ";};
-    Expression* get_value(){return value;};
+    Expression* get_expression(){return value;};
     std::string get_var_type(){return "none";};
 private:
     Expression* value;
