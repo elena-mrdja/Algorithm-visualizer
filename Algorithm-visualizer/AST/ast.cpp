@@ -327,9 +327,9 @@ void fill_assignment(Statement assign, Cache* cache, int current_line){
 void fill_ifelse(Statement ifelse, Cache* cache, int if_condition_line){
     Expression* condition = ifelse.get_condition();
     if (condition->get_value(cache, if_condition_line)){
-        int n = ifelse.get_block().get_size();
+        int n = ifelse.get_block()->get_size();
         for (int i = 1; i <= n; i++){
-            fill_statement(ifelse.get_block().get_child(if_condition_line + i), cache, if_condition_line + i);
+            fill_statement(ifelse.get_block()->get_child(if_condition_line + i), cache, if_condition_line + i);
         };
     }
     else {
@@ -451,7 +451,7 @@ flowchart read_statement(Statement stmt, int line_num, Cache* cache){
     if(st_type == while_loop){
         chart.shape = diamond;
         chart.text = stmt.get_condition()->get_text();
-        chart.first_block = stmt.get_block()->num_statements();
+        chart.first_block = stmt.get_block()->get_size();
         return chart;
     };
     return chart;
