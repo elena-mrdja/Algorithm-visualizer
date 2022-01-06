@@ -520,6 +520,40 @@ private:
     Block* block_stmt;
 };
 
+class IfRest: public AssignDec{
+public:
+    IfRest(AlgoParser::IfrestContext* ctx);
+    Expression* get_condition(){return nullptr;}
+    //BlockIf* get_block(){return block;}
+    AssignDec* get_block_child(int i){return block->get_child(i).get_child();}
+    std::string get_type(){return "IfRest";}
+    Expression* get_value(){return nullptr;}
+    std::string get_name(){return nullptr;}
+    std::string get_var_type(){return nullptr;}
+    AssignDec* get_ifrest(){return nullptr;}
+
+private:
+    Block* block;
+};
+
+
+
+class IfElse: public AssignDec{
+public:
+    IfElse(AlgoParser::IfelseContext* ctx);
+    Expression* get_condition(){return condition;}
+    AssignDec* get_block_child(int i){return block->get_child(i).get_child();}
+    std::string get_type(){return "IfElse";}
+    Expression* get_value(){return nullptr;}
+    std::string get_name(){return nullptr;}
+    std::string get_var_type(){return nullptr;}
+    AssignDec* get_ifrest(){return else_stmt;}
+private:
+    Expression* condition;
+    Block* block;
+    AssignDec* else_stmt;
+};
+
 class Return : public AssignDec {
 public:
     Return(AlgoParser::ReturnStmtContext* ctx);

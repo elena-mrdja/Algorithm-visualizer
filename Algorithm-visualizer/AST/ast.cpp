@@ -231,6 +231,25 @@ AST::AST(AlgoParser::BlockContext* ctx) {
     }
 }
 
+IfElse::IfElse(AlgoParser::IfelseContext* ctx){
+
+    condition = new Expression(ctx->exp());
+    block = new Block(ctx->block());
+    if (ctx->ifrest()){
+        else_stmt = new IfRest(ctx->ifrest());
+    }else{
+        else_stmt = nullptr;
+    }
+
+}
+
+IfRest::IfRest(AlgoParser::IfrestContext* ctx){
+    block = new Block(ctx->block());
+
+
+}
+
+
 
 ValuesList::ValuesList(Value* h, Value* t){
     head = h;
