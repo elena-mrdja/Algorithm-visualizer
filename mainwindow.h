@@ -16,12 +16,14 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    int counter;
 
 
 public slots:
     void on_variables_clicked();
 
     void on_Visualize_clicked();
+
 
 private:
     Ui::MainWindow *ui;

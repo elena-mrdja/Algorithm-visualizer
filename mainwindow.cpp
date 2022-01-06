@@ -3,16 +3,15 @@
 #include <QPainter>
 #include <iostream>
 
-int counter =0;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+
 {
     ui->setupUi(this);
-
+    counter=0;
 }
-
 
 MainWindow::~MainWindow()
 {
@@ -67,6 +66,7 @@ void MainWindow::on_variables_clicked()
 
     if (counter==ve.size()+1){
         index=1;
+        counter=0;
     }
     else{
         index=counter;
