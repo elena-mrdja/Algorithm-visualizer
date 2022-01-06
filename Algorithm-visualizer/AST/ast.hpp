@@ -418,7 +418,6 @@ private :
 
 };
 
-
 class Block {
 public :
     Block(AlgoParser::BlockContext* ctx/*, pass down cache*/ );
@@ -495,8 +494,6 @@ public:
     };
     std::string get_text(){return "-"+value->get_text();}; //returns the value as a string <- IMPORTANT
     std::string get_operation(){return "none";}; //no needed
-    BinOpExp* get_left_expression(){return nullptr;}; // no needed
-    BinOpExp* get_right_expression(){return nullptr;}; //no needed
     //~Negation();
     std::string get_type(){return "Negation";};
     std::string get_name(){return " ";};
