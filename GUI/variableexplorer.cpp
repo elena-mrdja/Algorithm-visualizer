@@ -50,8 +50,25 @@ void VariableExplorer::set_background()
 }
 
 
+void VariableExplorer::track(vector<unordered_map<char, vector<double>>> v, int index)
+{
+    string words="";
+    for(int i=0;i<index;i++)
+    {
+        words= words + "Line: " + std::to_string(i+1) +"\n";
+        for(auto it : v[i])
+        {
+            for(int j=0;j<it.second.size();j++)
+                words= words + it.first + "=" + std::to_string(it.second[j])+"\n";
+        }
+        words= words + "\n";
+    }
+    QString word = QString::fromStdString(words);
+    auto text = this->createText2(word, 1,1,100,100);
+    scene->addItem(text);
+}
 
-void VariableExplorer::track(std::unordered_map<char, std::vector<double>> mp, std::vector<char> order, int index)
+/*void VariableExplorer::track(std::unordered_map<char, std::vector<double>> mp, std::vector<char> order, int index)
 {
     string words="";
     vector<pair<char, double>> written;
@@ -71,7 +88,7 @@ void VariableExplorer::track(std::unordered_map<char, std::vector<double>> mp, s
     auto text = this->createText2(word, 1,1,100,100);
     scene->addItem(text);
 }
-
+*/
 
 /*void VariableExplorer::track2(vector<unordered_map<char, vector<double>>::iterator> v);
 {
