@@ -285,15 +285,29 @@ Cache::Cache(int number){
     num_lines = number;
 }
 
-void fill_statement(Statement stmt, Cache* cache, int line, Block* block = nullptr, Expression* condition = nullptr);
+void fill_while_block(Block* block, Expression* condition, Cache* cache, int while_condition_line);
+void fill_declaration(Statement dec, Cache* cache, int current_line);
+void fill_assignment(Statement assign, Cache* cache, int current_line);
+void fill_ifelse(Statement ifelse, Cache* cache, int if_condition_line);
+
+
+void fill_statement(Statement stmt, Cache* cache, int current_line, Block* block = nullptr, Expression* condition = nullptr){
+    switch (stmt.get_stmt_type()){
+    case declaration : fill_declaration(stmt, cache, current_line);
+    case assignment : fill_assignment(stmt, cache, current_line);
+    case ifelse : fill_ifelse(stmt, cache, current_line);
+    case ifrest : {};
+    case while_loop : fill_while_block(stmt.get_block(), stmt.get_condition(), cache, current_line);
+    };
+};
 
 void fill_while_block(Block* block, Expression* condition, Cache* cache, int while_condition_line){
     //Block : the block of the while statement
     //while_condition_line : the number of the line while(condition)
     int n = block->get_size();
     while (condition->get_value(cache, while_condition_line)) {
-        for (int i = 0; i < n; i++) {
-            fill_statement(block->get_child(i), cache, i, block, condition);
+        for (int i = 1; i <= n; i++) {
+            fill_statement(block->get_child(while_condition_line + i), cache, while_condition_line + i, block, condition);
         };
     };
 };
@@ -310,15 +324,20 @@ void fill_assignment(Statement assign, Cache* cache, int current_line){
     cache->get_map()[current_line][assign.get_name()]->add_value(value);
 };
 
-void fill_statement(Statement stmt, Cache* cache, int line){
-    switch (stmt.get_stmt_type()){
-    case declaration : fill_declaration(stmt, cache, line);
-    case assignment : fill_assignment(stmt, cache, line);
-    case ifelse : {};
-    case ifrest : {};
-    case while_loop : fill_while_block(stmt.get_block(), stmt.get_condition(), cache, line);
-    };
+void fill_ifelse(Statement ifelse, Cache* cache, int if_condition_line){
+    Expression* condition = ifelse.get_condition();
+    if (condition->get_value(cache, if_condition_line)){
+        int n = ifelse.get_block().get_size();
+        for (int i = 1; i <= n; i++){
+            fill_statement(ifelse.get_block().get_child(if_condition_line + i), cache, if_condition_line + i);
+        };
+    }
+    else {
+        //jump to else
+    }
 };
+
+
 
 void fill_cache_names(Block* ast, Cache* cache, int n){
     //When this function is called Cache is an empty array of length n
@@ -341,6 +360,10 @@ void fill_cache_names(Block* ast, Cache* cache, int n){
         int next_line = current_line + 1 + ast->get_child(current_line).get_block().get_size();
         //next_line : in case of stmts with no blocks, the line increases by only 1
         cache->get_map()[next_line] = cache->get_map()[current_line];
+        //add the case of if/else
+
+
+
             /*if (ast->get_child(current_line).get_stmt_type() == declaration or ast->get_child(current_line).get_stmt_type() == assignment) {
                 cache->get_map()[current_line] = cache->get_map()[current_line - 1];
                 Value* value = new Value;
@@ -428,7 +451,7 @@ flowchart read_statement(Statement stmt, int line_num, Cache* cache){
     if(st_type == while_loop){
         chart.shape = diamond;
         chart.text = stmt.get_condition()->get_text();
-        chart.first_block = stmt.block_stmt->num_statements();
+        chart.first_block = stmt.get_block()->num_statements();
         return chart;
     };
     return chart;
