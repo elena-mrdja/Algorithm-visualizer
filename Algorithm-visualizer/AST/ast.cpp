@@ -306,20 +306,22 @@ void fill_cache_names(Block* ast, Cache* cache, int n){
     //This function will fill in the existing keys in each line of the Cache
     //This means that after this function, we can read which values
     //exist in each line of the program, but not their values
-    ValuesListInt block_ends = ValuesListInt();
+    /*ValuesListInt block_ends = ValuesListInt();
     ValueInt* first_block_end = new ValueInt;
     first_block_end->value = n;
     block_ends.add_value(first_block_end);
     ValuesListInt block_starts = ValuesListInt();
     ValueInt* first_block_start = new ValueInt;
     first_block_start->value = 0;
-    block_ends.add_value(first_block_start);
+    block_ends.add_value(first_block_start);*/
     int current_line = 0;
     while (current_line < n){
-        if (current_line < block_ends.get_tail()->value) {
-            cache->get_map()[current_line] = cache->get_map()[current_line - 1];
-            fill_statement(ast->get_child(current_line), cache, current_line, ast->get_child(current_line).get_block(), ast->get_child(current_line).get_condition());
-            current_line += 1 + ast->get_child(current_line).get_block().get_size();
+        //if (current_line < block_ends.get_tail()->value) {
+            //with our constraints, the first line has to be a declaration
+        fill_statement(ast->get_child(current_line), cache, current_line, ast->get_child(current_line).get_block(), ast->get_child(current_line).get_condition());
+        int next_line = current_line + 1 + ast->get_child(current_line).get_block().get_size();
+        //next_line : in case of stmts with no blocks, the line increases by only 1
+        cache->get_map()[next_line] = cache->get_map()[current_line];
             /*if (ast->get_child(current_line).get_stmt_type() == declaration or ast->get_child(current_line).get_stmt_type() == assignment) {
                 cache->get_map()[current_line] = cache->get_map()[current_line - 1];
                 Value* value = new Value;
@@ -350,7 +352,7 @@ void fill_cache_names(Block* ast, Cache* cache, int n){
                         if (ast->get_child(current_line).get_stmt_type() == ifrest)
                     };
                 }
-            };*/
+            };
         }
         else {
             block_ends.pop();
@@ -372,7 +374,7 @@ void fill_cache_names(Block* ast, Cache* cache, int n){
                 block_starts.add_value(next_block_start);
             }
         };
-        current_line++;
+        current_line++;*/
     };
 
 };
