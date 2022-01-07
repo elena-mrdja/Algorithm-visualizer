@@ -494,6 +494,7 @@ public:
     virtual Expression* get_condition(){return nullptr;};
     virtual Block* get_block(){return nullptr;};
     int get_jump_length(){return 1;};
+    virtual AssignDec* get_ifrest();
 private :
     AssignDec* child;
 };
@@ -653,10 +654,16 @@ enum chart_type {
     while_chart = 2
 };
 
+enum colors {
+    red = 0,
+    green = 1
+};
+
 struct flowchart {
     chart_shape shape;
     chart_type type;
     string text;
     int first_block; // num of stmts in the first block (if in if and the only block in while)
     int second_block; // num of stmts in else
+    colors color;
 };

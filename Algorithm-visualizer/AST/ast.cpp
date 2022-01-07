@@ -339,7 +339,7 @@ void fill_ifelse(Statement ifelse, Cache* cache, int if_condition_line){
 
 
 
-void fill_cache_names(Block* ast, Cache* cache, int n){
+void fill_cache_names(Block* ast, Cache* cache){
     //When this function is called Cache is an empty array of length n
     //This function will fill in the existing keys in each line of the Cache
     //This means that after this function, we can read which values
@@ -353,6 +353,7 @@ void fill_cache_names(Block* ast, Cache* cache, int n){
     first_block_start->value = 0;
     block_ends.add_value(first_block_start);*/
     int current_line = 0;
+    int n = ast->get_size();
     while (current_line < n){
         //if (current_line < block_ends.get_tail()->value) {
             //with our constraints, the first line has to be a declaration
@@ -431,27 +432,33 @@ flowchart read_statement(Statement stmt, int line_num, Cache* cache){
     if (st_type == declaration){
         chart.shape = rectangle;
         chart.text = "Declare " + stmt.get_child()->get_name();
+        chart.color = red;
         return chart;
     }
     if(st_type == assignment){
         chart.shape = rectangle;
         chart.text = "Assign " + stmt.get_name();
-        Value* value = new Value;
+        /*Value* value = new Value;
         value->value = stmt.get_child()->get_expression()->get_value(cache, line_num);
-        cache->get_map()[line_num][stmt.get_child()->get_name()]->add_value(value);
+        cache->get_map()[line_num][stmt.get_child()->get_name()]->add_value(value);*/
+        chart.color = red;
         return chart;
     };
-    /*if(st_type == ifelse){
+    if(st_type == ifelse){
         chart.shape = diamond;
-        chart.text = stmt->get_condition()->get_text();
-        chart.first_block = stmt->block_stmt->num_statements();
-        chart.second_block = stmt->else_stmt->num_stmt;
+        chart.text = stmt.get_condition()->get_text();
+        chart.first_block = stmt.get_block()->get_size();
+        chart.second_block = stmt.get_ifrest()->get_block()->get_size();
+        if (stmt.get_condition()->get_value(cache, line_num)) chart.color = green;
+        else chart.color = red;
         return chart;
-    };*/
+    };
     if(st_type == while_loop){
         chart.shape = diamond;
         chart.text = stmt.get_condition()->get_text();
         chart.first_block = stmt.get_block()->get_size();
+        if (stmt.get_condition()->get_value(cache, line_num)) chart.color = green;
+        else chart.color = red;
         return chart;
     };
     return chart;
