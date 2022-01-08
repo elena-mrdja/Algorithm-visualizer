@@ -291,12 +291,12 @@ void fill_assignment(Statement assign, Cache* cache, int current_line);
 void fill_ifelse(Statement ifelse, Cache* cache, int if_condition_line);
 
 
-void fill_statement(Statement stmt, Cache* cache, int current_line, Block* block = nullptr, Expression* condition = nullptr){
+void fill_statement(Statement stmt, Cache* cache, int current_line){
     switch (stmt.get_stmt_type()){
     case declaration : fill_declaration(stmt, cache, current_line);
     case assignment : fill_assignment(stmt, cache, current_line);
     case ifelse : fill_ifelse(stmt, cache, current_line);
-    case ifrest : {};
+    case ifrest : cout << "error: ifelse";
     case while_loop : fill_while_block(stmt.get_block(), stmt.get_condition(), cache, current_line);
     };
 };
@@ -307,21 +307,21 @@ void fill_while_block(Block* block, Expression* condition, Cache* cache, int whi
     int n = block->get_size();
     while (condition->get_value(cache, while_condition_line)) {
         for (int i = 1; i <= n; i++) {
-            fill_statement(block->get_child(while_condition_line + i), cache, while_condition_line + i, block, condition);
+            fill_statement(block->get_child(while_condition_line + i), cache, while_condition_line + i);
         };
     };
 };
 
-void fill_declaration(Statement dec, Cache* cache, int current_line){
+void fill_declaration(Statement dec, Cache* cache, int declaration_line){
     Value* value = new Value;
-    value->value = dec.get_expression()->get_value(cache, current_line);
-    cache->get_map()[current_line][dec.get_name()]->add_value(value);
+    value->value = dec.get_expression()->get_value(cache, declaration_line);
+    cache->get_map()[declaration_line][dec.get_name()]->add_value(value);
 };
 
-void fill_assignment(Statement assign, Cache* cache, int current_line){
+void fill_assignment(Statement assign, Cache* cache, int assignment_line){
     Value* value = new Value;
-    value->value = assign.get_expression()->get_value(cache, current_line);
-    cache->get_map()[current_line][assign.get_name()]->add_value(value);
+    value->value = assign.get_expression()->get_value(cache, assignment_line);
+    cache->get_map()[assignment_line][assign.get_name()]->add_value(value);
 };
 
 void fill_ifelse(Statement ifelse, Cache* cache, int if_condition_line){
@@ -329,11 +329,17 @@ void fill_ifelse(Statement ifelse, Cache* cache, int if_condition_line){
     if (condition->get_value(cache, if_condition_line)){
         int n = ifelse.get_block()->get_size();
         for (int i = 1; i <= n; i++){
-            fill_statement(ifelse.get_block()->get_child(if_condition_line + i), cache, if_condition_line + i);
+            fill_statement(ifelse.get_block()->get_child(i - 1), cache, if_condition_line + i);
         };
     }
     else {
-        //jump to else
+        if (ifelse.get_ifrest() != nullptr) {
+            int n = ifelse.get_block()->get_size();
+            int m = ifelse.get_ifrest()->get_block()->get_size();
+            for (int i = 1; i <= m; i++) {
+                fill_statement(ifelse.get_ifrest()->get_block()->get_child(i - 1), cache, if_condition_line + n + i);
+            }
+        }
     }
 };
 
@@ -345,86 +351,17 @@ void fill_unop(Statement unop, Cache* cache, int current_line){
 
 
 
-void fill_cache_names(Block* ast, Cache* cache){
-    //When this function is called Cache is an empty array of length n
-    //This function will fill in the existing keys in each line of the Cache
-    //This means that after this function, we can read which values
-    //exist in each line of the program, but not their values
-    /*ValuesListInt block_ends = ValuesListInt();
-    ValueInt* first_block_end = new ValueInt;
-    first_block_end->value = n;
-    block_ends.add_value(first_block_end);
-    ValuesListInt block_starts = ValuesListInt();
-    ValueInt* first_block_start = new ValueInt;
-    first_block_start->value = 0;
-    block_ends.add_value(first_block_start);*/
+void fill_cache(Block* ast, Cache* cache){
     int current_line = 0;
     int n = ast->get_size();
     while (current_line < n){
-        //if (current_line < block_ends.get_tail()->value) {
-            //with our constraints, the first line has to be a declaration
+        //with our constraints, the first line has to be a declaration
         int next_line = current_line + ast->get_child(current_line).get_jump_length();
         fill_statement(ast->get_child(current_line), cache, current_line, ast->get_child(current_line).get_block(), ast->get_child(current_line).get_condition());
         //next_line : in case of stmts with no blocks, the line increases by only 1
         cache->get_map()[next_line] = cache->get_map()[current_line];
         current_line = next_line;
         //add the case of if/else
-
-
-
-            /*if (ast->get_child(current_line).get_stmt_type() == declaration or ast->get_child(current_line).get_stmt_type() == assignment) {
-                cache->get_map()[current_line] = cache->get_map()[current_line - 1];
-                Value* value = new Value;
-                value->value = ast->get_child(current_line).get_expression()->get_value(cache, current_line);
-                cache->get_map()[current_line][ast->get_child(current_line).get_name()]->add_value(value);
-            }
-            else {
-                cache[current_line] = cache[current_line - 1];
-                ValueInt* next_block_end = new ValueInt;
-                next_block_end->value = (double)(current_line + ast->get_child(current_line).num_stmts());
-                block_ends.add_value(next_block_end);
-                ValueInt* next_block_start = new ValueInt;
-                next_block_start->value = current_line;
-                block_starts.add_value(next_block_start);
-                if (ast->get_child(current_line).get_stmt_type() == while_loop){
-                    int while_start = block_starts.get_tail()->value;
-                    do{
-                        //recursive call to the same function but that reads a block rather than an AST
-                        //or something like that
-                    } while (ast->get_child(while_start).get_condition()->get_value(cache, current_line));
-
-                }
-                if (ast->get_child(current_line).get_stmt_type() == ifelse) {
-                    if (ast->get_child(current_line).get_condition()->get_value(cache, current_line)) {
-                        //recursive call to the same function but that reads a block rather than an AST
-                    }
-                    else {
-                        if (ast->get_child(current_line).get_stmt_type() == ifrest)
-                    };
-                }
-            };
-        }
-        else {
-            block_ends.pop();
-            cache->get_map()[current_line] = cache->get_map()[block_starts.get_tail()->value - 1];
-            block_starts.pop();
-            if (ast->get_child(current_line).get_stmt_type() == declaration) {
-                ValuesList* empty = new ValuesList();
-                cache->get_map()[current_line][ast->get_child(current_line).get_name()] = empty;
-            }
-            else if (ast->get_child(current_line).get_stmt_type() == assignment) {
-                continue;
-            }
-            else {
-                ValueInt* next_block_end = new ValueInt;
-                next_block_end->value = (double)(current_line + ast->get_child(current_line).num_stmts());
-                block_ends.add_value(next_block_end);
-                ValueInt* next_block_start = new ValueInt;
-                next_block_start->value = current_line;
-                block_starts.add_value(next_block_start);
-            }
-        };
-        current_line++;*/
     };
 
 };
