@@ -341,28 +341,6 @@ private:
     bool right_brakets = false;
 };
 
-class UnOp : public BinOpExp{
-public:
-    UnOp(AlgoParser::ExpContext* ctx);
-    ~UnOp();
-    exp_type get_exp_type(){return unop;};
-    un_ops get_unop(){return operation;};
-    string get_text(){
-        return get_left_expression()->get_text() + get_operation();
-    };
-    string get_operation(){ //returns binOp operation
-        switch(operation) {
-        case plusplus: return "++";
-        case minusminus: return "--";
-        default: return "unknown operation";
-        }
-    }
-    BinOpExp* get_left_expression(){return left_exp;}; //return the number to which we add or subtract 1
-
-private:
-    un_ops operation;
-    BinOpExp* left_exp;
-};
 
 
 class Jump : public BinOpExp{
@@ -455,6 +433,7 @@ public:
     string get_name(){return name;}; // returns the name of the variable
     //std::string get_array_size(){return array_size;};
     stmt_type get_stmt_type(){return declaration;};
+    std::string get_operation(){return "none";};
 private:
     variable_type var_type = unknown_var;
     //std::string array_size;
@@ -471,6 +450,7 @@ public:
     string get_name(){return name;}; // returns the name of the variable
     string get_var_type(){return "none";}; //assign does not need to return variable type
     stmt_type get_stmt_type(){return assignment;};
+    std::string get_operation(){return "none";};
 private:
     string name;
     Expression* value;
@@ -478,6 +458,27 @@ private:
 };
 // double x = 2.0;
 // x = x + 2
+
+class UnOp : public AssignDec{
+public:
+    UnOp(AlgoParser::ExpContext* ctx);
+    //~UnOp();
+    std::string get_operation(){ //returns binOp operation
+        switch(operation) {
+        case 0: return "++";
+        case 1: return "--";
+        default: return "unknown operation";
+        }
+    }
+    std::string get_name(){return left_exp;}
+    std::string get_val_type(){return "none";};
+    Expression* get_value(){return nullptr;};
+    virtual Block* get_block(){return nullptr;};
+    std::string get_type(){return "UnOp";};
+private:
+    int operation;
+    std::string left_exp;
+};
 
 class Statement {
 public:
@@ -495,6 +496,7 @@ public:
     virtual Block* get_block(){return nullptr;};
     int get_jump_length(){return 1;};
     virtual AssignDec* get_ifrest();
+    std::string get_operation(){return "none";};
 private :
     AssignDec* child;
 };
@@ -508,6 +510,7 @@ public :
     Statement get_child(int i){return children[i];} //returns a child by index
     int get_size(){return size;} //needed for a for loop
     types get_type(){return block;};
+    std::string get_operation(){return "none";};
     //walker function
 private:
     Statement* child;
@@ -524,6 +527,7 @@ public:
     void set_block_stmt(Block* stmt){block_stmt = stmt;};
     std::string get_type(){return "While";};
     int get_jump_length(){return block_stmt->get_size() + 1;};
+    std::string get_operation(){return "none";};
     //attributes: condition, block
 private:
     Expression* condition;
@@ -541,7 +545,7 @@ public:
     std::string get_name(){return nullptr;}
     std::string get_var_type(){return nullptr;}
     AssignDec* get_ifrest(){return nullptr;}
-
+    std::string get_operation(){return "none";};
 private:
     Block* block;
 };
@@ -559,6 +563,7 @@ public:
     std::string get_var_type(){return nullptr;}
     AssignDec* get_ifrest(){return else_stmt;}
     int get_jump_length(){return block->get_size() + else_stmt->get_block()->get_size() + 1;};
+    std::string get_operation(){return "none";};
 private:
     Expression* condition;
     Block* block;
@@ -575,6 +580,7 @@ public:
     Expression* get_expression(){return value;};
     std::string get_var_type(){return "none";};
     int get_jump_length(){return 1;};
+    std::string get_operation(){return "none";};
 private:
     Expression* value;
 };
@@ -588,6 +594,7 @@ public:
     std::string get_name(){return " ";};
     Expression* get_expression(){return value;};
     int get_jump_length(){return 1;};
+    std::string get_operation(){return "none";};
 private:
     Expression* value;
 };

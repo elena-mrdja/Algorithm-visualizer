@@ -114,7 +114,7 @@ std::string BinOp::get_text(){
 
 
 UnOp::UnOp(AlgoParser::ExpContext* ctx){
-    AlgoParser::ExpContext* left_node = ctx->exp(0);
+    std::string left_node = ctx->exp(0)->variable()->getText();
     AlgoParser::UnopContext *i = ctx->unop();
     if(i->PLUSPLUS()){
         operation = 0;
