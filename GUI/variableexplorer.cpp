@@ -43,8 +43,8 @@ void VariableExplorer::set_background()
     QPen black_pen(Qt::black);
     outlinePen.setWidth(2);
 
-    rectangle = scene->addRect(0, 1000, 100, 20, black_pen, blackBrush);
-    rectangle = scene->addRect(10000, 0, 100, 20, black_pen, blackBrush);
+    //rectangle = scene->addRect(0, 1000, 100, 20, black_pen, blackBrush);
+    //rectangle = scene->addRect(10000, 0, 100, 20, black_pen, blackBrush);
     rectangle = scene->addRect(10000, 10000, 100, 20, black_pen, blackBrush);
     rectangle = scene->addRect(0, 0, 100, 20, black_pen, blackBrush);
 }
@@ -59,12 +59,12 @@ void VariableExplorer::track(vector<unordered_map<char, vector<double>>> v, int 
         for(auto it : v[i])
         {
             for(int j=0;j<it.second.size();j++)
-                words= words + it.first + "=" + std::to_string(it.second[j])+"\n";
+                words= words + it.first + " = " + std::to_string(it.second[j])+"\n";
         }
         words= words + "\n";
     }
     QString word = QString::fromStdString(words);
-    auto text = this->createText2(word, 1,1,100,100);
+    auto text = this->createText2(word, 180,-35,100,100);
     scene->addItem(text);
 }
 
