@@ -518,7 +518,13 @@ public :
     types get_type(){return block;};
     std::string get_operation(){return "none";};
     //walker function
-    virtual int get_flowchart_size();
+    int get_flowchart_size(){
+        size = 0;
+        for (int i = 0; i < get_size(); i++){
+            size += get_child(i).get_flowchart_size();
+        };
+        return size;
+    };
 private:
     Statement* child;
     Statement* children;
