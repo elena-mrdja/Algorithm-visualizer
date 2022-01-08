@@ -12,6 +12,7 @@ using namespace antlrcpptest;
 
 const int MAX_LINES = 100;
 
+
 enum bin_ops {
     addition = 0,
     subtraction = 1,
@@ -691,3 +692,9 @@ struct flowchart {
     int second_block; // num of stmts in else
     colors color;
 };
+
+extern flowchart l[MAX_LINES];
+
+flowchart read_statement(Statement stmt, int line_num, Cache* cache);
+
+void make_chart_list(AST* ast, Cache* cache);

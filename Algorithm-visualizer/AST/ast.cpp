@@ -423,15 +423,13 @@ flowchart read_statement(Statement stmt, int line_num, Cache* cache){
     return chart;
 };
 
+flowchart l[MAX_LINES] = {};
+
 void draw_flowchart(AST* ast, Cache* cache){
     int n = ast->get_size();
     for (int i = 0; i < n; i++){
         flowchart chart = read_statement(ast->get_child(i), i, cache);
-
-
-
-
-
+        l[i] = chart;
 
     };
 };

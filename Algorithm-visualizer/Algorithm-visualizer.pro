@@ -29,9 +29,11 @@ SOURCES += \
     AST/variable.cpp \
     AST/variable_template.cpp \
     AST/while.cpp \
-    GUI/codecell.cpp \
-    GUI/gui.cpp \
-    GUI/varcell.cpp \
+    GUI/codeeditor.cpp \
+    GUI/highlighter.cpp \
+    GUI/linenumberarea.cpp \
+    GUI/textblockdata.cpp \
+    GUI/variableexplorer.cpp \
     GUI/viewer.cpp \
     Parsing/parsing.cpp \
     main.cpp \
@@ -59,9 +61,11 @@ HEADERS += \
     AST/variable.hpp \
     AST/variable_template.hpp \
     AST/while.hpp \
-    GUI/codecell.h \
-    GUI/gui.hpp \
-    GUI/varcell.h \
+    GUI/codeeditor.h \
+    GUI/highlighter.h \
+    GUI/linenumberarea.h \
+    GUI/textblockdata.h \
+    GUI/variableexplorer.h \
     GUI/viewer.h \
     Parsing/parsing.hpp \
     mainwindow.h
