@@ -416,6 +416,7 @@ struct AssignDec { //needed to unite statement children
     int num_stmts(){return 0;};
     int get_jump_length(){return 1;};
     virtual Block* get_block();
+    virtual int get_flowchart_size();
 };
 class Declaration : public AssignDec {
 public:
@@ -435,6 +436,7 @@ public:
     //std::string get_array_size(){return array_size;};
     stmt_type get_stmt_type(){return declaration;};
     std::string get_operation(){return "none";};
+    int get_flowchart_size(){return 1;};
 private:
     variable_type var_type = unknown_var;
     //std::string array_size;
@@ -451,6 +453,7 @@ public:
     string get_name(){return name;}; // returns the name of the variable
     string get_var_type(){return "none";}; //assign does not need to return variable type
     stmt_type get_stmt_type(){return assignment;};
+    int get_flowchart_size(){return 1;};
 private:
     string name;
     Expression* value;
@@ -477,6 +480,7 @@ public:
     std::string get_type(){return "UnOp";};
     stmt_type get_stmt_type(){return unop;};
     int get_jump_length(){return 1;};
+    int get_flowchart_size(){return 1;};
 private:
     int operation;
     std::string left_exp;
@@ -496,7 +500,8 @@ public:
     virtual Expression* get_expression(){return nullptr;};
     virtual Expression* get_condition(){return nullptr;};
     virtual Block* get_block(){return nullptr;};
-    int get_jump_length(){return 1;};
+    virtual int get_jump_length();
+    virtual int get_flowchart_size(){return 1;};
     virtual AssignDec* get_ifrest();
 private :
     AssignDec* child;
@@ -513,6 +518,7 @@ public :
     types get_type(){return block;};
     std::string get_operation(){return "none";};
     //walker function
+    virtual int get_flowchart_size();
 private:
     Statement* child;
     Statement* children;
@@ -530,6 +536,7 @@ public:
     int get_jump_length(){return block_stmt->get_size() + 1;};
     std::string get_operation(){return "none";};
     //attributes: condition, block
+    int get_flowchart_size(){return get_block()->get_flowchart_size() + 1;};
 private:
     Expression* condition;
     Block* block_stmt;
@@ -547,6 +554,7 @@ public:
     std::string get_var_type(){return nullptr;}
     AssignDec* get_ifrest(){return nullptr;}
     std::string get_operation(){return "none";};
+    int get_flowchart_size(){return get_block()->get_flowchart_size();};
 private:
     Block* block;
 };
@@ -564,6 +572,7 @@ public:
     std::string get_var_type(){return nullptr;}
     AssignDec* get_ifrest(){return else_stmt;}
     int get_jump_length(){return block->get_size() + else_stmt->get_block()->get_size() + 1;};
+    int get_flowchart_size(){return get_block()->get_flowchart_size() + get_ifrest()->get_block()->get_flowchart_size() + 1;};
 private:
     Expression* condition;
     Block* block;
@@ -581,6 +590,7 @@ public:
     std::string get_var_type(){return "none";};
     int get_jump_length(){return 1;};
     std::string get_operation(){return "none";};
+    int get_flowchart_size(){return 1;};
 private:
     Expression* value;
 };
@@ -595,6 +605,7 @@ public:
     Expression* get_expression(){return value;};
     int get_jump_length(){return 1;};
     std::string get_operation(){return "none";};
+    int get_flowchart_size(){return 1;};
 private:
     Expression* value;
 };
