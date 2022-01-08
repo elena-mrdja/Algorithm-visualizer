@@ -289,7 +289,7 @@ void fill_while_block(Block* block, Expression* condition, Cache* cache, int whi
 void fill_declaration(Statement dec, Cache* cache, int current_line);
 void fill_assignment(Statement assign, Cache* cache, int current_line);
 void fill_ifelse(Statement ifelse, Cache* cache, int if_condition_line);
-
+void fill_unop(Statement ifelse, Cache* cache, int if_condition_line);
 
 void fill_statement(Statement stmt, Cache* cache, int current_line){
     switch (stmt.get_stmt_type()){
@@ -298,6 +298,7 @@ void fill_statement(Statement stmt, Cache* cache, int current_line){
     case ifelse : fill_ifelse(stmt, cache, current_line);
     case ifrest : cout << "error: ifelse";
     case while_loop : fill_while_block(stmt.get_block(), stmt.get_condition(), cache, current_line);
+    case unop : fill_unop(stmt, cache, current_line);
     };
 };
 
@@ -362,7 +363,6 @@ void fill_cache(Block* ast, Cache* cache){
         cache->get_map()[next_line] = cache->get_map()[current_line];
         current_line = next_line;
     };
-
 };
 
 
@@ -427,5 +427,11 @@ void draw_flowchart(AST* ast, Cache* cache){
     int n = ast->get_size();
     for (int i = 0; i < n; i++){
         flowchart chart = read_statement(ast->get_child(i), i, cache);
+
+
+
+
+
+
     };
 };
