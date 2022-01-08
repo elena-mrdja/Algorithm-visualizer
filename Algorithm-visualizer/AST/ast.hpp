@@ -476,6 +476,7 @@ public:
     virtual Block* get_block(){return nullptr;};
     std::string get_type(){return "UnOp";};
     stmt_type get_stmt_type(){return unop;};
+    int get_jump_length(){return 1;};
 private:
     int operation;
     std::string left_exp;
