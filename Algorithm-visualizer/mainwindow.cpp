@@ -242,6 +242,8 @@ void MainWindow::on_variables_clicked()
     vector<char> order;
     vector<unordered_map<char, vector<double>>::iterator> vec;
 
+
+    //postoje funkcije koje ce ti pomoci da ubacis value
     unordered_map<char, vector<double>> mapa;
     mapa['z'].push_back(4);
     mapa['z'].push_back(5);

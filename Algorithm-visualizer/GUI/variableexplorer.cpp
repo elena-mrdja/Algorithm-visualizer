@@ -72,23 +72,27 @@ void VariableExplorer::set_background()
     scene->addItem(text);
 }*/
 
+
+//ValueList a ne vector
+
 void VariableExplorer::track(vector<unordered_map<char, vector<double>>> v, int index)
 {
     string words="";
     for(int i=0;i<index;i++)
     {
-        words = words + "line: " + std::to_string(i+1) + "\n";
+        words = words + "Line: " + std::to_string(i+1) + "\n";
         for(auto it : v[i])
         {
             for(int j=0;j<it.second.size();j++)
             {
-                words = words + it.first + "=" + std::to_string(it.second[j]) + "\n";
+                words = words + it.first + " = " + std::to_string(it.second[j]) + "\n";
             }
         }
-        words = words + "____________" + "\n";
+        words = words + "____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________"
+                + "\n";
     }
     QString word = QString::fromStdString(words);
-    auto text = this->createText2(word, 0,0,100,100);
+    auto text = this->createText2(word, 210,-35,100,100);
     scene->addItem(text);
 }
 
