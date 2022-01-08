@@ -55,7 +55,8 @@ enum stmt_type {
     assignment = 1,
     ifelse = 2,
     ifrest = 3,
-    while_loop = 4
+    while_loop = 4,
+    unop = 5
 };
 
 enum exp_type {
@@ -475,6 +476,7 @@ public:
     Expression* get_value(){return nullptr;};
     virtual Block* get_block(){return nullptr;};
     std::string get_type(){return "UnOp";};
+    stmt_type get_stmt_type(){return unop;};
 private:
     int operation;
     std::string left_exp;

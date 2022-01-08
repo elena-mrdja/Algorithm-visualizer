@@ -337,6 +337,12 @@ void fill_ifelse(Statement ifelse, Cache* cache, int if_condition_line){
     }
 };
 
+void fill_unop(Statement unop, Cache* cache, int current_line){
+    Value* value = new Value;
+    value->value = unop.get_expression()->get_value(cache, current_line);
+    cache->get_map()[current_line][unop.get_name()]->add_value(value);
+}
+
 
 
 void fill_cache_names(Block* ast, Cache* cache){
@@ -461,7 +467,14 @@ flowchart read_statement(Statement stmt, int line_num, Cache* cache){
         if (stmt.get_condition()->get_value(cache, line_num)) chart.color = green;
         else chart.color = red;
         return chart;
+
     };
+    if(st_type == unop){
+        chart.shape = rectangle;
+        chart.text = "Assign" + stmt.get_name();
+        chart.color = red;
+        return chart;
+    }
     return chart;
 };
 
