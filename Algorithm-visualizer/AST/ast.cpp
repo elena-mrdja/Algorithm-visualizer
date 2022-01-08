@@ -455,10 +455,19 @@ flowchart read_statement(Statement stmt, int line_num, Cache* cache){
         chart.shape = diamond;
         chart.text = stmt.get_condition()->get_text();
         chart.first_block = stmt.get_block()->get_size();
-        chart.second_block = stmt.get_ifrest()->get_block()->get_size();
+        if (stmt.get_ifrest()->get_block() == nullptr) {
+            chart.second_block = 0;
+        }
+        else chart.second_block = 1;
         if (stmt.get_condition()->get_value(cache, line_num)) chart.color = green;
         else chart.color = red;
         return chart;
+    };
+    if (st_type == ifrest) {
+        chart.shape = diamond;
+        chart.text = "Else";
+        chart.color = red;
+        chart.first_block = stmt.get_block()->get_size();
     };
     if(st_type == while_loop){
         chart.shape = diamond;

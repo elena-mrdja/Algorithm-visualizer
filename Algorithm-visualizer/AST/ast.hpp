@@ -451,7 +451,6 @@ public:
     string get_name(){return name;}; // returns the name of the variable
     string get_var_type(){return "none";}; //assign does not need to return variable type
     stmt_type get_stmt_type(){return assignment;};
-    std::string get_operation(){return "none";};
 private:
     string name;
     Expression* value;
@@ -498,7 +497,6 @@ public:
     virtual Block* get_block(){return nullptr;};
     int get_jump_length(){return 1;};
     virtual AssignDec* get_ifrest();
-    std::string get_operation(){return "none";};
 private :
     AssignDec* child;
 };
@@ -557,15 +555,14 @@ private:
 class IfElse: public AssignDec{
 public:
     IfElse(AlgoParser::IfelseContext* ctx);
-    Expression* get_condition(){return condition;}
-    AssignDec* get_block_child(int i){return block->get_child(i).get_child();}
-    std::string get_type(){return "IfElse";}
+    Expression* get_condition(){return condition;};
+    AssignDec* get_block_child(int i){return block->get_child(i).get_child();};
+    stmt_type get_stmt_type(){return ifelse;};
     Expression* get_value(){return nullptr;}
     std::string get_name(){return nullptr;}
     std::string get_var_type(){return nullptr;}
     AssignDec* get_ifrest(){return else_stmt;}
     int get_jump_length(){return block->get_size() + else_stmt->get_block()->get_size() + 1;};
-    std::string get_operation(){return "none";};
 private:
     Expression* condition;
     Block* block;
