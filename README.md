@@ -1,6 +1,6 @@
 # Algorithm visualizer
 
-Algorithm Visualizer is a tool that will help you see the visual representation of every line of your code and help both student and coders to debug their code.
+Algorithm Visualizer is a tool that will help you see the visual representation of the C++ code and be able to help both student and coders to debug their code. 
 
 ## Members 
 1. Mina Goranovic, goranovic37, minagoranovic2, Project lead
@@ -38,4 +38,18 @@ This is the frontend team that will code the interface part of the project which
 *	Mina Goranovic
 
 
+
+
+##Additional dependencies
+
+Our project is using the ANTLR4. The folder with the path Algorithm-visualizer/AST in the brach "Workspace" contains all of the files needed to run the code. In order to install ANTLR and be able to compile the project, please follow the following steps:
+
+  1) Download all the files
+  2) Download Java (you might use this link for that: https://www.oracle.com/java/technologies/downloads/#java11-windows)
+  2) Creat an empty folder called (ex. build) (inside the test_antlr4 folder)
+  3) In the Terminal direct yourself into build folder
+  4) Call: cmake ../ (you might need to download and install cmake)
+  5) Call: make
+  6) Now your project is configurated and you can open it in QT (use CMakeLists.txt file to configurate QT project)
+ 
 
