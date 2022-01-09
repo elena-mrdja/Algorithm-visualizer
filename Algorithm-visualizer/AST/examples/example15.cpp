@@ -18,10 +18,10 @@ int main(){
         }
     }
     if (prime){
-        std::cout << n << " is a prime number";
+        std::cout << n << " is a prime number" << std::endl ;
     }
     else{
-        std::cout << n << " is not a prime number";
+        std::cout << n << " is not a prime number" << std::endl ;
     }
     return 0;
 }
