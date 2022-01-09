@@ -30,9 +30,8 @@ int main(int argc, const char* argv[]) {
 
     std::cout << tree->toStringTree(&parser) << std::endl;
     Block ast(tree->mainStmt()->block());
-    //cout << "testing" << std::endl;
-    Declaration dec = Declaration(tree->mainStmt()->block()->stmts(0)->varDec());
-    //cout << "testing" << std::endl;
-    cout <<ast.get_child(1).get_expression()->get_child()->get_exp_type()<< " here" << endl;
+    //Declaration dec = Declaration(tree->mainStmt()->block()->stmts(0)->varDec());
+    //Expression exp = Expression(tree->mainStmt()->block()->stmts(1)->assign()->exp(0));
+    cout <<ast.get_child(2).get_expression()->get_exp_type()<< "    <-  Final Testing Output" << endl;
     return 0;
 }

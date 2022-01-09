@@ -79,23 +79,45 @@ class Cache;
 class BinOp;
 class SingleOutput;
 class Negation;
-class BinOpExp{
+class Expression{
 public:
-    BinOpExp(AlgoParser::ExpContext* ctx);
-    BinOpExp(){expression_type = unknown_exp_type; child_binop = nullptr; child_sing = nullptr; child_binop = nullptr;};
+    Expression(AlgoParser::ExpContext* ctx);
+    Expression(){
+        expression_type = unknown_exp_type;
+        //expression_type = "Unknown exp type";
+        child_binop = nullptr;
+        child_sing = nullptr;
+        child_neg = nullptr;
+        child_binop_exp = nullptr;}
+    /*~Expression(){
+        delete child_binop;
+        delete child_sing;
+        delete child_neg;
+        delete child_binop_exp;
+    }*/
+    string get_myself(){return "Expression";}
+    exp_type get_type();
     exp_type get_exp_type(){return expression_type;};
+    //virtual string get_exp_type(){cout << expression_type<<endl; return expression_type;}
     virtual string get_operation(){return nullptr;};
-    virtual BinOpExp* get_left_expression(){return nullptr;};
-    virtual BinOpExp* get_right_expression(){return nullptr;};
+    virtual Expression* get_left_expression(){return nullptr;};
+    virtual Expression* get_right_expression(){return nullptr;};
     virtual string get_text(){return nullptr;};
     virtual value_type get_value_type(){return unknown_value_type;};
     virtual double get_value(Cache* cache, int i){return 0;};
     int num_blocks(){return 0;};
     int get_jump_length(){return 1;};
+
+    BinOp* get_child_binop(){return child_binop;};
+    SingleOutput* get_child_sing(){return child_sing;};
+    Negation* get_child_neg(){return child_neg;};
+    Expression* get_child_binop_exp(){return child_binop_exp;};
 private:
     BinOp* child_binop;
     SingleOutput* child_sing;
     Negation* child_neg;
+    Expression* child_binop_exp;
+    //string expression_type = "Unknown";
     exp_type expression_type;
 };
 
@@ -110,7 +132,7 @@ class ValuesList {
 public:
     ValuesList();
     ValuesList(Value* h, Value* t, double v);
-    ~ValuesList();
+    //~ValuesList();
     Value* get_head();
     Value* get_tail();
     double get_value();
@@ -165,9 +187,8 @@ class UnOp;
 class AssignDec { //needed to unite statement children
 public:
     AssignDec(AlgoParser::StmtsContext* i);
-    //AssignDec(){child = nullptr;}
     AssignDec(){type = unknown_stmt_type; child_d = nullptr;child_a = nullptr;child_if = nullptr;child_ifrest = nullptr;child_r = nullptr;child_p = nullptr; child_while = nullptr;child_u = nullptr;};
-    //~AssignDec(){delete child_d; delete child_a; delete child_if; delete child_ifrest; delete child_r; delete child_p; delete child_while; delete child_u;};
+    ////~AssignDec(){delete child_d; delete child_a; delete child_if; delete child_ifrest; delete child_r; delete child_p; delete child_while; delete child_u;};
     virtual string get_name(){return nullptr;};
     Expression* get_expression();
     stmt_type get_type(){return type;};
@@ -185,7 +206,6 @@ public:
     Print* get_child_print(){return child_p;}
     WhileStmt* get_child_while(){return child_while;}
     UnOp* get_child_unop(){return child_u;}
-    AssignDec* get_child(){return child;}
     virtual Expression* get_condition();
     virtual AssignDec* get_ifrest(){return nullptr;};
 private:
@@ -198,14 +218,13 @@ private:
     WhileStmt* child_while;
     UnOp* child_u;
     stmt_type type;
-    AssignDec* child;
 };
 
 
-class SingleOutput : public BinOpExp {
+class SingleOutput : public Expression {
 public:
     SingleOutput(AlgoParser::ExpContext* ctx);
-    //~SingleOutput();
+    //~SingleOutput(){delete node;};
     exp_type get_exp_type(){
         if (val_type == num) return number;
         return variable;
@@ -213,8 +232,8 @@ public:
     string get_text(){return value;}; //returns the value as a string
 
     string get_operation(){return "none";}; //no needed
-    BinOpExp* get_left_expression(){return nullptr;}; // no needed
-    BinOpExp* get_right_expression(){return nullptr;}; //no needed
+    Expression* get_left_expression(){return nullptr;}; // no needed
+    Expression* get_right_expression(){return nullptr;}; //no needed
     variable_type get_var_type(){return val_type;}; // returns a type of a single output
     value_type get_value_type(){return double_value;}                                              // possible outputs: 'double', 'integer', 'boolean', 'variable'.
     int num_blocks(){return 0;};
@@ -225,18 +244,18 @@ public:
             return cache->get_last_value(value, i);
         }
     }; //returns the value as a string <- IMPORTANT
-    BinOpExp* get_result(){return nullptr;};
+    Expression* get_result(){return nullptr;};
 private:
     string value;
     variable_type val_type;
 };
 
-class BinOp : public BinOpExp{
+class BinOp : public Expression{
 public:
     BinOp(AlgoParser::ExpContext* ctx);
-    //~BinOp();
+    //~BinOp(){delete left_exp; delete right_exp;};
     exp_type get_exp_type(){return binop;};
-    string get_text(){
+    /*string get_text(){
         if (left_exp->get_exp_type() == number or left_exp->get_exp_type() == variable) {
             if (right_exp->get_exp_type() == number or right_exp->get_exp_type() == variable)
             {
@@ -252,7 +271,7 @@ public:
             }
         }
         return "(" + left_exp->get_text() + ") " + get_operation() + " (" + right_exp->get_text() + ")";
-    }; //returns an entire binOp line as a string (ex. output: '( 4.0 + x ) * 5')
+    }; //returns an entire binOp line as a string (ex. output: '( 4.0 + x ) * 5')*/
     string get_operation(){ //returns binOp operation
         switch(operation) {
         case addition: return "+";
@@ -396,23 +415,23 @@ public:
             default: return 0;
         }
     };
-    BinOpExp* get_left_expression(){return left_exp;}; //return a node to left expression
-    BinOpExp* get_right_expression(){return right_exp;}; // returns a node to right expression
+    Expression* get_left_expression(){return left_exp;}; //return a node to left expression
+    Expression* get_right_expression(){return right_exp;}; // returns a node to right expression
     bin_ops get_binop(){return operation;};
 private:
     bin_ops operation;
-    BinOpExp* left_exp;
-    BinOpExp* right_exp;
+    Expression* left_exp;
+    Expression* right_exp;
     bool left_brakets = false;
     bool right_brakets = false;
 };
 
 
 
-/*class Jump : public BinOpExp{ // change to stmt
+/*class Jump : public Expression{ // change to stmt
 public:
     Jump(AlgoParser::JumpContext* ctx);
-    //~UnOp();
+    ////~UnOp();
     string get_val_type(){
         switch(jumper) {
         case 0: return "Break";
@@ -425,57 +444,44 @@ private:
     int jumper;
 };*/
 
-class Negation : public BinOpExp {
+class Negation : public Expression {
 public:
     //not sure if this is necessary but putting
     //it down for now
     Negation(AlgoParser::NegationContext* ctx){
-        cout << "create negation" << endl;
         AlgoParser::ExpContext* node = ctx->exp();
-        if (node->binOp()){
-            value = new BinOp(node);
-        }else if(node->LP()){
-            value = new BinOp(node);
-        }else if((node->integerType()) || (node->doubleType()) || (node->boolType())){
-            value = new SingleOutput(node);
-        }else if(node->variable()){
-            value = new SingleOutput(node);
-        }else{
-            std::cout << "something else" <<std::endl;
-        }
+        value = new Expression(node);
     };
-    Negation(){value = nullptr;}
-    //~Negation(){delete value;};
+    //~Negation(){delete value;}
     exp_type get_exp_type(){return neg;};
     string get_text(){return "-"+value->get_text();}; //returns the value as a string <- IMPORTANT
-    BinOpExp* get_result(){
-        //cout << "try" << endl;
+    Expression* get_result(){
         return value;
     };
     string get_var_type(){return "none";};
     virtual string get_operation(){return nullptr;};
-    virtual BinOpExp* get_left_expression(){return nullptr;};
-    virtual BinOpExp* get_right_expression(){return nullptr;};
+    virtual Expression* get_left_expression(){return nullptr;};
+    virtual Expression* get_right_expression(){return nullptr;};
     virtual value_type get_value_type(){return double_value;};
     double get_value(Cache* cache, int i){return -value->get_value(cache, i);};
 private:
-    BinOpExp* value;
+    Expression* value;
 };
 
 
-class Expression {
+/*class Expression {
 public :
     Expression(AlgoParser::ExpContext* ctx);
     Expression(){child = nullptr;};
-    //~Expression(){delete child;};
-    BinOpExp* get_child(){return child;}; //return a child of expression (for now only binOp or SingleOutputs)
+    ////~Expression(){delete child;};
+    Expression* get_child(){return child;}; //return a child of expression (for now only binOp or SingleOutputs)
     types get_type(){return expression;};
     virtual double get_value(Cache* cache, int i){return 0;};
     virtual string get_text(){return child->get_text();};
     int get_jump_length(){return 1;};
 private:
-    BinOpExp* child;
-};
+    Expression* child;
+};*/
 
 class Block;
 
@@ -485,7 +491,7 @@ class Declaration : public AssignDec {
 public:
     Declaration(AlgoParser::VarDecContext* ctx);
     Declaration(){value = nullptr; name = "none"; var_type = unknown_var;}
-    //~Declaration(){delete value;};
+    ////~Declaration(){delete value;};
     string get_var_type(){ //return type of the variable
         switch(var_type) {
         case num: return "number";
@@ -510,7 +516,7 @@ private:
 class Assignment : public AssignDec {
 public:
     Assignment(AlgoParser::AssignContext* ctx);
-    //~Assignment(){delete value;};
+    ////~Assignment(){delete value;};
     Expression* get_expression(){return value;}; // returns the object of class which corresponds to the value
     //Expression* get_index(){return index;};
     //void set_index(Expression* i){index = i;};
@@ -533,7 +539,7 @@ class UnOp : public AssignDec{
 public:
     UnOp(AlgoParser::ExpContext* ctx);
     UnOp(){operation = 0; left_exp = nullptr;}
-    //~UnOp(){delete left_exp;};
+    ////~UnOp(){delete left_exp;};
     string get_operation(){ //returns binOp operation
         switch(operation) {
         case 0: return "++";
@@ -541,7 +547,7 @@ public:
         default: return "unknown operation";
         }
     }
-    string get_name(){return "none";} // change to binopexp
+    string get_name(){return "none";} // change to Expression
     string get_var_type(){return "none";};
     virtual Expression* get_expression(){return nullptr;}
     Expression* get_value(){return left_exp;};
@@ -559,7 +565,7 @@ private:
 /*class Statement {
 public:
     Statement(AlgoParser::StmtsContext* ctx);
-    ~Statement();
+    //~Statement();
     Statement(){child = nullptr;};
     AssignDec* get_child(){return child;}; //return a child of statement,
                                             //i.e directs to the actual statement (ex. assign, declaration, return, etc.)
@@ -581,7 +587,7 @@ class Block {
 public :
     Block(AlgoParser::BlockContext* ctx);
     Block();
-    //~Block(){delete children; delete child;};
+    ////~Block(){delete children; delete child;};
     AssignDec* get_children(){return children;}
     AssignDec get_child(int i){return children[i];} //returns a child by index
     int get_size(){return size;} //needed for a for loop
@@ -596,7 +602,7 @@ public :
         return size;
     };
 private:
-    AssignDec* child;
+    AssignDec child;
     AssignDec* children;
     int size;
 };
@@ -604,7 +610,7 @@ class WhileStmt : public AssignDec {
 public:
     WhileStmt(AlgoParser::WhileStmtContext* ctx);
     virtual string get_name(){return "none";}
-    //~WhileStmt(){delete condition; delete block_stmt;};
+    ////~WhileStmt(){delete condition; delete block_stmt;};
     void set_condition(Expression* c){condition = c;};
     virtual Expression* get_expression(){return nullptr;}
     Expression* get_condition(){return condition;};
@@ -625,7 +631,7 @@ private:
 class IfRest: public AssignDec{
 public:
     IfRest(AlgoParser::IfrestContext* ctx);
-    //~IfRest(){delete block;}
+    ////~IfRest(){delete block;}
     Expression* get_condition(){return nullptr;}
     //BlockIf* get_block(){return block;}
     //AssignDec* get_block_child(int i){return block->get_child(i).get_child();}
@@ -647,7 +653,7 @@ private:
 class IfElse: public AssignDec{
 public:
     IfElse(AlgoParser::IfelseContext* ctx);
-    //~IfElse(){delete condition; delete block; delete else_stmt;}
+    ////~IfElse(){delete condition; delete block; delete else_stmt;}
     Expression* get_condition(){return condition;};
     virtual Expression* get_expression(){return nullptr;}
     //AssignDec* get_block_child(int i){return block->get_child(i).get_child();};
@@ -669,7 +675,7 @@ class Return : public AssignDec {
 public:
     Return(AlgoParser::ReturnStmtContext* ctx);
     Return(){value = nullptr;};
-    //~Return(){delete value;};
+    ////~Return(){delete value;};
     string get_name(){return " ";};
     Expression* get_expression(){return value;};
     string get_var_type(){return "none";};
@@ -688,7 +694,7 @@ class Print : public AssignDec{
 public:
     Print(AlgoParser::PrintContext* ctx);
     Print(){value = nullptr;};
-    //~Print(){delete value;};
+    ////~Print(){delete value;};
     string get_name(){return " ";};
     Expression* get_expression(){return value;};
     int get_jump_length(){return 1;};
@@ -707,7 +713,7 @@ class AST {
 public :
     AST(AlgoParser::BlockContext* ctx/*, pass down cache*/ );
     AST();
-    //~Block();
+    ////~Block();
     AssignDec* get_children(){return children;}
     AssignDec get_child(int i){return children[i];} //returns a child by index
     int get_size(){return size;} //needed for a for loop
@@ -737,7 +743,7 @@ class ValuesListInt {
 public:
     ValuesListInt();
     ValuesListInt(ValueInt* h, ValueInt* t);
-    //~ValuesListInt();
+    ////~ValuesListInt();
     ValueInt* get_head(){return head;};
     ValueInt* get_tail(){return tail;};
     void set_head(ValueInt* h);

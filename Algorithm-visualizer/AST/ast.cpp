@@ -6,31 +6,39 @@
 using namespace std;
 using namespace antlr4;
 using namespace antlrcpptest;
-BinOpExp::BinOpExp(AlgoParser::ExpContext* ctx){
-    cout << "sleeeeeeeeep" << std::endl;
+Expression::Expression(AlgoParser::ExpContext* ctx){
+    expression_type = unknown_exp_type;
     if (ctx->binOp()){
-        cout << "binop" << std::endl;
-        BinOp child_binop(ctx);
-        expression_type = child_binop.get_exp_type();
+        child_binop = new BinOp(ctx);
+        expression_type = binop;
     }else if (ctx->negation()){
+        child_neg = new Negation(ctx->negation());
         expression_type = neg;
-        Negation child_neg(ctx->negation());
-        expression_type = child_neg.get_exp_type();
+    }else if (ctx->LP()){
+        child_binop_exp = new Expression(ctx->exp(0));
+        expression_type = binop_exp;
     }else{
-        SingleOutput child_sing(ctx);
-        expression_type = child_sing.get_exp_type();
+        child_sing = new SingleOutput(ctx);
+        if (ctx->variable()){
+            expression_type = variable;
+        }else{
+            expression_type = number;
+        }
     }
-    cout << expression_type << std::endl;
+}
+
+exp_type Expression::get_type(){
+    if (child_binop != nullptr){
+        return binop;
+    }
+    return unknown_exp_type;
 }
 SingleOutput::SingleOutput(AlgoParser::ExpContext* ctx){
-    //cout << "katia4\n"<< std::endl;
     if (ctx->integerType()){
         value = ctx->integerType()->INTEGER()->getText();
         val_type = num;
     }else if (ctx->doubleType()){
-        //cout << "katia5\n"<< std::endl;
         value = ctx->doubleType()->FLOAT()->getText();
-        //cout << value << std::endl;
         val_type = num;
     }else if (ctx -> boolType()){
         if (ctx -> boolType()->TRUE()){
@@ -41,44 +49,15 @@ SingleOutput::SingleOutput(AlgoParser::ExpContext* ctx){
         val_type = num;
     }else if (ctx -> variable()){
         value = ctx->variable()->STRING()->getText();
-        val_type = smth_var; // y = (x * 1) + 1
+        val_type = smth_var;
     }
 }
 
 BinOp::BinOp(AlgoParser::ExpContext* ctx){
     AlgoParser::ExpContext* left_node = ctx->exp(0);
     AlgoParser::ExpContext* right_node = ctx->exp(1);
-    //BinOpExp* left_exp(left_node);
-    //BinOpExp* right_exp(right_node);
-    if (left_node->binOp()){
-        left_exp = new BinOp(left_node);
-    }else if(left_node->LP()){
-        left_exp = new BinOp(left_node->exp(0));
-        left_brakets = true;
-    }else if((left_node->integerType()) || (left_node->doubleType()) || (left_node->boolType())){
-        left_exp = new SingleOutput(left_node);
-    }else if(left_node->variable()){
-        left_exp = new SingleOutput(left_node);
-    }else if (left_node->negation()){
-        left_exp = new Negation(left_node->negation());
-    }else{
-        std::cout << "something else" <<std::endl;
-    }
-
-    if (right_node->binOp()){
-        right_exp = new BinOp(right_node);
-    }else if(right_node->LP()){
-        right_exp = new BinOp(right_node->exp(0));
-        right_brakets = true;
-    }else if((right_node->integerType()) || (right_node->doubleType()) || (right_node->boolType())){
-        right_exp = new SingleOutput(right_node);
-    }else if(right_node->variable()){
-        right_exp = new SingleOutput(right_node);
-    }else if (right_node->negation()){
-        right_exp = new Negation(right_node->negation());
-    }else{
-            std::cout << "something else" <<std::endl;
-     }
+    left_exp = new Expression(left_node);
+    right_exp = new Expression(right_node);
 
     AlgoParser::BinOpContext *i = ctx->binOp();
 
@@ -112,64 +91,39 @@ BinOp::BinOp(AlgoParser::ExpContext* ctx){
 }
 
 AssignDec::AssignDec(AlgoParser::StmtsContext* i){
-    //cout << "katia1\n"<< std::endl;
-    Declaration* child_d = nullptr;
-    Assignment* child_a = nullptr;
-    IfElse* child_if = nullptr;
-    IfRest* child_ifrest = nullptr;
-    Return* child_r = nullptr;
-    Print* child_p = nullptr;
-    WhileStmt* child_while = nullptr;
-    UnOp* child_u = nullptr;
-    type = unknown_stmt_type;
-    //cout << "katia Type...\n" << std::endl;
-    //cout << type << std::endl;
-    //cout << "katia Type\n"<< std::endl;
-    //cout << i->print()<< std::endl;
     if(i->assign()){
         AlgoParser::AssignContext* node = i->assign();
-        //Assignment child_a(node);
-        //child = new Assignment(node);
+        child_a = new Assignment(node);
         type = assignment;
     }else if(i->varDec()){
-        //cout << "katia VarDec\n"<< std::endl;
         AlgoParser::VarDecContext* node = i->varDec();
-        //child = new Declaration(node);
-        Declaration child_d(node);
+        child_d = new Declaration(node);
         type = declaration;
-        //cout << i->varDec()<< std::endl;
     }else if(i->returnStmt()){
         AlgoParser::ReturnStmtContext* node = i->returnStmt();
-        //child = new Return(node);
-        Return child_r(node);
+        child_r = new Return(node);
         type = return_stmt;
     }else if(i->print()){
         AlgoParser::PrintContext* node = i->print();
-        //child = new Print(node);
-        Print child_p(node);
+        child_p = new Print(node);
         type = print_stmt;
     }else if(i->whileStmt()){
         AlgoParser::WhileStmtContext* node = i->whileStmt();
-        //child = new WhileStmt(node);
-        WhileStmt child_while(node);
+        child_while = new WhileStmt(node);
         type = while_loop;
     }else if(i->ifelse()){
         AlgoParser::IfelseContext* node = i->ifelse();
-        //child = new IfElse(node);
-        IfElse child_if(node);
+        child_if = new IfElse(node);
         type = ifelse;
     }else if(i->exp()){
         AlgoParser::ExpContext* node = i->exp();
-        //child = new UnOp(node);
-        UnOp child_u(node);
+        child_u = new UnOp(node);
         type = unop;
-    }else{
-        cout << "katia Strange\n";
     }
 }
 UnOp::UnOp(AlgoParser::ExpContext* ctx){
     AlgoParser::ExpContext* left_node = ctx->exp(0);
-    Expression left_exp(left_node);
+    left_exp = new Expression(left_node);
     AlgoParser::UnopContext *i = ctx->unop();
     if(i->PLUSPLUS()){
         operation = 0;
@@ -182,7 +136,7 @@ UnOp::UnOp(AlgoParser::ExpContext* ctx){
 Expression* AssignDec::get_expression(){
     switch (type) {
     case declaration : return child_d->get_expression();
-    case assignment : return child_a->get_expression();
+    case assignment :  return child_a->get_expression();
     case ifelse : return nullptr;
     case ifrest : return nullptr;
     case while_loop : return nullptr;
@@ -203,35 +157,10 @@ Expression* AssignDec::get_expression(){
     }
 }*/
 
-Expression::Expression(AlgoParser::ExpContext* ctx){
-    //cout << "katia3\n"<< std::endl;
-    if (ctx->binOp()){
-        child = new BinOpExp(ctx);
-    }else if (ctx->exp(0)){
-        child = Expression(ctx->exp(0)).get_child();
-    }else if (ctx->negation()){
-        child = new BinOpExp(ctx);
-    }else{
-        child = new BinOpExp(ctx);
-    }
-}
 Declaration::Declaration(AlgoParser::VarDecContext* ctx) {
-    //cout << "katia2\n"<< std::endl;
     value = new Expression(ctx->exp(0));
     name = ctx->variable()->STRING()->getText();
     var_type = num;
-    /*if (ctx->type()->INT()){
-        var_type = num;
-    }else if (ctx->type()->DOUBLE()){
-        var_type = num;
-    }else if (ctx->type()->CHAR()){
-        var_type = num;
-    }else if (ctx->type()->BOOLEAN()){
-        var_type = num;
-    }else{
-        var_type = num;
-    }*/
-
 }
 
 Assignment::Assignment(AlgoParser::AssignContext* ctx)
@@ -240,42 +169,14 @@ Assignment::Assignment(AlgoParser::AssignContext* ctx)
     name = ctx->variable()->STRING()->getText();
 }
 
-/*Statement::Statement(AlgoParser::StmtsContext* ctx){
-    //AlgoParser::BinOpContext *i = ctx->binOp();
-    if(ctx->assign()){
-        AlgoParser::AssignContext* node = ctx->assign();
-        child = new Assignment(node);
-    }else if(ctx->varDec()){
-        AlgoParser::VarDecContext* node = ctx->varDec();
-        child = new Declaration(node);
-    }else if(ctx->returnStmt()){
-        AlgoParser::ReturnStmtContext* node = ctx->returnStmt();
-        child = new Return(node);
-    }else if(ctx->print()){
-        AlgoParser::PrintContext* node = ctx->print();
-        child = new Print(node);
-    }
-}*/
-
 Block::Block(AlgoParser::BlockContext* ctx) {
     size = ctx->stmts().size();
     children = new AssignDec[size];
-    //cache constructor
-    cout << ctx->stmts()[1] << std::endl;
     int i = 0;
     for (;i < size; i++){
-         //cout << "katia\n"<< std::endl;
          AssignDec child(ctx->stmts()[i]);
-         //cout << child.get_type() << std::endl;
-         //cout << "end"<< std::endl;
          children[i] = child;
-         //cout << "end children"<< std::endl;
-         //cout << size << std::endl;
-         //cout << i << std::endl;
-         //cout << ctx->stmts().size() << std::endl;
-
     };
-    cout << child << std::endl;
 }
 
 WhileStmt::WhileStmt(AlgoParser::WhileStmtContext* ctx){
@@ -296,7 +197,7 @@ Print::Print(AlgoParser::PrintContext* ctx){
 }
 
 
-AST::AST(AlgoParser::BlockContext* ctx) {
+/*AST::AST(AlgoParser::BlockContext* ctx) {
     size = 0;
     children = new AssignDec[size];
     int idx = 0;
@@ -307,7 +208,7 @@ AST::AST(AlgoParser::BlockContext* ctx) {
         size++;
         idx++;
     }
-}
+}*/
 
 IfElse::IfElse(AlgoParser::IfelseContext* ctx){
 
@@ -323,8 +224,6 @@ IfElse::IfElse(AlgoParser::IfelseContext* ctx){
 
 IfRest::IfRest(AlgoParser::IfrestContext* ctx){
     block = new Block(ctx->block());
-
-
 }
 
 
