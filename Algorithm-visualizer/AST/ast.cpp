@@ -151,7 +151,19 @@ Assignment::Assignment(AlgoParser::AssignContext* ctx)
     name = ctx->variable()->STRING()->getText();
 }
 
-// BLOCK
+
+
+Block::Block(AlgoParser::BlockContext* ctx) {
+    size = ctx->stmts().size();
+    children = new AssignDec[size];
+    int i = 0;
+    
+    for (;i < size; i++){
+        
+         AssignDec child(ctx->stmts()[i]);
+         children[i] = child;
+    };
+}
 
 WhileStmt::WhileStmt(AlgoParser::WhileStmtContext* ctx){
    condition = new Expression(ctx->exp());
@@ -184,8 +196,21 @@ Print::Print(AlgoParser::PrintContext* ctx){
     }
 }*/
 
-// IFELSE HERE
+IfElse::IfElse(AlgoParser::IfelseContext* ctx){
 
+    condition = new Expression(ctx->exp());
+    block = new Block(ctx->block());
+    if (ctx->ifrest()){
+        else_stmt = new IfRest(ctx->ifrest());
+    }else{
+        else_stmt = nullptr;
+    }
+
+}
+
+IfRest::IfRest(AlgoParser::IfrestContext* ctx){
+    block = new Block(ctx->block());
+}
 
 /*ValuesList::ValuesList(Value* h, Value* t, double v){
     head = h;
