@@ -6,6 +6,7 @@ VariableExplorer::VariableExplorer(QWidget *parent) : QGraphicsView(parent)
     Y_current = -35;
     Y_next = -35;
 
+
 }
 
 void VariableExplorer::wheelEvent(QWheelEvent *event)
@@ -53,7 +54,7 @@ void VariableExplorer::set_background()
 
 
 
-/*void VariableExplorer::track(std::unordered_map<char, std::vector<double>> mp, std::vector<char> order, int index)
+/*void VariableExplorer::track(std::map<char, std::vector<double>> mp, std::vector<char> order, int index)
 {
     string words="";
     vector<pair<char, double>> written;
@@ -79,29 +80,26 @@ void VariableExplorer::set_background()
 
 void VariableExplorer::track(vector<unordered_map<char, vector<double>>> v, int index)
 {
-    const int X = 100;
+    const int X = 50;
     string words="";
-    for(int i=0;i<index;i++)
-    {
-        words = words + "Line: " + std::to_string(i+1) + "\n";
-        Y_next += 20;
 
-        for(auto it : v[i])
-        {
-            for(int j=0; j < it.second.size();j++)
-            {
+    unordered_map<char, vector<double>> map = v[index];
+    int size = map.size();
+
+    words = words + "Line: " + std::to_string(index+1) + "\n";
+    Y_next += 20;
+
+    for(auto it : map){
+        for(int j = 0; j < it.second.size();j++) {
                 words = words + it.first + " = " + std::to_string(it.second[j]) + "\n";
                 Y_next += 20;
-
             }
         }
-        words = words + "_________________________" + "\n";
-        Y_next += 15;
-
-    }
+    words = words + "_________________________" + "\n";
+    Y_next += 15;
 
     QString word = QString::fromStdString(words);
-    auto text = this->createText2(word, X+175*(index-1),Y_current,100,100);
+    auto text = this->createText2(word, X+42*(index+1),Y_current,100,100);
     scene->addItem(text);
     Y_current = Y_next;
 }
@@ -114,7 +112,7 @@ vector<pair<char, double>> written;
 
 for(int i=0;i<index;i++)
 {
-    unordered_map mp = mp_pointers[i];
+    map mp = mp_pointers[i];
     written.push_back({order[i], mp[order[i]][mp[order[i]].size()-1]});
     for(int j=0; j<written.size(); j++)
     {
@@ -129,7 +127,7 @@ QString word = QString::fromStdString(words);
 auto text = this->createText2(word, 0,0,100,100);
 scene->addItem(text);*/
 
-/*void VariableExplorer::track2(vector<unordered_map<char, vector<double>>::iterator> v);
+/*void VariableExplorer::track2(vector<map<char, vector<double>>::iterator> v);
 {
     vector<pair<char, double>> written;
     for (int i=0;i<v.size();i++)

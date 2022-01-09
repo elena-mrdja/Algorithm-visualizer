@@ -12,8 +12,8 @@
 #include <Qt>
 
 #include <iostream>
-#include <map>
 #include <unordered_map>
+#include <map>
 #include <vector>
 #include <utility>
 
@@ -25,8 +25,10 @@ public:
     VariableExplorer(QWidget *parent = nullptr);
 
     void set_background();
+
     int Y_current;
     int Y_next;
+
     QGraphicsScene *scene;
     QGraphicsRectItem *rectangle;
     QGraphicsView *view;
@@ -35,7 +37,7 @@ public:
     QGraphicsTextItem *text;
 
     void track(vector<unordered_map<char, vector<double>>> v, int index);
-    void track2(vector<unordered_map<char, vector<double>>::iterator> v);
+    //void track2(vector<map<char, vector<double>>::iterator> v);
 protected:
     QGraphicsSimpleTextItem* createText2(QString str, int x, int y, int w, int l);
     virtual void wheelEvent(QWheelEvent *event);
