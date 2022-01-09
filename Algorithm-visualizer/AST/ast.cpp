@@ -408,23 +408,11 @@ double Expression::get_value(Cache* cache, int i){
 };
 
 void fill_while_block(Block* block, Expression* condition, Cache* cache, int while_condition_line);
-void fill_declaration(Declaration dec, Cache* cache, int current_line);
-void fill_assignment(Assignment assign, Cache* cache, int current_line);
-void fill_ifelse(IfElse ifelse, Cache* cache, int if_condition_line);
-void fill_unop(IfRest ifelse, Cache* cache, int if_condition_line);
-
-void fill_statement(AssignDec stmt, Cache* cache, int current_line){
-    switch (stmt.get_stmt_type()){
-    case declaration : fill_declaration(stmt.get_child_dec, cache, current_line);
-    case assignment : fill_assignment(stmt.get_child_ass, cache, current_line);
-    case ifelse : fill_ifelse(stmt.get_child_if, cache, current_line);
-    case ifrest : cout << "error: ifelse";
-    case while_loop : fill_while_block(stmt.get_child_while.get_block(), stmt.get_child_while.get_condition(), cache, current_line);
-    case unop : fill_unop(stmt.get_child_unop, cache, current_line);
-    case print_stmt : {};
-    case return_stmt : {}
-    };
-};
+void fill_declaration(Declaration* dec, Cache* cache, int current_line);
+void fill_assignment(Assignment* assign, Cache* cache, int current_line);
+void fill_ifelse(IfElse* ifelse, Cache* cache, int if_condition_line);
+void fill_unop(UnOp* unop, Cache* cache, int if_condition_line);
+void fill_statement(AssignDec stmt, Cache* cache, int current_line);
 
 void fill_while_block(Block* block, Expression* condition, Cache* cache, int while_condition_line){
     //Block : the block of the while statement
@@ -474,8 +462,6 @@ void fill_unop(UnOp unop, Cache* cache, int current_line){
     cache->get_map()[current_line][unop.get_name()]->add_value(value);
 }
 
-
-
 void fill_cache(Block* ast, Cache* cache){
     int current_line = 0;
     int n = ast->get_size();
@@ -489,6 +475,18 @@ void fill_cache(Block* ast, Cache* cache){
     };
 };
 
+void fill_statement(AssignDec stmt, Cache* cache, int current_line){
+    switch (stmt.get_type()){
+    case declaration : fill_declaration(stmt.get_child_dec(), cache, current_line);
+    case assignment : fill_assignment(stmt.get_child_ass(), cache, current_line);
+    case ifelse : fill_ifelse(stmt.get_child_ifelse(), cache, current_line);
+    case ifrest : cout << "error: ifelse";
+    case while_loop : fill_while_block(stmt.get_child_while()->get_block(), stmt.get_child_while()->get_condition(), cache, current_line);
+    case unop : fill_unop(stmt.get_child_unop(), cache, current_line);
+    case print_stmt : {};
+    case return_stmt : {}
+    };
+};
 
 flowchart read_declaration(Declaration* dec, int line_num, Cache* cache){
     flowchart chart;
