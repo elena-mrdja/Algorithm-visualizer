@@ -89,7 +89,7 @@ mainStmt: type MAIN LP RP body = block;
 
 assign: varName=variable (LSB index=exp RSB)? EQ val=exp SEMICOLON;
 
-exp: integerType| doubleType| boolType| string | LP exp RP| exp binOp exp| unop exp| exp unop | negation | identifier | arrayType | variable;
+exp: integerType| doubleType| boolType| string | LP exp RP| exp binOp exp | unop exp| exp unop| negation | identifier | arrayType | variable;
 
 varDec: type varName=variable (LSB arrSize=exp RSB)? (EQ val=exp)? SEMICOLON; 
 

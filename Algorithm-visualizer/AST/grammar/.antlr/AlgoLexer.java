@@ -1,4 +1,4 @@
-// Generated from /Users/katushaborisova/Desktop/test_antlr4 copy/grammar/AlgoLexer.g4 by ANTLR 4.8
+// Generated from /Users/katushaborisova/Desktop/CSE201/Project/Algorithm-visualizer/AST/grammar/AlgoLexer.g4 by ANTLR 4.8
 /* lexer header section */
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

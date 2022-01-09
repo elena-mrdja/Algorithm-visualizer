@@ -29,7 +29,10 @@ int main(int argc, const char* argv[]) {
 
     std::cout << tree->toStringTree(&parser) << std::endl;
     AST ast(tree->mainStmt()->block());
-    std::cout << ast.get_child(1).get_child()->get_value()->get_child()->get_value()<< std::endl;
+    Declaration dec = Declaration(tree->mainStmt()->block()->stmts(0)->varDec());
+    AssignDec assdec = AssignDec();
+    cout << assdec.get_type() << endl;
+    std::cout <<ast.get_child(0).get_type()<< std::endl;
     //ImageVisitor visitor;
     //Scene scene = visitor.visitFile(tree).as<Scene>();
     //scene.draw();

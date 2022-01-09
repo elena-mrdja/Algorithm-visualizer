@@ -9,16 +9,20 @@ using namespace antlrcpptest;
 SingleOutput::SingleOutput(AlgoParser::ExpContext* ctx){
     if (ctx->integerType()){
         value = ctx->integerType()->INTEGER()->getText();
-        val_type = "integer";
+        val_type = num;
     }else if (ctx->doubleType()){
         value = ctx->doubleType()->FLOAT()->getText();
-        val_type = "double";
+        val_type = num;
     }else if (ctx -> boolType()){
-        value = ctx->boolType()->getText();
-        val_type = "boolean";
+        if (ctx -> boolType()->TRUE()){
+            value = '1';
+        }else{
+            value = '0';
+        }
+        val_type = num;
     }else if (ctx -> variable()){
         value = ctx->variable()->STRING()->getText();
-        val_type = "variable";
+        val_type = smth_var; // y = (x * 1) + 1
     }
 }
 
@@ -85,36 +89,54 @@ BinOp::BinOp(AlgoParser::ExpContext* ctx){
         operation = leq;
     }else if(i->MEQ()){
         operation = meq;
-    }else {
-        operation = unknown_op;
     }
 }
-std::string BinOp::get_text(){
-    std::string a = get_left_expression()->get_text();
-    std::string op = get_operation();
-    std::string b = right_exp->get_text();
-    std::string res;
 
-    if (left_brakets){
-        if(right_brakets){
-            res = "( " + a + " ) " + op + " ( " + b + " )";
-        }else{
-            res = "( " + a + " ) " + op + " " + b;
-        }
-    }else{
-        if(right_brakets){
-            res = a + " " + op + " ( " + b + " )";
-        }else{
-            res = a + " " + op + " " + b;
-        }
-
+AssignDec::AssignDec(AlgoParser::StmtsContext* i){
+    std::cout << "here" << std::endl;
+    Declaration* child_d = nullptr;
+    Assignment* child_a = nullptr;
+    IfElse* child_if = nullptr;
+    IfRest* child_ifrest = nullptr;
+    Return* child_r = nullptr;
+    Print* child_p = nullptr;
+    WhileStmt* child_while = nullptr;
+    UnOp* child_u = nullptr;
+    type = unknown_stmt_type;
+    std::cout << type << std::endl;
+    if(i->assign()){
+        AlgoParser::AssignContext* node = i->assign();
+        Assignment child_a(node);
+        type = assignment;
+    }else if(i->varDec()){
+        AlgoParser::VarDecContext* node = i->varDec();
+        Declaration child_d(node);
+        type = declaration;
+    }else if(i->returnStmt()){
+        AlgoParser::ReturnStmtContext* node = i->returnStmt();
+        Return child_r(node);
+        type = return_stmt;
+    }else if(i->print()){
+        AlgoParser::PrintContext* node = i->print();
+        Print child_p(node);
+        type = print_stmt;
+    }else if(i->whileStmt()){
+        AlgoParser::WhileStmtContext* node = i->whileStmt();
+        WhileStmt child_while(node);
+        type = while_loop;
+    }else if(i->ifelse()){
+        AlgoParser::IfelseContext* node = i->ifelse();
+        IfElse child_if(node);
+        type = ifelse;
+    }else if(i->exp()){
+        AlgoParser::ExpContext* node = i->exp();
+        UnOp child_u(node);
+        type = unop;
     }
-    return res;
 }
-
-
 UnOp::UnOp(AlgoParser::ExpContext* ctx){
-    std::string left_node = ctx->exp(0)->variable()->getText();
+    AlgoParser::ExpContext* left_node = ctx->exp(0);
+    Expression left_exp(left_node);
     AlgoParser::UnopContext *i = ctx->unop();
     if(i->PLUSPLUS()){
         operation = 0;
@@ -125,7 +147,7 @@ UnOp::UnOp(AlgoParser::ExpContext* ctx){
     }
 }
 
-Jump::Jump(AlgoParser::JumpContext* ctx){
+/*Jump::Jump(AlgoParser::JumpContext* ctx){
     if(ctx->CONT()){
         jumper = 0;
     }else if(ctx->BREAK()){
@@ -133,7 +155,7 @@ Jump::Jump(AlgoParser::JumpContext* ctx){
     }else {
         jumper = 2;
     }
-}
+}*/
 
 Expression::Expression(AlgoParser::ExpContext* ctx){
     if (ctx -> binOp()){
@@ -147,21 +169,20 @@ Expression::Expression(AlgoParser::ExpContext* ctx){
     }
 }
 Declaration::Declaration(AlgoParser::VarDecContext* ctx) {
-
     value = new Expression(ctx->exp(0));
     name = ctx->variable()->STRING()->getText();
-
-    if (ctx->type()->INT()){
-        var_type = 0;
+    var_type = num;
+    /*if (ctx->type()->INT()){
+        var_type = num;
     }else if (ctx->type()->DOUBLE()){
-        var_type = 1;
+        var_type = num;
     }else if (ctx->type()->CHAR()){
-        var_type = 2;
+        var_type = num;
     }else if (ctx->type()->BOOLEAN()){
-        var_type = 3;
+        var_type = num;
     }else{
-        var_type = 4;
-    }
+        var_type = num;
+    }*/
 
 }
 
@@ -171,7 +192,7 @@ Assignment::Assignment(AlgoParser::AssignContext* ctx)
     name = ctx->variable()->STRING()->getText();
 }
 
-Statement::Statement(AlgoParser::StmtsContext* ctx){
+/*Statement::Statement(AlgoParser::StmtsContext* ctx){
     //AlgoParser::BinOpContext *i = ctx->binOp();
     if(ctx->assign()){
         AlgoParser::AssignContext* node = ctx->assign();
@@ -186,15 +207,15 @@ Statement::Statement(AlgoParser::StmtsContext* ctx){
         AlgoParser::PrintContext* node = ctx->print();
         child = new Print(node);
     }
-}
+}*/
 
 Block::Block(AlgoParser::BlockContext* ctx) {
     size = ctx->children.size();
-    children = new Statement[size];
+    children = new AssignDec[size];
     int idx = 0;
     //cache constructor
     for (auto i: ctx->stmts()){
-         Statement child(i); // child to cache
+         AssignDec child(i);
          children[idx] = child;
          idx++;
     }
@@ -220,11 +241,11 @@ Print::Print(AlgoParser::PrintContext* ctx){
 
 AST::AST(AlgoParser::BlockContext* ctx) {
     size = 0;
-    children = new Statement[size];
+    children = new AssignDec[size];
     int idx = 0;
     //cache constructor
     for (auto i: ctx->stmts()){
-        Statement child(i); // child to cache
+        AssignDec child(i); // child to cache
         children[idx] = child;
         size++;
         idx++;
@@ -281,17 +302,17 @@ void ValuesList::add_value(Value* v){
 
 
 //variable tracking
-Cache::Cache(int number){
+/*Cache::Cache(int number){
     num_lines = number;
 }
 
 void fill_while_block(Block* block, Expression* condition, Cache* cache, int while_condition_line);
-void fill_declaration(Statement dec, Cache* cache, int current_line);
-void fill_assignment(Statement assign, Cache* cache, int current_line);
-void fill_ifelse(Statement ifelse, Cache* cache, int if_condition_line);
-void fill_unop(Statement ifelse, Cache* cache, int if_condition_line);
+void fill_declaration(AssignDec dec, Cache* cache, int current_line);
+void fill_assignment(AssignDec assign, Cache* cache, int current_line);
+void fill_ifelse(AssignDec ifelse, Cache* cache, int if_condition_line);
+void fill_unop(AssignDec ifelse, Cache* cache, int if_condition_line);
 
-void fill_statement(Statement stmt, Cache* cache, int current_line){
+void fill_statement(AssignDec stmt, Cache* cache, int current_line){
     switch (stmt.get_stmt_type()){
     case declaration : fill_declaration(stmt, cache, current_line);
     case assignment : fill_assignment(stmt, cache, current_line);
@@ -313,19 +334,19 @@ void fill_while_block(Block* block, Expression* condition, Cache* cache, int whi
     };
 };
 
-void fill_declaration(Statement dec, Cache* cache, int declaration_line){
+void fill_declaration(AssignDec dec, Cache* cache, int declaration_line){
     Value* value = new Value;
     value->value = dec.get_expression()->get_value(cache, declaration_line);
     cache->get_map()[declaration_line][dec.get_name()]->add_value(value);
 };
 
-void fill_assignment(Statement assign, Cache* cache, int assignment_line){
+void fill_assignment(AssignDec assign, Cache* cache, int assignment_line){
     Value* value = new Value;
     value->value = assign.get_expression()->get_value(cache, assignment_line);
     cache->get_map()[assignment_line][assign.get_name()]->add_value(value);
 };
 
-void fill_ifelse(Statement ifelse, Cache* cache, int if_condition_line){
+void fill_ifelse(AssignDec ifelse, Cache* cache, int if_condition_line){
     Expression* condition = ifelse.get_condition();
     if (condition->get_value(cache, if_condition_line)){
         int n = ifelse.get_block()->get_size();
@@ -344,7 +365,7 @@ void fill_ifelse(Statement ifelse, Cache* cache, int if_condition_line){
     }
 };
 
-void fill_unop(Statement unop, Cache* cache, int current_line){
+void fill_unop(AssignDec unop, Cache* cache, int current_line){
     Value* value = new Value;
     value->value = unop.get_expression()->get_value(cache, current_line);
     cache->get_map()[current_line][unop.get_name()]->add_value(value);
@@ -366,7 +387,7 @@ void fill_cache(Block* ast, Cache* cache){
 };
 
 
-flowchart read_statement(Statement stmt, int line_num, Cache* cache){
+flowchart read_statement(AssignDec stmt, int line_num, Cache* cache){
     //returns a flowchart corresponding to the given statement
     //this function is supposed to be used within the walker i will keep the line of the statement being read
     //(so, if stmt is in the 20th line, i = 20)
@@ -383,14 +404,14 @@ flowchart read_statement(Statement stmt, int line_num, Cache* cache){
         chart.text = "Assign " + stmt.get_name();
         /*Value* value = new Value;
         value->value = stmt.get_child()->get_expression()->get_value(cache, line_num);
-        cache->get_map()[line_num][stmt.get_child()->get_name()]->add_value(value);*/
+        cache->get_map()[line_num][stmt.get_child()->get_name()]->add_value(value);
         chart.color = red;
         return chart;
     };
     if(st_type == ifelse){
         chart.shape = diamond;
         chart.text = stmt.get_condition()->get_text();
-        chart.first_block = stmt.get_block()->get_flowchart_size();
+        chart.first_block = stmt.get_block()->get_block_flowchart_size();
         if (stmt.get_ifrest()->get_block() == nullptr) {
             chart.second_block = 0;
         }
@@ -403,12 +424,12 @@ flowchart read_statement(Statement stmt, int line_num, Cache* cache){
         chart.shape = diamond;
         chart.text = "Else";
         chart.color = red;
-        chart.first_block = stmt.get_block()->get_flowchart_size();
+        chart.first_block = stmt.get_block()->get_block_flowchart_size();
     };
     if(st_type == while_loop){
         chart.shape = diamond;
         chart.text = stmt.get_condition()->get_text();
-        chart.first_block = stmt.get_block()->get_flowchart_size();
+        chart.first_block = stmt.get_block()->get_block_flowchart_size();
         if (stmt.get_condition()->get_value(cache, line_num)) chart.color = green;
         else chart.color = red;
         return chart;
@@ -432,4 +453,4 @@ void draw_flowchart(AST* ast, Cache* cache){
         l[i] = chart;
 
     };
-};
+};*/

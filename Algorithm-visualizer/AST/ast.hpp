@@ -37,12 +37,9 @@ enum un_ops {
 };
 
 enum variable_type {
-    var_int = 0,
-    var_double = 1,
-    var_bool = 2,
-    var_char = 3,
-    num = 4,
-    unknown_var = 5
+    num = 0,
+    smth_var= 1,
+    unknown_var = 2
 };
 
 enum value_type {
@@ -57,11 +54,13 @@ enum stmt_type {
     ifelse = 2,
     ifrest = 3,
     while_loop = 4,
-    unop = 5
+    unop = 5,
+    print_stmt = 6,
+    return_stmt = 7,
+    unknown_stmt_type = 8
 };
 
 enum exp_type {
-    unop = 0,
     binop = 1,
     binop_exp = 2,
     neg = 3,
@@ -80,12 +79,12 @@ class Cache;
 
 struct BinOpExp{
     virtual exp_type get_exp_type(){return binop_exp;};
-    virtual std::string get_operation();
-    virtual BinOpExp* get_left_expression();
-    virtual BinOpExp* get_right_expression();
-    virtual std::string get_text();
-    virtual value_type get_value_type();
-    virtual double get_value(Cache* cache, int i);
+    virtual string get_operation(){return nullptr;};
+    virtual BinOpExp* get_left_expression(){return nullptr;};
+    virtual BinOpExp* get_right_expression(){return nullptr;};
+    virtual string get_text(){return nullptr;};
+    virtual value_type get_value_type(){return unknown_value_type;};
+    virtual double get_value(Cache* cache, int i){return 0;};
     int num_blocks(){return 0;};
     int get_jump_length(){return 1;};
 };
@@ -152,7 +151,7 @@ public:
     BinOpExp* get_left_expression(){return nullptr;}; // no needed
     BinOpExp* get_right_expression(){return nullptr;}; //no needed
     variable_type get_var_type(){return val_type;}; // returns a type of a single output
-                                                   // possible outputs: 'double', 'integer', 'boolean', 'variable'.
+    value_type get_value_type(){return double_value;}                                              // possible outputs: 'double', 'integer', 'boolean', 'variable'.
     int num_blocks(){return 0;};
     double get_value(Cache* cache, int i){
         //i is the line which the SingleOutput is in
@@ -189,7 +188,7 @@ public:
         }
         return "(" + left_exp->get_text() + ") " + get_operation() + " (" + right_exp->get_text() + ")";
     }; //returns an entire binOp line as a string (ex. output: '( 4.0 + x ) * 5')
-    std::string get_operation(){ //returns binOp operation
+    string get_operation(){ //returns binOp operation
         switch(operation) {
         case addition: return "+";
         case subtraction: return "-";
@@ -345,21 +344,21 @@ private:
 
 
 
-class Jump : public BinOpExp{
+/*class Jump : public BinOpExp{ // change to stmt
 public:
     Jump(AlgoParser::JumpContext* ctx);
     //~UnOp();
-    std::string get_val_type(){
+    string get_val_type(){
         switch(jumper) {
         case 0: return "Break";
         case 1: return "Continue";
         default: return "unknown operation";
         }
     }
-    std::string get_type(){return "Jump";};
+    string get_type(){return "Jump";};
 private:
     int jumper;
-};
+};*/
 
 class Negation : public BinOpExp {
 public:
@@ -380,14 +379,20 @@ public:
             std::cout << "something else" <<std::endl;
         }
     };
-    ~Negation();
+    Negation(){value = nullptr;}
+    ~Negation(){delete value;};
     exp_type get_exp_type(){return neg;};
-    std::string get_text(){return "-"+value->get_text();}; //returns the value as a string <- IMPORTANT
+    string get_text(){return "-"+value->get_text();}; //returns the value as a string <- IMPORTANT
     BinOpExp* get_result(){
         //cout << "try" << endl;
         return value;
     };
-    std::string get_var_type(){return "none";};
+    string get_var_type(){return "none";};
+    virtual string get_operation(){return nullptr;};
+    virtual BinOpExp* get_left_expression(){return nullptr;};
+    virtual BinOpExp* get_right_expression(){return nullptr;};
+    virtual value_type get_value_type(){return double_value;};
+    double get_value(Cache* cache, int i){return -value->get_value(cache, i);};
 private:
     BinOpExp* value;
 };
@@ -396,11 +401,11 @@ private:
 class Expression {
 public :
     Expression(AlgoParser::ExpContext* ctx);
-    Expression();
-    //~Expression();
+    Expression(){child = nullptr;};
+    ~Expression(){delete child;};
     BinOpExp* get_child(){return child;}; //return a child of expression (for now only binOp or SingleOutputs)
     types get_type(){return expression;};
-    virtual double get_value(Cache* cache, int i);
+    virtual double get_value(Cache* cache, int i){return 0;};
     virtual string get_text(){return child->get_text();};
     int get_jump_length(){return 1;};
 private:
@@ -409,45 +414,80 @@ private:
 
 class Block;
 
-struct AssignDec { //needed to unite statement children
-    virtual std::string get_name() = 0;
-    virtual Expression* get_expression();
-    virtual std::string get_type() = 0;
-    virtual std::string get_var_type() = 0;
+class IfRest;
+class Declaration;
+class Assignment;
+class IfElse;
+class UnOp;
+class WhileStmt;
+class Return;
+class Print;
+
+class AssignDec { //needed to unite statement children
+public:
+    AssignDec(AlgoParser::StmtsContext* i);
+    AssignDec(){type = unknown_stmt_type; child_d = nullptr;child_a = nullptr;child_if = nullptr;child_ifrest = nullptr;child_r = nullptr;child_p = nullptr; child_while = nullptr;child_u = nullptr;};
+    ~AssignDec(){delete child_d; delete child_a; delete child_if; delete child_ifrest; delete child_r; delete child_p; delete child_while; delete child_u;};
+    virtual string get_name(){return nullptr;};
+    virtual Expression* get_expression(){return nullptr;};
+    stmt_type get_type(){return type;};
+    virtual string get_var_type(){return nullptr;};
     int num_stmts(){return 0;};
     int get_jump_length(){return 1;};
-    virtual Block* get_block();
-    virtual int get_flowchart_size();
+    virtual Block* get_block(){return nullptr;};
+    virtual int get_flowchart_size(){return 0;};
+    virtual stmt_type get_stmt_type(){return unknown_stmt_type;};
+    Declaration* get_child_dec(){return child_d;}
+    Assignment* get_child_ass(){return child_a;};
+    IfElse* get_child_ifelse(){return child_if;}
+    IfRest* get_child_ifrest(){return child_ifrest;}
+    Return* get_child_return(){return child_r;}
+    Print* get_child_print(){return child_p;}
+    WhileStmt* get_child_while(){return child_while;}
+    UnOp* get_child_unop(){return child_u;}
+    virtual Expression* get_condition(){return nullptr;};
+    virtual AssignDec* get_ifrest(){return nullptr;};
+private:
+    Declaration* child_d;
+    Assignment* child_a;
+    IfElse* child_if;
+    IfRest* child_ifrest;
+    Return* child_r;
+    Print* child_p;
+    WhileStmt* child_while;
+    UnOp* child_u;
+    stmt_type type;
 };
 class Declaration : public AssignDec {
 public:
     Declaration(AlgoParser::VarDecContext* ctx);
-    //~Declaration();
-    std::string get_var_type(){ //return type of the variable
+    Declaration(){value = nullptr; name = "none"; var_type = unknown_var;}
+    ~Declaration(){delete value;};
+    string get_var_type(){ //return type of the variable
         switch(var_type) {
-        case var_int: return "int";
-        case var_double: return "double";
-        case var_char: return "char";
-        case var_bool: return "boolean";
-        case unknown_var: return "unknown variable type";
+        case num: return "number";
+        case smth_var: return "variable";
         }
     }
     Expression* get_expression(){return value;}; // returns the object of class which corresponds to the value
     string get_name(){return name;}; // returns the name of the variable
-    //std::string get_array_size(){return array_size;};
+    //string get_array_size(){return array_size;};
     stmt_type get_stmt_type(){return declaration;};
-    std::string get_operation(){return "none";};
+    string get_operation(){return "none";};
     int get_flowchart_size(){return 1;};
+    virtual Block* get_block(){return nullptr;};
+    virtual Expression* get_condition(){return nullptr;}
+    virtual AssignDec* get_ifrest(){return nullptr;}
 private:
     variable_type var_type = unknown_var;
-    //std::string array_size;
+    //string array_size;
     string name;
     Expression* value;
 };
 class Assignment : public AssignDec {
 public:
     Assignment(AlgoParser::AssignContext* ctx);
-    ~Assignment();
+    ~Assignment(){delete value;};
     Expression* get_expression(){return value;}; // returns the object of class which corresponds to the value
     //Expression* get_index(){return index;};
     //void set_index(Expression* i){index = i;};
@@ -455,6 +495,9 @@ public:
     string get_var_type(){return "none";}; //assign does not need to return variable type
     stmt_type get_stmt_type(){return assignment;};
     int get_flowchart_size(){return 1;};
+    virtual Block* get_block(){return nullptr;};
+    virtual Expression* get_condition(){return nullptr;}
+    virtual AssignDec* get_ifrest(){return nullptr;}
 private:
     string name;
     Expression* value;
@@ -466,28 +509,31 @@ private:
 class UnOp : public AssignDec{
 public:
     UnOp(AlgoParser::ExpContext* ctx);
-    //~UnOp();
-    std::string get_operation(){ //returns binOp operation
+    UnOp(){operation = 0; left_exp = nullptr;}
+    ~UnOp(){delete left_exp;};
+    string get_operation(){ //returns binOp operation
         switch(operation) {
         case 0: return "++";
         case 1: return "--";
         default: return "unknown operation";
         }
     }
-    std::string get_name(){return left_exp;}
-    std::string get_val_type(){return "none";};
-    Expression* get_value(){return nullptr;};
+    string get_name(){return "none";} // change to binopexp
+    string get_var_type(){return "none";};
+    virtual Expression* get_expression(){return nullptr;}
+    Expression* get_value(){return left_exp;};
     virtual Block* get_block(){return nullptr;};
-    std::string get_type(){return "UnOp";};
     stmt_type get_stmt_type(){return unop;};
     int get_jump_length(){return 1;};
     int get_flowchart_size(){return 1;};
+    virtual Expression* get_condition(){return nullptr;}
+    virtual AssignDec* get_ifrest(){return nullptr;}
 private:
     int operation;
-    std::string left_exp;
+    Expression* left_exp;
 };
 
-class Statement {
+/*class Statement {
 public:
     Statement(AlgoParser::StmtsContext* ctx);
     ~Statement();
@@ -506,20 +552,20 @@ public:
     virtual AssignDec* get_ifrest();
 private :
     AssignDec* child;
-};
+};*/
 
 class Block {
 public :
     Block(AlgoParser::BlockContext* ctx/*, pass down cache*/ );
     Block();
-    ~Block();
-    Statement* get_children(){return children;}
-    Statement get_child(int i){return children[i];} //returns a child by index
+    ~Block(){delete children; delete child;};
+    AssignDec* get_children(){return children;}
+    AssignDec get_child(int i){return children[i];} //returns a child by index
     int get_size(){return size;} //needed for a for loop
     types get_type(){return block;};
-    std::string get_operation(){return "none";};
+    string get_operation(){return "none";};
     //walker function
-    int get_flowchart_size(){
+    int get_block_flowchart_size(){
         size = 0;
         for (int i = 0; i < get_size(); i++){
             size += get_child(i).get_flowchart_size();
@@ -527,23 +573,26 @@ public :
         return size;
     };
 private:
-    Statement* child;
-    Statement* children;
+    AssignDec* child;
+    AssignDec* children;
     int size;
 };
 class WhileStmt : public AssignDec {
 public:
     WhileStmt(AlgoParser::WhileStmtContext* ctx);
-    //~WhileStmt();
+    virtual string get_name(){return "none";}
+    ~WhileStmt(){delete condition; delete block_stmt;};
     void set_condition(Expression* c){condition = c;};
+    virtual Expression* get_expression(){return nullptr;}
     Expression* get_condition(){return condition;};
     Block* get_block(){return block_stmt;};
     void set_block_stmt(Block* stmt){block_stmt = stmt;};
-    std::string get_type(){return "While";};
     int get_jump_length(){return block_stmt->get_size() + 1;};
-    std::string get_operation(){return "none";};
+    string get_operation(){return "none";};
+    virtual string get_var_type(){return "none";};
     //attributes: condition, block
-    int get_flowchart_size(){return get_block()->get_flowchart_size() + 1;};
+    int get_flowchart_size(){return get_block()->get_block_flowchart_size() + 1;};
+    virtual AssignDec* get_ifrest(){return nullptr;}
 private:
     Expression* condition;
     Block* block_stmt;
@@ -552,16 +601,18 @@ private:
 class IfRest: public AssignDec{
 public:
     IfRest(AlgoParser::IfrestContext* ctx);
+    ~IfRest(){delete block;}
     Expression* get_condition(){return nullptr;}
     //BlockIf* get_block(){return block;}
-    AssignDec* get_block_child(int i){return block->get_child(i).get_child();}
-    std::string get_type(){return "IfRest";}
+    //AssignDec* get_block_child(int i){return block->get_child(i).get_child();}
+    virtual Expression* get_expression(){return nullptr;}
     Expression* get_value(){return nullptr;}
-    std::string get_name(){return nullptr;}
-    std::string get_var_type(){return nullptr;}
+    string get_name(){return nullptr;}
+    string get_var_type(){return nullptr;}
     AssignDec* get_ifrest(){return nullptr;}
-    std::string get_operation(){return "none";};
-    int get_flowchart_size(){return get_block()->get_flowchart_size();};
+    string get_operation(){return "none";};
+    int get_flowchart_size(){return get_block()->get_block_flowchart_size();};
+    virtual Block* get_block(){return block;};
 private:
     Block* block;
 };
@@ -571,33 +622,38 @@ private:
 class IfElse: public AssignDec{
 public:
     IfElse(AlgoParser::IfelseContext* ctx);
+    ~IfElse(){delete condition; delete block; delete else_stmt;}
     Expression* get_condition(){return condition;};
-    AssignDec* get_block_child(int i){return block->get_child(i).get_child();};
+    virtual Expression* get_expression(){return nullptr;}
+    //AssignDec* get_block_child(int i){return block->get_child(i).get_child();};
+    virtual Block* get_block(){return block;};
     stmt_type get_stmt_type(){return ifelse;};
     Expression* get_value(){return nullptr;}
-    std::string get_name(){return nullptr;}
-    std::string get_var_type(){return nullptr;}
+    string get_name(){return nullptr;}
+    string get_var_type(){return nullptr;}
     AssignDec* get_ifrest(){return else_stmt;}
     int get_jump_length(){return block->get_size() + else_stmt->get_block()->get_size() + 1;};
-    int get_flowchart_size(){return get_block()->get_flowchart_size() + get_ifrest()->get_block()->get_flowchart_size() + 1;};
+    int get_flowchart_size(){return get_block()->get_block_flowchart_size() + get_ifrest()->get_block()->get_block_flowchart_size() + 1;};
 private:
     Expression* condition;
     Block* block;
-    AssignDec* else_stmt;
+    IfRest* else_stmt;
 };
 
 class Return : public AssignDec {
 public:
     Return(AlgoParser::ReturnStmtContext* ctx);
-    Return();
-    //~Return();
-    std::string get_type(){return "Return";};
-    std::string get_name(){return " ";};
+    Return(){value = nullptr;};
+    ~Return(){delete value;};
+    string get_name(){return " ";};
     Expression* get_expression(){return value;};
-    std::string get_var_type(){return "none";};
+    string get_var_type(){return "none";};
     int get_jump_length(){return 1;};
-    std::string get_operation(){return "none";};
+    string get_operation(){return "none";};
     int get_flowchart_size(){return 1;};
+    virtual Block* get_block(){return nullptr;};
+    virtual Expression* get_condition(){return nullptr;}
+    virtual AssignDec* get_ifrest(){return nullptr;}
 private:
     Expression* value;
 };
@@ -605,14 +661,17 @@ private:
 class Print : public AssignDec{
 public:
     Print(AlgoParser::PrintContext* ctx);
-    Print();
-    //~Print();
-    std::string get_type(){return "Print";};
-    std::string get_name(){return " ";};
+    Print(){value = nullptr;};
+    ~Print(){delete value;};
+    string get_name(){return " ";};
     Expression* get_expression(){return value;};
     int get_jump_length(){return 1;};
-    std::string get_operation(){return "none";};
+    string get_operation(){return "none";};
     int get_flowchart_size(){return 1;};
+    string get_var_type(){return "none";}
+    virtual Block* get_block(){return nullptr;};
+    virtual Expression* get_condition(){return nullptr;}
+    virtual AssignDec* get_ifrest(){return nullptr;}
 private:
     Expression* value;
 };
@@ -622,8 +681,8 @@ public :
     AST(AlgoParser::BlockContext* ctx/*, pass down cache*/ );
     AST();
     //~Block();
-    Statement* get_children(){return children;}
-    Statement get_child(int i){return children[i];} //returns a child by index
+    AssignDec* get_children(){return children;}
+    AssignDec get_child(int i){return children[i];} //returns a child by index
     int get_size(){return size;} //needed for a for loop
     types get_type(){return block;};
     int num_blocks(){
@@ -633,8 +692,8 @@ public :
     };
     //walker function
 private:
-    Statement* child;
-    Statement* children;
+    AssignDec* child;
+    AssignDec* children;
     int size;
 };
 
@@ -653,7 +712,7 @@ public:
     ValuesListInt(ValueInt* h, ValueInt* t);
     ~ValuesListInt();
     ValueInt* get_head(){return head;};
-    ValueInt* get_tail(){};
+    ValueInt* get_tail(){return tail;};
     void set_head(ValueInt* h);
     void set_tail(ValueInt* t);
     void add_value(ValueInt* v);
@@ -695,6 +754,6 @@ struct flowchart {
 
 extern flowchart l[MAX_LINES];
 
-flowchart read_statement(Statement stmt, int line_num, Cache* cache);
+flowchart read_statement(AssignDec stmt, int line_num, Cache* cache);
 
 void make_chart_list(AST* ast, Cache* cache);
