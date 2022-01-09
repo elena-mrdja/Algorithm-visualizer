@@ -488,74 +488,74 @@ void fill_statement(AssignDec stmt, Cache* cache, int current_line){
     };
 };
 
-flowchart read_declaration(Declaration* dec, int line_num, Cache* cache){
-    flowchart chart;
-    chart.shape = rectangle;
-    chart.text = dec->get_text();
-    chart.color = red;
+flowchart* read_declaration(Declaration* dec, int line_num, Cache* cache){
+    flowchart* chart = new flowchart;
+    chart->shape = rectangle;
+    chart->text = dec->get_text();
+    chart->color = red;
     return chart;
 };
-flowchart read_assignment(Assignment* assign, int line_num, Cache* cache){
-    flowchart chart;
-    chart.shape = rectangle;
-    chart.text = assign->get_text();
-    chart.color = red;
+flowchart* read_assignment(Assignment* assign, int line_num, Cache* cache){
+    flowchart* chart = new flowchart;
+    chart->shape = rectangle;
+    chart->text = assign->get_text();
+    chart->color = red;
     return chart;
 };
-flowchart read_if(IfElse* ifelse, int line_num, Cache* cache){
-    flowchart chart;
-    chart.shape = diamond;
-    chart.text = ifelse->get_condition()->get_text();
-    chart.first_block = ifelse->get_block()->get_block_flowchart_size();
+flowchart* read_if(IfElse* ifelse, int line_num, Cache* cache){
+    flowchart* chart = new flowchart;
+    chart->shape = diamond;
+    chart->text = ifelse->get_condition()->get_text();
+    chart->first_block = ifelse->get_block()->get_block_flowchart_size();
     if (ifelse->get_ifrest()->get_block() == nullptr) {
-        chart.second_block = 0;
+        chart->second_block = 0;
     }
-    else chart.second_block = 1;
+    else chart->second_block = 1;
     if (ifelse->get_condition()->get_value(cache, line_num)) chart.color = green;
-    else chart.color = red;
+    else chart->color = red;
     return chart;
 };
-flowchart read_else(IfRest* ifrest, int line_num, Cache* cache){
-    flowchart chart;
-    chart.shape = diamond;
-    chart.text = "Else";
-    chart.color = red;
-    chart.first_block = ifrest->get_block()->get_block_flowchart_size();
+flowchart* read_else(IfRest* ifrest, int line_num, Cache* cache){
+    flowchart* chart = new flowchart;
+    chart->shape = diamond;
+    chart->text = "Else";
+    chart->color = red;
+    chart->first_block = ifrest->get_block()->get_block_flowchart_size();
     return chart;
 };
-flowchart read_while(WhileStmt* while_stmt, int line_num, Cache* cache){
-    flowchart chart;
-    chart.shape = diamond;
-    chart.text = while_stmt->get_condition()->get_text();
-    chart.first_block = while_stmt->get_block()->get_block_flowchart_size();
+flowchart* read_while(WhileStmt* while_stmt, int line_num, Cache* cache){
+    flowchart* chart = new flowchart;
+    chart->shape = diamond;
+    chart->text = while_stmt->get_condition()->get_text();
+    chart->first_block = while_stmt->get_block()->get_block_flowchart_size();
     if (while_stmt->get_condition()->get_value(cache, line_num)) chart.color = green;
-    else chart.color = red;
+    else chart->color = red;
     return chart;
 };
-flowchart read_unop(UnOp* unop, int line_num, Cache* cache){
-    flowchart chart;
-    chart.shape = rectangle;
-    chart.text = "Assign" + unop->get_name();
-    chart.color = red;
+flowchart* read_unop(UnOp* unop, int line_num, Cache* cache){
+    flowchart* chart = new flowchart;
+    chart->shape = rectangle;
+    chart->text = "Assign" + unop->get_name();
+    chart->color = red;
     return chart;
 
 };
-flowchart read_print(Print* print_stmt, int line_num, Cache* cache){
-    flowchart chart;
-    chart.shape = rectangle;
-    chart.text = print_stmt->get_text();
-    chart.color = red;
+flowchart* read_print(Print* print_stmt, int line_num, Cache* cache){
+    flowchart* chart = new flowchart;
+    chart->shape = rectangle;
+    chart->text = print_stmt->get_text();
+    chart->color = red;
     return chart;
 };
-flowchart read_return(Return* return_stmt, int line_num, Cache* cache){
-    flowchart chart;
-    chart.shape = rectangle;
-    chart.text = return_stmt->get_text();
-    chart.color = red;
+flowchart* read_return(Return* return_stmt, int line_num, Cache* cache){
+    flowchart* chart = new flowchart;
+    chart->shape = rectangle;
+    chart->text = return_stmt->get_text();
+    chart->color = red;
     return chart;
 };
 
-flowchart read_statement(AssignDec* stmt, int line_num, Cache* cache){
+flowchart* read_statement(AssignDec* stmt, int line_num, Cache* cache){
     //returns a flowchart corresponding to the given statement
     //this function is supposed to be used within the walker i will keep the line of the statement being read
     //(so, if stmt is in the 20th line, i = 20)
