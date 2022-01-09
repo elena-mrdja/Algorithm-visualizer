@@ -1,0 +1,60 @@
+WHAT WE CAN USE :
+
+We can run our program on the main function, which shouldn’t call any other functions.
+
+Structure:
+-	Main function
+-	While loop
+-	If/Else
+
+Statements:
+-	Return 
+-	Print (equivalent to std∷cout ≪ “thing to be printed” ≪ std∷endl; )
+-	Jump
+
+Binary Operations (BinOp):
+-	+   
+-	-     
+-	*       
+-	/      
+-	%       
+-	||       
+-	&&      
+-	==    
+-	!=     
+-	<      
+-	<=     
+-	>     
+-	>= 
+
+Unop:
+-	++
+-	--
+
+Variables:
+-	Boolean
+-	Double (positive or negative)
+-	Integer (positive or negative)
+
+WHAT WE CANNOT USE : 
+
+Structure:
+-	For loop
+-	Inner functions/Recursions
+-	Classes
+-	Do ... while (we should use only while instead)
+- Other functions that are not main functions
+
+Variable:
+-	String 
+-	Array (only done for back-end)
+ 
+BinOp:
+-	Shortcuts, such as   -=    +=    /=    *=
+
+Initialize variable without assigning something to it
+int number ; //not possible
+int number = 3 ; //possible
+
+External libraries
+
