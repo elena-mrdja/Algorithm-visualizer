@@ -280,6 +280,7 @@ string AssignDec::get_name(){
     case print_stmt : return get_child_print()->get_name();
     case return_stmt : return get_child_return()->get_name();
     case unop : return get_child_unop()->get_name();
+    case unknown_stmt_type : return "Error";
 }
 };
 string AssignDec::get_var_type(){
@@ -292,7 +293,8 @@ string AssignDec::get_var_type(){
     case print_stmt : return get_child_print()->get_var_type();
     case return_stmt : return get_child_return()->get_var_type();
     case unop : return get_child_unop()->get_var_type();
-};
+    case unknown_stmt_type : return "Error";
+    };
 }
 int AssignDec::get_jump_length(){
     switch (get_type()){
@@ -304,6 +306,7 @@ int AssignDec::get_jump_length(){
     case print_stmt : return get_child_print()->get_jump_length();
     case return_stmt : return get_child_return()->get_jump_length();
     case unop : return get_child_unop()->get_jump_length();
+    case unknown_stmt_type : return -1;
 };
 }
 Block* AssignDec::get_block(){
@@ -316,6 +319,7 @@ Block* AssignDec::get_block(){
     case print_stmt : get_child_print()->get_block();
     case return_stmt : get_child_return()->get_block();
     case unop : get_child_unop()->get_block();
+    case unknown_stmt_type : return nullptr;
 }
 };
 int AssignDec::get_flowchart_size(){
@@ -326,8 +330,9 @@ int AssignDec::get_flowchart_size(){
     case ifrest : return get_child_ifrest()->get_flowchart_size();
     case while_loop : return get_child_while()->get_flowchart_size();
     case print_stmt : return get_child_print()->get_flowchart_size();
-    case return_stmt : return get_child_return()->get_flowchart_size();;
-    case unop : return get_child_unop()->get_flowchart_size();;
+    case return_stmt : return get_child_return()->get_flowchart_size();
+    case unop : return get_child_unop()->get_flowchart_size();
+    case unknown_stmt_type : return -1;
 };
 }
 AssignDec* AssignDec::get_ifrest(){
@@ -364,6 +369,8 @@ string Expression::get_operation(){
     case neg : return get_child_neg()->get_operation();
     case number : return get_child_sing()->get_operation();
     case variable : return get_child_sing()->get_operation();
+    case binop_exp : return "Error";
+    case unknown_exp_type : cout << "Get operation Error!" << endl; return "Error";
     }
 };
 Expression* Expression::get_left_expression(){
@@ -372,6 +379,8 @@ case binop : return get_child_binop()->get_left_expression();
 case neg : return get_child_neg()->get_left_expression();
 case number : return get_child_sing()->get_left_expression();
 case variable : return get_child_sing()->get_left_expression();
+case binop_exp : return nullptr;
+case unknown_exp_type : cout << "Get left exp Error!" << endl; return nullptr;
 }
 };
 Expression* Expression::get_right_expression(){
@@ -380,6 +389,8 @@ Expression* Expression::get_right_expression(){
     case neg : return get_child_neg()->get_right_expression();
     case number : return get_child_sing()->get_right_expression();
     case variable : return get_child_sing()->get_right_expression();
+    case binop_exp : return nullptr;
+    case unknown_exp_type : cout << "Get right exp Error!" << endl; return nullptr;
     }
 };
 string Expression::get_text(){
@@ -388,6 +399,8 @@ string Expression::get_text(){
     case neg : return get_child_neg()->get_operation();
     case number : return get_child_sing()->get_operation();
     case variable : return get_child_sing()->get_operation();
+    case binop_exp : return "Error";
+    case unknown_exp_type : cout << "Get text Error!" << endl; return "Error";
     }
 };
 value_type Expression::get_value_type(){
@@ -396,6 +409,8 @@ value_type Expression::get_value_type(){
     case neg : return get_child_neg()->get_value_type();
     case number : return get_child_sing()->get_value_type();
     case variable : return get_child_sing()->get_value_type();
+    case binop_exp : return unknown_value_type;
+    case unknown_exp_type : cout << "Get value type Error!" << endl; return unknown_value_type;
     }
 };
 double Expression::get_value(Cache* cache, int i){
@@ -404,6 +419,8 @@ double Expression::get_value(Cache* cache, int i){
     case neg : return get_child_neg()->get_value(cache, i);
     case number : return get_child_sing()->get_value(cache, i);
     case variable : return get_child_sing()->get_value(cache, i);
+    case binop_exp : return 0;
+    case unknown_exp_type : cout << "Get value Error!" << endl; return 0;
     }
 };
 
@@ -484,7 +501,8 @@ void fill_statement(AssignDec stmt, Cache* cache, int current_line){
     case while_loop : fill_while_block(stmt.get_child_while()->get_block(), stmt.get_child_while()->get_condition(), cache, current_line);
     case unop : fill_unop(stmt.get_child_unop(), cache, current_line);
     case print_stmt : {};
-    case return_stmt : {}
+    case return_stmt : {};
+    case unknown_stmt_type : cout << "Fill Stmt Error!"  << endl;
     };
 };
 
@@ -511,7 +529,7 @@ flowchart* read_if(IfElse* ifelse, int line_num, Cache* cache){
         chart->second_block = 0;
     }
     else chart->second_block = 1;
-    if (ifelse->get_condition()->get_value(cache, line_num)) chart.color = green;
+    if (ifelse->get_condition()->get_value(cache, line_num)) chart->color = green;
     else chart->color = red;
     return chart;
 };
@@ -528,7 +546,7 @@ flowchart* read_while(WhileStmt* while_stmt, int line_num, Cache* cache){
     chart->shape = diamond;
     chart->text = while_stmt->get_condition()->get_text();
     chart->first_block = while_stmt->get_block()->get_block_flowchart_size();
-    if (while_stmt->get_condition()->get_value(cache, line_num)) chart.color = green;
+    if (while_stmt->get_condition()->get_value(cache, line_num)) chart->color = green;
     else chart->color = red;
     return chart;
 };
@@ -568,6 +586,7 @@ flowchart* read_statement(AssignDec* stmt, int line_num, Cache* cache){
     case unop : return read_unop(stmt->get_child_unop(), line_num, cache);
     case print_stmt : return read_print(stmt->get_child_print(), line_num, cache);
     case return_stmt : return read_return(stmt->get_child_return(), line_num, cache);
+    case unknown_stmt_type : cout << "Read Stmt Error!" << endl; return nullptr;
     }
 
 };

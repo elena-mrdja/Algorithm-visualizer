@@ -495,6 +495,8 @@ public:
         switch(var_type) {
         case double_value: return "number";
         case variable_type: return "variable";
+        case boolean: return "bool";
+        case unknown_value_type : return "none";
         }
     }
     Expression* get_expression(){return value;}; // returns the object of class which corresponds to the value
