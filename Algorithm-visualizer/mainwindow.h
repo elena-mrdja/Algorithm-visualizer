@@ -15,7 +15,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
+    int index;
 
 public slots:
     void on_variables_clicked();

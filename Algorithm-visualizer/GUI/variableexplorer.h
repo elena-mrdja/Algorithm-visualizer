@@ -26,6 +26,8 @@ public:
 
     void set_background();
 
+    int counter_ll;
+
     QGraphicsScene *scene;
     QGraphicsRectItem *rectangle;
     QGraphicsView *view;
@@ -33,10 +35,9 @@ public:
     QPainter *painter;
     QGraphicsTextItem *text;
 
-    void track(vector<unordered_map<char, vector<double>>> v, int index);
-    void track2(vector<unordered_map<char, vector<double>>::iterator> v);
-protected:
+    string track(int index);
     QGraphicsSimpleTextItem* createText2(QString str, int x, int y, int w, int l);
+protected:
     virtual void wheelEvent(QWheelEvent *event);
 };
 

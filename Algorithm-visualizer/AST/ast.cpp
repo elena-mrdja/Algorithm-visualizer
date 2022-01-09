@@ -329,14 +329,16 @@ IfRest::IfRest(AlgoParser::IfrestContext* ctx){
 
 
 
-ValuesList::ValuesList(Value* h, Value* t){
+ValuesList::ValuesList(Value* h, Value* t, double v){
     head = h;
     tail = t;
+    current = v;
 };
 
 ValuesList::ValuesList(){
     head = new Value();
     tail = head;
+    current = tail->value;
 }
 
 Value* ValuesList::get_head(){return head;};
@@ -345,6 +347,8 @@ Value* ValuesList::get_tail(){return tail;};
 void ValuesList::set_head(Value* h){head = h;};
 void ValuesList::set_tail(Value* t){tail = t;};
 bool ValuesList::is_empty(){return head == nullptr;};
+void ValuesList::set_value(double v){current = v;};
+double ValuesList::get_value(){return current;};
 void ValuesList::add_value(Value* v){
     if (is_empty()){
         head = v;

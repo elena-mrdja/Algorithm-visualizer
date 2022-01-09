@@ -109,22 +109,28 @@ struct Value{
 class ValuesList {
 public:
     ValuesList();
-    ValuesList(Value* h, Value* t);
-    //~ValuesList();
+    ValuesList(Value* h, Value* t, double v);
+    ~ValuesList();
     Value* get_head();
     Value* get_tail();
+    double get_value();
+
+    void set_value(double v);
     void set_head(Value* h);
     void set_tail(Value* t);
+
     void add_value(Value* v);
     bool is_empty(); //fill in
     void pop(){
         Value* t = get_tail();
         tail = t->prev;
     };
-private:
+
     Value* head;
     Value* tail;
+    double current;
 };
+
 
 class Declaration;
 

@@ -117,58 +117,12 @@ void MainWindow::on_Visualize_clicked()
 
 void MainWindow::on_variables_clicked()
 {
-    vector<char> order;
-    vector<unordered_map<char, vector<double>>::iterator> vec;
+    string words = ui->widget_5->track(index);
+    QString word = QString::fromStdString(words);
+    auto text = ui->widget_5->createText2(word, 210,-35,100,100);
+    ui->widget_5->scene->addItem(text);
+    index ++;
 
-
-    //postoje funkcije koje ce ti pomoci da ubacis value
-    unordered_map<char, vector<double>> mapa;
-    mapa['z'].push_back(4);
-    mapa['z'].push_back(5);
-    mapa['x'].push_back(1);
-    mapa['y'].push_back(2);
-    mapa['y'].push_back(3);
-    order.push_back('z');
-    order.push_back('x');
-    order.push_back('y');
-
-    unordered_map<char, vector<double>> mapa1;
-    mapa1['a'].push_back(4);
-    mapa1['z'].push_back(5.98);
-    mapa1['b'].push_back(11);
-    mapa1['b'].push_back(24);
-    mapa1['b'].push_back(32);
-
-    unordered_map<char, vector<double>> mapa2;
-    mapa2['a'].push_back(8);
-    mapa2['z'].push_back(10);
-    mapa2['b'].push_back(22);
-    mapa2['b'].push_back(38);
-    mapa2['b'].push_back(64);
-
-
-    vector<unordered_map<char, vector<double>>> ve;
-    ve.push_back(mapa);
-    ve.push_back(mapa1);
-    ve.push_back(mapa2);
-
-    for(unordered_map<char, vector<double>>::iterator it=mapa.begin();it!=mapa.end();it++)
-    {
-        vec.push_back(it);
-    }
-
-    if (trackerIndex == ve.size())
-    {
-        trackerIndex = 1;
-    }
-    else
-    {
-        trackerIndex++;
-    }
-
-    this->ui->widget_4->writeOut(QString("Btn"));
-    this->ui->widget_5->track(ve, trackerIndex);
-    //this->ui->widget_5->track2(vec);
 }
 
 

@@ -1,9 +1,11 @@
 #include "variableexplorer.h"
+#include "AST/ast.hpp"
 
 VariableExplorer::VariableExplorer(QWidget *parent) : QGraphicsView(parent)
 {
     set_background();
 
+    counter_ll = 0;
 }
 
 void VariableExplorer::wheelEvent(QWheelEvent *event)
@@ -75,26 +77,35 @@ void VariableExplorer::set_background()
 
 //ValueList a ne vector
 
-void VariableExplorer::track(vector<unordered_map<char, vector<double>>> v, int index)
+string VariableExplorer::track(int index)
 {
-    string words="";
-    for(int i=0;i<index;i++)
-    {
-        words = words + "Line: " + std::to_string(i+1) + "\n";
-        for(auto it : v[i])
-        {
-            for(int j=0;j<it.second.size();j++)
-            {
-                words = words + it.first + " = " + std::to_string(it.second[j]) + "\n";
-            }
-        }
-        words = words + "___________________________"
-                + "\n";
-    }
-    QString word = QString::fromStdString(words);
-    auto text = this->createText2(word, 210,-35,100,100);
-    scene->addItem(text);
+    Cache* cache;
+    map<string, ValuesList*>* pointers = cache->get_map();
+
+    string one_line ="";
+
+   one_line = one_line + "Line: " + std::to_string(index +1) + "\n";
+
+   //int sizeMap = static_cast<int>(pointers[index].size());
+
+   auto it = pointers[index].begin();
+
+
+   while(it != pointers[index].end()) {
+
+       do {
+           one_line += it->first + " = ";
+           one_line += it->second[counter_ll].get_value() + '\n';
+           counter_ll ++;}
+       while (it->second[counter_ll-1].tail->next != nullptr);
+
+       counter_ll = 0;
+       it ++;
+   }
+   return one_line;
 }
+
+
 
 
 
