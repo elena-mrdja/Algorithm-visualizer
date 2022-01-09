@@ -407,25 +407,22 @@ double Expression::get_value(Cache* cache, int i){
     }
 };
 
-//variable tracking
-/*Cache::Cache(int number){
-    num_lines = number;
-}
-
 void fill_while_block(Block* block, Expression* condition, Cache* cache, int while_condition_line);
-void fill_declaration(AssignDec dec, Cache* cache, int current_line);
-void fill_assignment(AssignDec assign, Cache* cache, int current_line);
-void fill_ifelse(AssignDec ifelse, Cache* cache, int if_condition_line);
-void fill_unop(AssignDec ifelse, Cache* cache, int if_condition_line);
+void fill_declaration(Declaration dec, Cache* cache, int current_line);
+void fill_assignment(Assignment assign, Cache* cache, int current_line);
+void fill_ifelse(IfElse ifelse, Cache* cache, int if_condition_line);
+void fill_unop(IfRest ifelse, Cache* cache, int if_condition_line);
 
 void fill_statement(AssignDec stmt, Cache* cache, int current_line){
     switch (stmt.get_stmt_type()){
-    case declaration : fill_declaration(stmt, cache, current_line);
-    case assignment : fill_assignment(stmt, cache, current_line);
-    case ifelse : fill_ifelse(stmt, cache, current_line);
+    case declaration : fill_declaration(stmt.get_child_dec, cache, current_line);
+    case assignment : fill_assignment(stmt.get_child_ass, cache, current_line);
+    case ifelse : fill_ifelse(stmt.get_child_if, cache, current_line);
     case ifrest : cout << "error: ifelse";
-    case while_loop : fill_while_block(stmt.get_block(), stmt.get_condition(), cache, current_line);
-    case unop : fill_unop(stmt, cache, current_line);
+    case while_loop : fill_while_block(stmt.get_child_while.get_block(), stmt.get_child_while.get_condition(), cache, current_line);
+    case unop : fill_unop(stmt.get_child_unop, cache, current_line);
+    case print_stmt : {};
+    case return_stmt : {}
     };
 };
 
@@ -440,19 +437,19 @@ void fill_while_block(Block* block, Expression* condition, Cache* cache, int whi
     };
 };
 
-void fill_declaration(AssignDec dec, Cache* cache, int declaration_line){
+void fill_declaration(Declaration dec, Cache* cache, int declaration_line){
     Value* value = new Value;
     value->value = dec.get_expression()->get_value(cache, declaration_line);
     cache->get_map()[declaration_line][dec.get_name()]->add_value(value);
 };
 
-void fill_assignment(AssignDec assign, Cache* cache, int assignment_line){
+void fill_assignment(Assignment assign, Cache* cache, int assignment_line){
     Value* value = new Value;
     value->value = assign.get_expression()->get_value(cache, assignment_line);
     cache->get_map()[assignment_line][assign.get_name()]->add_value(value);
 };
 
-void fill_ifelse(AssignDec ifelse, Cache* cache, int if_condition_line){
+void fill_ifelse(IfElse ifelse, Cache* cache, int if_condition_line){
     Expression* condition = ifelse.get_condition();
     if (condition->get_value(cache, if_condition_line)){
         int n = ifelse.get_block()->get_size();
@@ -471,7 +468,7 @@ void fill_ifelse(AssignDec ifelse, Cache* cache, int if_condition_line){
     }
 };
 
-void fill_unop(AssignDec unop, Cache* cache, int current_line){
+void fill_unop(UnOp unop, Cache* cache, int current_line){
     Value* value = new Value;
     value->value = unop.get_expression()->get_value(cache, current_line);
     cache->get_map()[current_line][unop.get_name()]->add_value(value);
@@ -493,61 +490,88 @@ void fill_cache(Block* ast, Cache* cache){
 };
 
 
-flowchart read_statement(AssignDec stmt, int line_num, Cache* cache){
+flowchart read_declaration(Declaration* dec, int line_num, Cache* cache){
+    flowchart chart;
+    chart.shape = rectangle;
+    chart.text = dec->get_text();
+    chart.color = red;
+    return chart;
+};
+flowchart read_assignment(Assignment* assign, int line_num, Cache* cache){
+    flowchart chart;
+    chart.shape = rectangle;
+    chart.text = assign->get_text();
+    chart.color = red;
+    return chart;
+};
+flowchart read_if(IfElse* ifelse, int line_num, Cache* cache){
+    flowchart chart;
+    chart.shape = diamond;
+    chart.text = ifelse->get_condition()->get_text();
+    chart.first_block = ifelse->get_block()->get_block_flowchart_size();
+    if (ifelse->get_ifrest()->get_block() == nullptr) {
+        chart.second_block = 0;
+    }
+    else chart.second_block = 1;
+    if (ifelse->get_condition()->get_value(cache, line_num)) chart.color = green;
+    else chart.color = red;
+    return chart;
+};
+flowchart read_else(IfRest* ifrest, int line_num, Cache* cache){
+    flowchart chart;
+    chart.shape = diamond;
+    chart.text = "Else";
+    chart.color = red;
+    chart.first_block = ifrest->get_block()->get_block_flowchart_size();
+    return chart;
+};
+flowchart read_while(WhileStmt* while_stmt, int line_num, Cache* cache){
+    flowchart chart;
+    chart.shape = diamond;
+    chart.text = while_stmt->get_condition()->get_text();
+    chart.first_block = while_stmt->get_block()->get_block_flowchart_size();
+    if (while_stmt->get_condition()->get_value(cache, line_num)) chart.color = green;
+    else chart.color = red;
+    return chart;
+};
+flowchart read_unop(UnOp* unop, int line_num, Cache* cache){
+    flowchart chart;
+    chart.shape = rectangle;
+    chart.text = "Assign" + unop->get_name();
+    chart.color = red;
+    return chart;
+
+};
+flowchart read_print(Print* print_stmt, int line_num, Cache* cache){
+    flowchart chart;
+    chart.shape = rectangle;
+    chart.text = print_stmt->get_text();
+    chart.color = red;
+    return chart;
+};
+flowchart read_return(Return* return_stmt, int line_num, Cache* cache){
+    flowchart chart;
+    chart.shape = rectangle;
+    chart.text = return_stmt->get_text();
+    chart.color = red;
+    return chart;
+};
+
+flowchart read_statement(AssignDec* stmt, int line_num, Cache* cache){
     //returns a flowchart corresponding to the given statement
     //this function is supposed to be used within the walker i will keep the line of the statement being read
     //(so, if stmt is in the 20th line, i = 20)
-    stmt_type st_type = stmt.get_stmt_type();
-    flowchart chart;
-    if (st_type == declaration){
-        chart.shape = rectangle;
-        chart.text = "Declare " + stmt.get_child()->get_name();
-        chart.color = red;
-        return chart;
+    switch (stmt->get_type()){
+    case declaration : return read_declaration(stmt->get_child_dec(), line_num, cache);
+    case assignment : return read_assignment(stmt->get_child_ass(), line_num, cache);
+    case ifelse : return read_if(stmt->get_child_ifelse(), line_num, cache);
+    case ifrest : return read_else(stmt->get_child_ifrest(), line_num, cache);
+    case while_loop : return read_while(stmt->get_child_while(), line_num, cache);
+    case unop : return read_unop(stmt->get_child_unop(), line_num, cache);
+    case print_stmt : return read_print(stmt->get_child_print(), line_num, cache);
+    case return_stmt : return read_return(stmt->get_child_return(), line_num, cache);
     }
-    if(st_type == assignment){
-        chart.shape = rectangle;
-        chart.text = "Assign " + stmt.get_name();
-        Value* value = new Value;
-        value->value = stmt.get_child()->get_expression()->get_value(cache, line_num);
-        cache->get_map()[line_num][stmt.get_child()->get_name()]->add_value(value);
-        chart.color = red;
-        return chart;
-    };
-    if(st_type == ifelse){
-        chart.shape = diamond;
-        chart.text = stmt.get_condition()->get_text();
-        chart.first_block = stmt.get_block()->get_block_flowchart_size();
-        if (stmt.get_ifrest()->get_block() == nullptr) {
-            chart.second_block = 0;
-        }
-        else chart.second_block = 1;
-        if (stmt.get_condition()->get_value(cache, line_num)) chart.color = green;
-        else chart.color = red;
-        return chart;
-    };
-    if (st_type == ifrest) {
-        chart.shape = diamond;
-        chart.text = "Else";
-        chart.color = red;
-        chart.first_block = stmt.get_block()->get_block_flowchart_size();
-    };
-    if(st_type == while_loop){
-        chart.shape = diamond;
-        chart.text = stmt.get_condition()->get_text();
-        chart.first_block = stmt.get_block()->get_block_flowchart_size();
-        if (stmt.get_condition()->get_value(cache, line_num)) chart.color = green;
-        else chart.color = red;
-        return chart;
 
-    };
-    if(st_type == unop){
-        chart.shape = rectangle;
-        chart.text = "Assign" + stmt.get_name();
-        chart.color = red;
-        return chart;
-    }
-    return chart;
 };
 
 flowchart l[MAX_LINES] = {};
@@ -559,4 +583,11 @@ void draw_flowchart(AST* ast, Cache* cache){
         l[i] = chart;
 
     };
-};*/
+};
+
+
+//variable tracking
+Cache::Cache(int number){
+    num_lines = number;
+}
+
