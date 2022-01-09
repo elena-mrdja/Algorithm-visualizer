@@ -66,7 +66,7 @@ enum exp_type {
     neg = 3,
     variable = 4,
     number = 5,
-    unknown_exp_type = 5
+    unknown_exp_type = 6
 };
 
 enum types {
@@ -76,9 +76,14 @@ enum types {
 };
 
 class Cache;
-
-struct BinOpExp{
-    virtual exp_type get_exp_type(){return binop_exp;};
+class BinOp;
+class SingleOutput;
+class Negation;
+class BinOpExp{
+public:
+    BinOpExp(AlgoParser::ExpContext* ctx);
+    BinOpExp(){expression_type = unknown_exp_type; child_binop = nullptr; child_sing = nullptr; child_binop = nullptr;};
+    exp_type get_exp_type(){return expression_type;};
     virtual string get_operation(){return nullptr;};
     virtual BinOpExp* get_left_expression(){return nullptr;};
     virtual BinOpExp* get_right_expression(){return nullptr;};
@@ -87,6 +92,11 @@ struct BinOpExp{
     virtual double get_value(Cache* cache, int i){return 0;};
     int num_blocks(){return 0;};
     int get_jump_length(){return 1;};
+private:
+    BinOp* child_binop;
+    SingleOutput* child_sing;
+    Negation* child_neg;
+    exp_type expression_type;
 };
 
 //the following three classes are for variable tracking
@@ -153,7 +163,7 @@ public:
     AssignDec(){type = unknown_stmt_type; child_d = nullptr;child_a = nullptr;child_if = nullptr;child_ifrest = nullptr;child_r = nullptr;child_p = nullptr; child_while = nullptr;child_u = nullptr;};
     //~AssignDec(){delete child_d; delete child_a; delete child_if; delete child_ifrest; delete child_r; delete child_p; delete child_while; delete child_u;};
     virtual string get_name(){return nullptr;};
-    virtual Expression* get_expression(){return nullptr;};
+    Expression* get_expression();
     stmt_type get_type(){return type;};
     virtual string get_var_type(){return nullptr;};
     int num_stmts(){return 0;};
@@ -218,7 +228,7 @@ private:
 class BinOp : public BinOpExp{
 public:
     BinOp(AlgoParser::ExpContext* ctx);
-    ~BinOp();
+    //~BinOp();
     exp_type get_exp_type(){return binop;};
     string get_text(){
         if (left_exp->get_exp_type() == number or left_exp->get_exp_type() == variable) {

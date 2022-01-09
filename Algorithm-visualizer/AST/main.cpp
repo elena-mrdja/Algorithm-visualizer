@@ -33,6 +33,6 @@ int main(int argc, const char* argv[]) {
     //cout << "testing" << std::endl;
     Declaration dec = Declaration(tree->mainStmt()->block()->stmts(0)->varDec());
     //cout << "testing" << std::endl;
-    cout <<ast.get_child(2).get_type() << " here" << endl;
+    cout <<ast.get_child(1).get_expression()->get_child()->get_exp_type()<< " here" << endl;
     return 0;
 }

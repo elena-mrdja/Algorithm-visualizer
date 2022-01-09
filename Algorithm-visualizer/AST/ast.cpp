@@ -6,15 +6,31 @@
 using namespace std;
 using namespace antlr4;
 using namespace antlrcpptest;
+BinOpExp::BinOpExp(AlgoParser::ExpContext* ctx){
+    cout << "sleeeeeeeeep" << std::endl;
+    if (ctx->binOp()){
+        cout << "binop" << std::endl;
+        BinOp child_binop(ctx);
+        expression_type = child_binop.get_exp_type();
+    }else if (ctx->negation()){
+        expression_type = neg;
+        Negation child_neg(ctx->negation());
+        expression_type = child_neg.get_exp_type();
+    }else{
+        SingleOutput child_sing(ctx);
+        expression_type = child_sing.get_exp_type();
+    }
+    cout << expression_type << std::endl;
+}
 SingleOutput::SingleOutput(AlgoParser::ExpContext* ctx){
-    cout << "katia4\n"<< std::endl;
+    //cout << "katia4\n"<< std::endl;
     if (ctx->integerType()){
         value = ctx->integerType()->INTEGER()->getText();
         val_type = num;
     }else if (ctx->doubleType()){
-        cout << "katia5\n"<< std::endl;
+        //cout << "katia5\n"<< std::endl;
         value = ctx->doubleType()->FLOAT()->getText();
-        cout << value << std::endl;
+        //cout << value << std::endl;
         val_type = num;
     }else if (ctx -> boolType()){
         if (ctx -> boolType()->TRUE()){
@@ -96,7 +112,7 @@ BinOp::BinOp(AlgoParser::ExpContext* ctx){
 }
 
 AssignDec::AssignDec(AlgoParser::StmtsContext* i){
-    cout << "katia1\n"<< std::endl;
+    //cout << "katia1\n"<< std::endl;
     Declaration* child_d = nullptr;
     Assignment* child_a = nullptr;
     IfElse* child_if = nullptr;
@@ -116,7 +132,7 @@ AssignDec::AssignDec(AlgoParser::StmtsContext* i){
         //child = new Assignment(node);
         type = assignment;
     }else if(i->varDec()){
-        cout << "katia VarDec\n"<< std::endl;
+        //cout << "katia VarDec\n"<< std::endl;
         AlgoParser::VarDecContext* node = i->varDec();
         //child = new Declaration(node);
         Declaration child_d(node);
@@ -163,6 +179,19 @@ UnOp::UnOp(AlgoParser::ExpContext* ctx){
         operation = 2;
     }
 }
+Expression* AssignDec::get_expression(){
+    switch (type) {
+    case declaration : return child_d->get_expression();
+    case assignment : return child_a->get_expression();
+    case ifelse : return nullptr;
+    case ifrest : return nullptr;
+    case while_loop : return nullptr;
+    case unop : return nullptr;
+    case print_stmt : return child_p->get_expression();
+    case return_stmt : return child_r->get_expression();
+    case unknown_stmt_type : return nullptr;
+    }
+}
 
 /*Jump::Jump(AlgoParser::JumpContext* ctx){
     if(ctx->CONT()){
@@ -175,19 +204,19 @@ UnOp::UnOp(AlgoParser::ExpContext* ctx){
 }*/
 
 Expression::Expression(AlgoParser::ExpContext* ctx){
-    cout << "katia3\n"<< std::endl;
-    if (ctx -> binOp()){
-        child = new BinOp(ctx);
-    }else if (ctx -> exp(0)){
+    //cout << "katia3\n"<< std::endl;
+    if (ctx->binOp()){
+        child = new BinOpExp(ctx);
+    }else if (ctx->exp(0)){
         child = Expression(ctx->exp(0)).get_child();
     }else if (ctx->negation()){
-        child = new Negation(ctx->negation());
+        child = new BinOpExp(ctx);
     }else{
-        child = new SingleOutput(ctx);
+        child = new BinOpExp(ctx);
     }
 }
 Declaration::Declaration(AlgoParser::VarDecContext* ctx) {
-    cout << "katia2\n"<< std::endl;
+    //cout << "katia2\n"<< std::endl;
     value = new Expression(ctx->exp(0));
     name = ctx->variable()->STRING()->getText();
     var_type = num;
