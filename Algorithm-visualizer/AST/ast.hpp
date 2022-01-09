@@ -36,11 +36,11 @@ enum un_ops {
     unknown_unop = 2
 };
 
-enum variable_type {
+/*enum variable_type {
     num = 0,
     smth_var= 1,
     unknown_var = 2
-};
+};*/
 
 enum value_type {
     boolean = 0,
@@ -84,7 +84,6 @@ public:
     Expression(AlgoParser::ExpContext* ctx);
     Expression(){
         expression_type = unknown_exp_type;
-        //expression_type = "Unknown exp type";
         child_binop = nullptr;
         child_sing = nullptr;
         child_neg = nullptr;
@@ -96,18 +95,17 @@ public:
         delete child_binop_exp;
     }*/
     string get_myself(){return "Expression";}
-    exp_type get_type();
-    exp_type get_exp_type(){return expression_type;};
-    //virtual string get_exp_type(){cout << expression_type<<endl; return expression_type;}
-    virtual string get_operation(){return nullptr;};
-    virtual Expression* get_left_expression(){return nullptr;};
-    virtual Expression* get_right_expression(){return nullptr;};
-    virtual string get_text(){return nullptr;};
-    virtual value_type get_value_type(){return unknown_value_type;};
-    virtual double get_value(Cache* cache, int i){return 0;};
-    int num_blocks(){return 0;};
-    int get_jump_length(){return 1;};
+    //exp_type get_type();
 
+    //virtual string get_exp_type(){cout << expression_type<<endl; return expression_type;}
+    virtual string get_operation();
+    virtual Expression* get_left_expression();
+    virtual Expression* get_right_expression();
+    virtual string get_text();
+    virtual value_type get_value_type();
+    virtual double get_value(Cache* cache, int i);
+
+    exp_type get_exp_type(){return expression_type;};
     BinOp* get_child_binop(){return child_binop;};
     SingleOutput* get_child_sing(){return child_sing;};
     Negation* get_child_neg(){return child_neg;};
@@ -233,12 +231,11 @@ public:
     string get_operation(){return "none";}; //no needed
     Expression* get_left_expression(){return nullptr;}; // no needed
     Expression* get_right_expression(){return nullptr;}; //no needed
-    variable_type get_var_type(){return val_type;}; // returns a type of a single output
-    value_type get_value_type(){return double_value;}                                              // possible outputs: 'double', 'integer', 'boolean', 'variable'.
+    value_type get_value_type(){return val_type;}; // returns a type of a single output                                        // possible outputs: 'double', 'integer', 'boolean', 'variable'.
     int num_blocks(){return 0;};
     double get_value(Cache* cache, int i){
         //i is the line which the SingleOutput is in
-        if (val_type == num) return stod(value);
+        if (val_type == double_value) return stod(value);
         else {
             return cache->get_last_value(value, i);
         }
@@ -246,7 +243,7 @@ public:
     Expression* get_result(){return nullptr;};
 private:
     string value;
-    variable_type val_type;
+    value_type val_type;
 };
 
 class BinOp : public Expression{
@@ -254,7 +251,7 @@ public:
     BinOp(AlgoParser::ExpContext* ctx);
     //~BinOp(){delete left_exp; delete right_exp;};
     exp_type get_exp_type(){return binop;};
-    /*string get_text(){
+    string get_text(){
         if (left_exp->get_exp_type() == number or left_exp->get_exp_type() == variable) {
             if (right_exp->get_exp_type() == number or right_exp->get_exp_type() == variable)
             {
@@ -453,14 +450,14 @@ public:
     };
     //~Negation(){delete value;}
     exp_type get_exp_type(){return neg;};
-    string get_text(){return "-"+value->get_text();}; //returns the value as a string <- IMPORTANT
-    Expression* get_result(){
+    string get_text(){return "-" +value->get_text();}; //returns the value as a string <- IMPORTANT
+    /*Expression* get_result(){
         return value;
-    };
+    };*/
     string get_var_type(){return "none";};
-    virtual string get_operation(){return nullptr;};
+    virtual string get_operation(){return "-neg";};
     virtual Expression* get_left_expression(){return nullptr;};
-    virtual Expression* get_right_expression(){return nullptr;};
+    virtual Expression* get_right_expression(){return value;};
     virtual value_type get_value_type(){return double_value;};
     double get_value(Cache* cache, int i){return -value->get_value(cache, i);};
 private:
@@ -740,7 +737,7 @@ private:
 //below is stuff for the AST walker
 
 
-struct ValueInt{
+/*struct ValueInt{
     int value;
     ValueInt* prev;
     ValueInt* next;
@@ -764,7 +761,7 @@ public:
 private:
     ValueInt* head;
     ValueInt* tail;
-};
+};*/
 
 enum chart_shape {
     rectangle = 0,

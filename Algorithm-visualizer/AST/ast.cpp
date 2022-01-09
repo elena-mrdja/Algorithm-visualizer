@@ -364,7 +364,54 @@ string AssignDec::get_text(){
     }
 };
 
-
+string Expression::get_operation(){
+    switch (expression_type) {
+    case binop : return get_child_binop()->get_operation();
+    case neg : return get_child_neg()->get_operation();
+    case number : return get_child_sing()->get_operation();
+    case variable : return get_child_sing()->get_operation();
+    }
+};
+Expression* Expression::get_left_expression(){
+switch (expression_type) {
+case binop : return get_child_binop()->get_left_expression();
+case neg : return get_child_neg()->get_left_expression();
+case number : return get_child_sing()->get_left_expression();
+case variable : return get_child_sing()->get_left_expression();
+}
+};
+Expression* Expression::get_right_expression(){
+    switch (expression_type) {
+    case binop : return get_child_binop()->get_right_expression();
+    case neg : return get_child_neg()->get_right_expression();
+    case number : return get_child_sing()->get_right_expression();
+    case variable : return get_child_sing()->get_right_expression();
+    }
+};
+string Expression::get_text(){
+    switch (expression_type) {
+    case binop : return get_child_binop()->get_operation();
+    case neg : return get_child_neg()->get_operation();
+    case number : return get_child_sing()->get_operation();
+    case variable : return get_child_sing()->get_operation();
+    }
+};
+value_type Expression::get_value_type(){
+    switch (expression_type) {
+    case binop : return get_child_binop()->get_value_type();
+    case neg : return get_child_neg()->get_value_type();
+    case number : return get_child_sing()->get_value_type();
+    case variable : return get_child_sing()->get_value_type();
+    }
+};
+double Expression::get_value(Cache* cache, int i){
+    switch (expression_type) {
+    case binop : return get_child_binop()->get_value(cache, i);
+    case neg : return get_child_neg()->get_value(cache, i);
+    case number : return get_child_sing()->get_value(cache, i);
+    case variable : return get_child_sing()->get_value(cache, i);
+    }
+};
 
 //variable tracking
 /*Cache::Cache(int number){
