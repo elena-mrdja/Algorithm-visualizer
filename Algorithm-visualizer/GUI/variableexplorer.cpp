@@ -3,6 +3,8 @@
 VariableExplorer::VariableExplorer(QWidget *parent) : QGraphicsView(parent)
 {
     set_background();
+    Y_current = -35;
+    Y_next = -35;
 
 }
 
@@ -77,24 +79,33 @@ void VariableExplorer::set_background()
 
 void VariableExplorer::track(vector<unordered_map<char, vector<double>>> v, int index)
 {
+    const int X = 100;
     string words="";
     for(int i=0;i<index;i++)
     {
         words = words + "Line: " + std::to_string(i+1) + "\n";
+        Y_next += 20;
+
         for(auto it : v[i])
         {
-            for(int j=0;j<it.second.size();j++)
+            for(int j=0; j < it.second.size();j++)
             {
                 words = words + it.first + " = " + std::to_string(it.second[j]) + "\n";
+                Y_next += 20;
+
             }
         }
-        words = words + "____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________"
-                + "\n";
+        words = words + "_________________________" + "\n";
+        Y_next += 15;
+
     }
+
     QString word = QString::fromStdString(words);
-    auto text = this->createText2(word, 210,-35,100,100);
+    auto text = this->createText2(word, X+175*(index-1),Y_current,100,100);
     scene->addItem(text);
+    Y_current = Y_next;
 }
+
 
 
 

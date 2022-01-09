@@ -246,27 +246,17 @@ void MainWindow::on_variables_clicked()
     //postoje funkcije koje ce ti pomoci da ubacis value
     unordered_map<char, vector<double>> mapa;
     mapa['z'].push_back(4);
-    mapa['z'].push_back(5);
-    mapa['x'].push_back(1);
-    mapa['y'].push_back(2);
-    mapa['y'].push_back(3);
-    order.push_back('z');
-    order.push_back('x');
-    order.push_back('y');
+
 
     unordered_map<char, vector<double>> mapa1;
-    mapa1['a'].push_back(4);
-    mapa1['z'].push_back(5.98);
-    mapa1['b'].push_back(11);
-    mapa1['b'].push_back(24);
-    mapa1['b'].push_back(32);
+    mapa1['z'].push_back(4);
+    mapa1['x'].push_back(0);
+
 
     unordered_map<char, vector<double>> mapa2;
-    mapa2['a'].push_back(8);
-    mapa2['z'].push_back(10);
-    mapa2['b'].push_back(22);
-    mapa2['b'].push_back(38);
-    mapa2['b'].push_back(64);
+    mapa2['x'].push_back(2);
+    mapa2['z'].push_back(4);
+
 
 
     vector<unordered_map<char, vector<double>>> ve;
@@ -322,3 +312,5 @@ void MainWindow::on_Upload_clicked()
   //  update();
 //}
 
+
+//I mean ure doing ifs qwith ......, thats the worst thing i've ever saw

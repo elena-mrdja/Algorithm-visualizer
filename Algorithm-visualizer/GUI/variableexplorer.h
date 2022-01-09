@@ -25,7 +25,8 @@ public:
     VariableExplorer(QWidget *parent = nullptr);
 
     void set_background();
-
+    int Y_current;
+    int Y_next;
     QGraphicsScene *scene;
     QGraphicsRectItem *rectangle;
     QGraphicsView *view;
