@@ -100,7 +100,7 @@ class ValuesList {
 public:
     ValuesList();
     ValuesList(Value* h, Value* t);
-    ~ValuesList();
+    //~ValuesList();
     Value* get_head();
     Value* get_tail();
     void set_head(Value* h);
@@ -121,7 +121,7 @@ class Declaration;
 class Cache{
 public:
     Cache(int number);
-    ~Cache();
+    //Cache();
     void new_var(Declaration* dec, int num);
     ValuesList* get_var(string var);
     void add_new_value(string var, Value* value, int line);
@@ -149,8 +149,9 @@ class UnOp;
 class AssignDec { //needed to unite statement children
 public:
     AssignDec(AlgoParser::StmtsContext* i);
+    //AssignDec(){child = nullptr;}
     AssignDec(){type = unknown_stmt_type; child_d = nullptr;child_a = nullptr;child_if = nullptr;child_ifrest = nullptr;child_r = nullptr;child_p = nullptr; child_while = nullptr;child_u = nullptr;};
-    ~AssignDec(){delete child_d; delete child_a; delete child_if; delete child_ifrest; delete child_r; delete child_p; delete child_while; delete child_u;};
+    //~AssignDec(){delete child_d; delete child_a; delete child_if; delete child_ifrest; delete child_r; delete child_p; delete child_while; delete child_u;};
     virtual string get_name(){return nullptr;};
     virtual Expression* get_expression(){return nullptr;};
     stmt_type get_type(){return type;};
@@ -168,6 +169,7 @@ public:
     Print* get_child_print(){return child_p;}
     WhileStmt* get_child_while(){return child_while;}
     UnOp* get_child_unop(){return child_u;}
+    AssignDec* get_child(){return child;}
     virtual Expression* get_condition();
     virtual AssignDec* get_ifrest(){return nullptr;};
 private:
@@ -180,13 +182,14 @@ private:
     WhileStmt* child_while;
     UnOp* child_u;
     stmt_type type;
+    AssignDec* child;
 };
 
 
 class SingleOutput : public BinOpExp {
 public:
     SingleOutput(AlgoParser::ExpContext* ctx);
-    ~SingleOutput();
+    //~SingleOutput();
     exp_type get_exp_type(){
         if (val_type == num) return number;
         return variable;
@@ -426,7 +429,7 @@ public:
         }
     };
     Negation(){value = nullptr;}
-    ~Negation(){delete value;};
+    //~Negation(){delete value;};
     exp_type get_exp_type(){return neg;};
     string get_text(){return "-"+value->get_text();}; //returns the value as a string <- IMPORTANT
     BinOpExp* get_result(){
@@ -448,7 +451,7 @@ class Expression {
 public :
     Expression(AlgoParser::ExpContext* ctx);
     Expression(){child = nullptr;};
-    ~Expression(){delete child;};
+    //~Expression(){delete child;};
     BinOpExp* get_child(){return child;}; //return a child of expression (for now only binOp or SingleOutputs)
     types get_type(){return expression;};
     virtual double get_value(Cache* cache, int i){return 0;};
@@ -466,7 +469,7 @@ class Declaration : public AssignDec {
 public:
     Declaration(AlgoParser::VarDecContext* ctx);
     Declaration(){value = nullptr; name = "none"; var_type = unknown_var;}
-    ~Declaration(){delete value;};
+    //~Declaration(){delete value;};
     string get_var_type(){ //return type of the variable
         switch(var_type) {
         case num: return "number";
@@ -491,7 +494,7 @@ private:
 class Assignment : public AssignDec {
 public:
     Assignment(AlgoParser::AssignContext* ctx);
-    ~Assignment(){delete value;};
+    //~Assignment(){delete value;};
     Expression* get_expression(){return value;}; // returns the object of class which corresponds to the value
     //Expression* get_index(){return index;};
     //void set_index(Expression* i){index = i;};
@@ -514,7 +517,7 @@ class UnOp : public AssignDec{
 public:
     UnOp(AlgoParser::ExpContext* ctx);
     UnOp(){operation = 0; left_exp = nullptr;}
-    ~UnOp(){delete left_exp;};
+    //~UnOp(){delete left_exp;};
     string get_operation(){ //returns binOp operation
         switch(operation) {
         case 0: return "++";
@@ -560,9 +563,9 @@ private :
 
 class Block {
 public :
-    Block(AlgoParser::BlockContext* ctx/*, pass down cache*/ );
+    Block(AlgoParser::BlockContext* ctx);
     Block();
-    ~Block(){delete children; delete child;};
+    //~Block(){delete children; delete child;};
     AssignDec* get_children(){return children;}
     AssignDec get_child(int i){return children[i];} //returns a child by index
     int get_size(){return size;} //needed for a for loop
@@ -585,7 +588,7 @@ class WhileStmt : public AssignDec {
 public:
     WhileStmt(AlgoParser::WhileStmtContext* ctx);
     virtual string get_name(){return "none";}
-    ~WhileStmt(){delete condition; delete block_stmt;};
+    //~WhileStmt(){delete condition; delete block_stmt;};
     void set_condition(Expression* c){condition = c;};
     virtual Expression* get_expression(){return nullptr;}
     Expression* get_condition(){return condition;};
@@ -597,6 +600,7 @@ public:
     //attributes: condition, block
     int get_flowchart_size(){return get_block()->get_block_flowchart_size() + 1;};
     virtual AssignDec* get_ifrest(){return nullptr;}
+    stmt_type get_stmt_type(){return while_loop;};
 private:
     Expression* condition;
     Block* block_stmt;
@@ -605,7 +609,7 @@ private:
 class IfRest: public AssignDec{
 public:
     IfRest(AlgoParser::IfrestContext* ctx);
-    ~IfRest(){delete block;}
+    //~IfRest(){delete block;}
     Expression* get_condition(){return nullptr;}
     //BlockIf* get_block(){return block;}
     //AssignDec* get_block_child(int i){return block->get_child(i).get_child();}
@@ -617,6 +621,7 @@ public:
     string get_operation(){return "none";};
     int get_flowchart_size(){return get_block()->get_block_flowchart_size();};
     virtual Block* get_block(){return block;};
+    stmt_type get_stmt_type(){return ifrest;};
 private:
     Block* block;
 };
@@ -626,7 +631,7 @@ private:
 class IfElse: public AssignDec{
 public:
     IfElse(AlgoParser::IfelseContext* ctx);
-    ~IfElse(){delete condition; delete block; delete else_stmt;}
+    //~IfElse(){delete condition; delete block; delete else_stmt;}
     Expression* get_condition(){return condition;};
     virtual Expression* get_expression(){return nullptr;}
     //AssignDec* get_block_child(int i){return block->get_child(i).get_child();};
@@ -648,7 +653,7 @@ class Return : public AssignDec {
 public:
     Return(AlgoParser::ReturnStmtContext* ctx);
     Return(){value = nullptr;};
-    ~Return(){delete value;};
+    //~Return(){delete value;};
     string get_name(){return " ";};
     Expression* get_expression(){return value;};
     string get_var_type(){return "none";};
@@ -658,6 +663,7 @@ public:
     virtual Block* get_block(){return nullptr;};
     virtual Expression* get_condition(){return nullptr;}
     virtual AssignDec* get_ifrest(){return nullptr;}
+    stmt_type get_stmt_type(){return return_stmt;};
 private:
     Expression* value;
 };
@@ -666,7 +672,7 @@ class Print : public AssignDec{
 public:
     Print(AlgoParser::PrintContext* ctx);
     Print(){value = nullptr;};
-    ~Print(){delete value;};
+    //~Print(){delete value;};
     string get_name(){return " ";};
     Expression* get_expression(){return value;};
     int get_jump_length(){return 1;};
@@ -676,6 +682,7 @@ public:
     virtual Block* get_block(){return nullptr;};
     virtual Expression* get_condition(){return nullptr;}
     virtual AssignDec* get_ifrest(){return nullptr;}
+    stmt_type get_stmt_type(){return print_stmt;};
 private:
     Expression* value;
 };
@@ -714,7 +721,7 @@ class ValuesListInt {
 public:
     ValuesListInt();
     ValuesListInt(ValueInt* h, ValueInt* t);
-    ~ValuesListInt();
+    //~ValuesListInt();
     ValueInt* get_head(){return head;};
     ValueInt* get_tail(){return tail;};
     void set_head(ValueInt* h);

@@ -11,6 +11,7 @@ using namespace antlr4;
 using namespace antlrcpptest;
 
 int main(int argc, const char* argv[]) {
+    cout << "testing" <<endl;
     std::ifstream stream;
     stream.open("example2.cpp"); // testing file
 
@@ -28,14 +29,10 @@ int main(int argc, const char* argv[]) {
     AlgoParser::FileContext *tree = parser.file();
 
     std::cout << tree->toStringTree(&parser) << std::endl;
-    AST ast(tree->mainStmt()->block());
+    Block ast(tree->mainStmt()->block());
+    //cout << "testing" << std::endl;
     Declaration dec = Declaration(tree->mainStmt()->block()->stmts(0)->varDec());
-    AssignDec assdec = AssignDec();
-    cout << assdec.get_type() << endl;
-    std::cout <<ast.get_child(0).get_type()<< std::endl;
-    //ImageVisitor visitor;
-    //Scene scene = visitor.visitFile(tree).as<Scene>();
-    //scene.draw();
-
+    //cout << "testing" << std::endl;
+    cout <<ast.get_child(2).get_type() << " here" << endl;
     return 0;
 }

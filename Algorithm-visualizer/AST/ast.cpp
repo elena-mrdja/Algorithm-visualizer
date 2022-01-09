@@ -7,11 +7,14 @@ using namespace std;
 using namespace antlr4;
 using namespace antlrcpptest;
 SingleOutput::SingleOutput(AlgoParser::ExpContext* ctx){
+    cout << "katia4\n"<< std::endl;
     if (ctx->integerType()){
         value = ctx->integerType()->INTEGER()->getText();
         val_type = num;
     }else if (ctx->doubleType()){
+        cout << "katia5\n"<< std::endl;
         value = ctx->doubleType()->FLOAT()->getText();
+        cout << value << std::endl;
         val_type = num;
     }else if (ctx -> boolType()){
         if (ctx -> boolType()->TRUE()){
@@ -93,7 +96,7 @@ BinOp::BinOp(AlgoParser::ExpContext* ctx){
 }
 
 AssignDec::AssignDec(AlgoParser::StmtsContext* i){
-    std::cout << "here" << std::endl;
+    cout << "katia1\n"<< std::endl;
     Declaration* child_d = nullptr;
     Assignment* child_a = nullptr;
     IfElse* child_if = nullptr;
@@ -103,35 +106,49 @@ AssignDec::AssignDec(AlgoParser::StmtsContext* i){
     WhileStmt* child_while = nullptr;
     UnOp* child_u = nullptr;
     type = unknown_stmt_type;
-    std::cout << type << std::endl;
+    //cout << "katia Type...\n" << std::endl;
+    //cout << type << std::endl;
+    //cout << "katia Type\n"<< std::endl;
+    //cout << i->print()<< std::endl;
     if(i->assign()){
         AlgoParser::AssignContext* node = i->assign();
-        Assignment child_a(node);
+        //Assignment child_a(node);
+        //child = new Assignment(node);
         type = assignment;
     }else if(i->varDec()){
+        cout << "katia VarDec\n"<< std::endl;
         AlgoParser::VarDecContext* node = i->varDec();
+        //child = new Declaration(node);
         Declaration child_d(node);
         type = declaration;
+        //cout << i->varDec()<< std::endl;
     }else if(i->returnStmt()){
         AlgoParser::ReturnStmtContext* node = i->returnStmt();
+        //child = new Return(node);
         Return child_r(node);
         type = return_stmt;
     }else if(i->print()){
         AlgoParser::PrintContext* node = i->print();
+        //child = new Print(node);
         Print child_p(node);
         type = print_stmt;
     }else if(i->whileStmt()){
         AlgoParser::WhileStmtContext* node = i->whileStmt();
+        //child = new WhileStmt(node);
         WhileStmt child_while(node);
         type = while_loop;
     }else if(i->ifelse()){
         AlgoParser::IfelseContext* node = i->ifelse();
+        //child = new IfElse(node);
         IfElse child_if(node);
         type = ifelse;
     }else if(i->exp()){
         AlgoParser::ExpContext* node = i->exp();
+        //child = new UnOp(node);
         UnOp child_u(node);
         type = unop;
+    }else{
+        cout << "katia Strange\n";
     }
 }
 UnOp::UnOp(AlgoParser::ExpContext* ctx){
@@ -158,6 +175,7 @@ UnOp::UnOp(AlgoParser::ExpContext* ctx){
 }*/
 
 Expression::Expression(AlgoParser::ExpContext* ctx){
+    cout << "katia3\n"<< std::endl;
     if (ctx -> binOp()){
         child = new BinOp(ctx);
     }else if (ctx -> exp(0)){
@@ -169,6 +187,7 @@ Expression::Expression(AlgoParser::ExpContext* ctx){
     }
 }
 Declaration::Declaration(AlgoParser::VarDecContext* ctx) {
+    cout << "katia2\n"<< std::endl;
     value = new Expression(ctx->exp(0));
     name = ctx->variable()->STRING()->getText();
     var_type = num;
@@ -210,15 +229,24 @@ Assignment::Assignment(AlgoParser::AssignContext* ctx)
 }*/
 
 Block::Block(AlgoParser::BlockContext* ctx) {
-    size = ctx->children.size();
+    size = ctx->stmts().size();
     children = new AssignDec[size];
-    int idx = 0;
     //cache constructor
-    for (auto i: ctx->stmts()){
-         AssignDec child(i);
-         children[idx] = child;
-         idx++;
-    }
+    cout << ctx->stmts()[1] << std::endl;
+    int i = 0;
+    for (;i < size; i++){
+         //cout << "katia\n"<< std::endl;
+         AssignDec child(ctx->stmts()[i]);
+         //cout << child.get_type() << std::endl;
+         //cout << "end"<< std::endl;
+         children[i] = child;
+         //cout << "end children"<< std::endl;
+         //cout << size << std::endl;
+         //cout << i << std::endl;
+         //cout << ctx->stmts().size() << std::endl;
+
+    };
+    cout << child << std::endl;
 }
 
 WhileStmt::WhileStmt(AlgoParser::WhileStmtContext* ctx){
@@ -312,7 +340,7 @@ Expression* AssignDec::get_condition(){
     case return_stmt : return nullptr;
     case unknown_stmt_type : return nullptr;
 }
-
+}
 
 //variable tracking
 /*Cache::Cache(int number){
