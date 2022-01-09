@@ -27,29 +27,23 @@ Expression::Expression(AlgoParser::ExpContext* ctx){
     }
 }
 
-exp_type Expression::get_type(){
-    if (child_binop != nullptr){
-        return binop;
-    }
-    return unknown_exp_type;
-}
 SingleOutput::SingleOutput(AlgoParser::ExpContext* ctx){
     if (ctx->integerType()){
         value = ctx->integerType()->INTEGER()->getText();
-        val_type = num;
+        val_type = double_value;
     }else if (ctx->doubleType()){
         value = ctx->doubleType()->FLOAT()->getText();
-        val_type = num;
+        val_type = double_value;
     }else if (ctx -> boolType()){
         if (ctx -> boolType()->TRUE()){
             value = '1';
         }else{
             value = '0';
         }
-        val_type = num;
+        val_type = boolean;
     }else if (ctx -> variable()){
         value = ctx->variable()->STRING()->getText();
-        val_type = smth_var;
+        val_type = variable_type;
     }
 }
 
@@ -148,7 +142,7 @@ UnOp::UnOp(AlgoParser::ExpContext* ctx){
 Declaration::Declaration(AlgoParser::VarDecContext* ctx) {
     value = new Expression(ctx->exp(0));
     name = ctx->variable()->STRING()->getText();
-    var_type = num;
+    var_type = double_value;
 }
 
 Assignment::Assignment(AlgoParser::AssignContext* ctx)
@@ -514,7 +508,7 @@ flowchart read_statement(AssignDec stmt, int line_num, Cache* cache){
     if(st_type == assignment){
         chart.shape = rectangle;
         chart.text = "Assign " + stmt.get_name();
-        /*Value* value = new Value;
+        Value* value = new Value;
         value->value = stmt.get_child()->get_expression()->get_value(cache, line_num);
         cache->get_map()[line_num][stmt.get_child()->get_name()]->add_value(value);
         chart.color = red;

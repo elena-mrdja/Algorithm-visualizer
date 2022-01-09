@@ -45,7 +45,8 @@ enum un_ops {
 enum value_type {
     boolean = 0,
     double_value = 1,
-    unknown_value_type = 2
+    variable_type = 2,
+    unknown_value_type = 3
 };
 
 enum stmt_type {
@@ -223,7 +224,7 @@ public:
     SingleOutput(AlgoParser::ExpContext* ctx);
     //~SingleOutput(){delete node;};
     exp_type get_exp_type(){
-        if (val_type == num) return number;
+        if (val_type == double_value or val_type == boolean) return number;
         return variable;
     };
     string get_text(){return value;}; //returns the value as a string
@@ -486,14 +487,14 @@ class AssignDec;
 class Declaration : public AssignDec {
 public:
     Declaration(AlgoParser::VarDecContext* ctx);
-    Declaration(){value = nullptr; name = "none"; var_type = unknown_var;}
+    Declaration(){value = nullptr; name = "none"; var_type = unknown_value_type;}
     ////~Declaration(){delete value;};
     virtual string get_text(){return "Declare " + name;};
     virtual int get_jump_length(){return 1;};
     string get_var_type(){ //return type of the variable
         switch(var_type) {
-        case num: return "number";
-        case smth_var: return "variable";
+        case double_value: return "number";
+        case variable_type: return "variable";
         }
     }
     Expression* get_expression(){return value;}; // returns the object of class which corresponds to the value
@@ -506,7 +507,7 @@ public:
     virtual Expression* get_condition(){return nullptr;}
     virtual AssignDec* get_ifrest(){return nullptr;}
 private:
-    variable_type var_type = unknown_var;
+    value_type var_type = unknown_value_type;
     //string array_size;
     string name;
     Expression* value;
@@ -516,7 +517,7 @@ public:
     Assignment(AlgoParser::AssignContext* ctx);
     ////~Assignment(){delete value;};
     virtual string get_text(){return "Assign " + name;};
-    virtual int get_jump_length();
+    virtual int get_jump_length(){return 1;};
     Expression* get_expression(){return value;}; // returns the object of class which corresponds to the value
     //Expression* get_index(){return index;};
     //void set_index(Expression* i){index = i;};
