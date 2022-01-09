@@ -189,15 +189,16 @@ public:
     AssignDec(AlgoParser::StmtsContext* i);
     AssignDec(){type = unknown_stmt_type; child_d = nullptr;child_a = nullptr;child_if = nullptr;child_ifrest = nullptr;child_r = nullptr;child_p = nullptr; child_while = nullptr;child_u = nullptr;};
     ////~AssignDec(){delete child_d; delete child_a; delete child_if; delete child_ifrest; delete child_r; delete child_p; delete child_while; delete child_u;};
-    virtual string get_name(){return nullptr;};
-    Expression* get_expression();
+    virtual string get_name();
+    virtual string get_text();
+    virtual Expression* get_expression();
+    virtual string get_var_type();
+    virtual int get_jump_length();
+    virtual Block* get_block();
+    virtual int get_flowchart_size();
+    virtual Expression* get_condition();
+    virtual AssignDec* get_ifrest();
     stmt_type get_type(){return type;};
-    virtual string get_var_type(){return nullptr;};
-    int num_stmts(){return 0;};
-    int get_jump_length(){return 1;};
-    virtual Block* get_block(){return nullptr;};
-    virtual int get_flowchart_size(){return 0;};
-    virtual stmt_type get_stmt_type(){return unknown_stmt_type;};
     Declaration* get_child_dec(){return child_d;}
     Assignment* get_child_ass(){return child_a;};
     IfElse* get_child_ifelse(){return child_if;}
@@ -206,8 +207,6 @@ public:
     Print* get_child_print(){return child_p;}
     WhileStmt* get_child_while(){return child_while;}
     UnOp* get_child_unop(){return child_u;}
-    virtual Expression* get_condition();
-    virtual AssignDec* get_ifrest(){return nullptr;};
 private:
     Declaration* child_d;
     Assignment* child_a;
@@ -492,6 +491,8 @@ public:
     Declaration(AlgoParser::VarDecContext* ctx);
     Declaration(){value = nullptr; name = "none"; var_type = unknown_var;}
     ////~Declaration(){delete value;};
+    virtual string get_text(){return "Declare " + name;};
+    virtual int get_jump_length(){return 1;};
     string get_var_type(){ //return type of the variable
         switch(var_type) {
         case num: return "number";
@@ -517,6 +518,8 @@ class Assignment : public AssignDec {
 public:
     Assignment(AlgoParser::AssignContext* ctx);
     ////~Assignment(){delete value;};
+    virtual string get_text(){return "Assign " + name;};
+    virtual int get_jump_length();
     Expression* get_expression(){return value;}; // returns the object of class which corresponds to the value
     //Expression* get_index(){return index;};
     //void set_index(Expression* i){index = i;};
@@ -549,7 +552,7 @@ public:
     }
     string get_name(){return "none";} // change to Expression
     string get_var_type(){return "none";};
-    virtual Expression* get_expression(){return nullptr;}
+    virtual Expression* get_expression(){return left_exp;};
     Expression* get_value(){return left_exp;};
     virtual Block* get_block(){return nullptr;};
     stmt_type get_stmt_type(){return unop;};
@@ -557,6 +560,7 @@ public:
     int get_flowchart_size(){return 1;};
     virtual Expression* get_condition(){return nullptr;}
     virtual AssignDec* get_ifrest(){return nullptr;}
+    string get_text(){return get_operation() + left_exp->get_text();};
 private:
     int operation;
     Expression* left_exp;
@@ -608,6 +612,7 @@ private:
 };
 class WhileStmt : public AssignDec {
 public:
+    virtual string get_text(){return condition->get_text();};
     WhileStmt(AlgoParser::WhileStmtContext* ctx);
     virtual string get_name(){return "none";}
     ////~WhileStmt(){delete condition; delete block_stmt;};
@@ -632,13 +637,14 @@ class IfRest: public AssignDec{
 public:
     IfRest(AlgoParser::IfrestContext* ctx);
     ////~IfRest(){delete block;}
+    virtual string get_text(){return "Else";};
     Expression* get_condition(){return nullptr;}
     //BlockIf* get_block(){return block;}
     //AssignDec* get_block_child(int i){return block->get_child(i).get_child();}
     virtual Expression* get_expression(){return nullptr;}
     Expression* get_value(){return nullptr;}
-    string get_name(){return nullptr;}
-    string get_var_type(){return nullptr;}
+    string get_name(){return "none";}
+    string get_var_type(){return "none";}
     AssignDec* get_ifrest(){return nullptr;}
     string get_operation(){return "none";};
     int get_flowchart_size(){return get_block()->get_block_flowchart_size();};
@@ -654,14 +660,15 @@ class IfElse: public AssignDec{
 public:
     IfElse(AlgoParser::IfelseContext* ctx);
     ////~IfElse(){delete condition; delete block; delete else_stmt;}
+    virtual string get_text(){return condition->get_text();};
     Expression* get_condition(){return condition;};
     virtual Expression* get_expression(){return nullptr;}
     //AssignDec* get_block_child(int i){return block->get_child(i).get_child();};
     virtual Block* get_block(){return block;};
     stmt_type get_stmt_type(){return ifelse;};
     Expression* get_value(){return nullptr;}
-    string get_name(){return nullptr;}
-    string get_var_type(){return nullptr;}
+    string get_name(){return "none";}
+    string get_var_type(){return "none";}
     AssignDec* get_ifrest(){return else_stmt;}
     int get_jump_length(){return block->get_size() + else_stmt->get_block()->get_size() + 1;};
     int get_flowchart_size(){return get_block()->get_block_flowchart_size() + get_ifrest()->get_block()->get_block_flowchart_size() + 1;};
@@ -676,11 +683,11 @@ public:
     Return(AlgoParser::ReturnStmtContext* ctx);
     Return(){value = nullptr;};
     ////~Return(){delete value;};
-    string get_name(){return " ";};
+    string get_name(){return "none";};
+    string get_text(){return "Return " + value->get_text();};
     Expression* get_expression(){return value;};
     string get_var_type(){return "none";};
     int get_jump_length(){return 1;};
-    string get_operation(){return "none";};
     int get_flowchart_size(){return 1;};
     virtual Block* get_block(){return nullptr;};
     virtual Expression* get_condition(){return nullptr;}
@@ -696,9 +703,9 @@ public:
     Print(){value = nullptr;};
     ////~Print(){delete value;};
     string get_name(){return " ";};
+    string get_text(){return "Print " + value->get_text();}
     Expression* get_expression(){return value;};
     int get_jump_length(){return 1;};
-    string get_operation(){return "none";};
     int get_flowchart_size(){return 1;};
     string get_var_type(){return "none";}
     virtual Block* get_block(){return nullptr;};

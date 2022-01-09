@@ -133,19 +133,7 @@ UnOp::UnOp(AlgoParser::ExpContext* ctx){
         operation = 2;
     }
 }
-Expression* AssignDec::get_expression(){
-    switch (type) {
-    case declaration : return child_d->get_expression();
-    case assignment :  return child_a->get_expression();
-    case ifelse : return nullptr;
-    case ifrest : return nullptr;
-    case while_loop : return nullptr;
-    case unop : return nullptr;
-    case print_stmt : return child_p->get_expression();
-    case return_stmt : return child_r->get_expression();
-    case unknown_stmt_type : return nullptr;
-    }
-}
+
 
 /*Jump::Jump(AlgoParser::JumpContext* ctx){
     if(ctx->CONT()){
@@ -273,6 +261,110 @@ Expression* AssignDec::get_condition(){
     case unknown_stmt_type : return nullptr;
 }
 }
+
+Expression* AssignDec::get_expression(){
+    switch (type) {
+    case declaration : return child_d->get_expression();
+    case assignment :  return child_a->get_expression();
+    case ifelse : return nullptr;
+    case ifrest : return nullptr;
+    case while_loop : return nullptr;
+    case unop : return nullptr;
+    case print_stmt : return child_p->get_expression();
+    case return_stmt : return child_r->get_expression();
+    case unknown_stmt_type : return nullptr;
+    }
+}
+
+string AssignDec::get_name(){
+    switch (get_type()){
+    case declaration : return get_child_dec()->get_name();
+    case assignment : return get_child_ass()->get_name();
+    case ifelse : return get_child_ifelse()->get_name();
+    case ifrest : return get_child_ifrest()->get_name();
+    case while_loop : return get_child_while()->get_name();
+    case print_stmt : return get_child_print()->get_name();
+    case return_stmt : return get_child_return()->get_name();
+    case unop : return get_child_unop()->get_name();
+}
+};
+string AssignDec::get_var_type(){
+    switch (type){
+    case declaration : return get_child_dec()->get_var_type();
+    case assignment : get_child_ass()->get_var_type();
+    case ifelse : return get_child_ifelse()->get_var_type();
+    case ifrest : return get_child_ifrest()->get_var_type();
+    case while_loop : return get_child_while()->get_var_type();
+    case print_stmt : return get_child_print()->get_var_type();
+    case return_stmt : return get_child_return()->get_var_type();
+    case unop : return get_child_unop()->get_var_type();
+};
+}
+int AssignDec::get_jump_length(){
+    switch (get_type()){
+    case declaration : return get_child_dec()->get_jump_length();
+    case assignment : return get_child_ass()->get_jump_length();
+    case ifelse : return get_child_ifelse()->get_jump_length();
+    case ifrest : return get_child_ifrest()->get_jump_length();
+    case while_loop : return get_child_while()->get_jump_length();
+    case print_stmt : return get_child_print()->get_jump_length();
+    case return_stmt : return get_child_return()->get_jump_length();
+    case unop : return get_child_unop()->get_jump_length();
+};
+}
+Block* AssignDec::get_block(){
+    switch (type){
+    case declaration : return get_child_dec()->get_block();
+    case assignment : return get_child_ass()->get_block();
+    case ifelse : return get_child_ifelse()->get_block();
+    case ifrest : return get_child_ifrest()->get_block();
+    case while_loop : return get_child_while()->get_block();
+    case print_stmt : get_child_print()->get_block();
+    case return_stmt : get_child_return()->get_block();
+    case unop : get_child_unop()->get_block();
+}
+};
+int AssignDec::get_flowchart_size(){
+    switch (type){
+    case declaration : return get_child_dec()->get_flowchart_size();
+    case assignment : return get_child_ass()->get_flowchart_size();
+    case ifelse : return get_child_ifelse()->get_flowchart_size();
+    case ifrest : return get_child_ifrest()->get_flowchart_size();
+    case while_loop : return get_child_while()->get_flowchart_size();
+    case print_stmt : return get_child_print()->get_flowchart_size();
+    case return_stmt : return get_child_return()->get_flowchart_size();;
+    case unop : return get_child_unop()->get_flowchart_size();;
+};
+}
+AssignDec* AssignDec::get_ifrest(){
+    switch (type) {
+    case declaration : return get_child_dec()->get_ifrest();
+    case assignment :  return get_child_ass()->get_ifrest();
+    case ifelse : return get_child_ifelse()->get_ifrest();
+    case ifrest : return get_child_ifrest()->get_ifrest();
+    case while_loop : return get_child_while()->get_ifrest();
+    case unop : return get_child_unop()->get_ifrest();
+    case print_stmt : return get_child_print()->get_ifrest();
+    case return_stmt : return get_child_return()->get_ifrest();
+    case unknown_stmt_type : return nullptr;
+    }
+};
+
+string AssignDec::get_text(){
+    switch (type) {
+    case declaration : return get_child_dec()->get_text();
+    case assignment :  return get_child_ass()->get_text();
+    case ifelse : return get_child_ifelse()->get_text();
+    case ifrest : return get_child_ifrest()->get_text();
+    case while_loop : return get_child_while()->get_text();
+    case unop : return get_child_unop()->get_text();
+    case print_stmt : return get_child_print()->get_text();
+    case return_stmt : return get_child_return()->get_text();
+    case unknown_stmt_type : return nullptr;
+    }
+};
+
+
 
 //variable tracking
 /*Cache::Cache(int number){
