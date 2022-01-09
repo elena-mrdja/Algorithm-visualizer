@@ -163,13 +163,13 @@ public:
     ValuesList* get_var(string var);
     void add_new_value(string var, Value* value, int line);
     double get_last_value(string name, int i){
-        return variables[i][i][name]->get_tail()->value;
+        return variables[i][name]->get_tail()->value;
     };
-    map<string, ValuesList*>* get_map(){return *variables;};
+    map<string, ValuesList*>* get_map(){return variables;};
 
 private:
     int num_lines;
-    map<string, ValuesList*>* variables[MAX_LINES]; //MAX_LINES defined on the top of the file
+    map<string, ValuesList*>* variables = new  map<string, ValuesList*>[MAX_LINES]; //MAX_LINES defined on the top of the file
 };
 
 class Expression;
@@ -236,6 +236,8 @@ public:
     int num_blocks(){return 0;};
     double get_value(Cache* cache, int i){
         //i is the line which the SingleOutput is in
+        cout << value << " value" << endl;
+        cout << val_type << " val_type" << endl;
         if (val_type == double_value) return stod(value);
         else {
             return cache->get_last_value(value, i);
@@ -792,8 +794,14 @@ struct flowchart {
     colors color;
 };
 
-extern flowchart l[MAX_LINES];
-
-flowchart read_statement(AssignDec stmt, int line_num, Cache* cache);
+extern flowchart* l[MAX_LINES];
 
 void make_chart_list(AST* ast, Cache* cache);
+
+void fill_while_block(Block* block, Expression* condition, Cache* cache, int while_condition_line);
+void fill_declaration(Declaration* dec, Cache* cache, int current_line);
+void fill_assignment(Assignment* assign, Cache* cache, int current_line);
+void fill_ifelse(IfElse* ifelse, Cache* cache, int if_condition_line);
+void fill_unop(UnOp* unop, Cache* cache, int if_condition_line);
+void fill_statement(AssignDec stmt, Cache* cache, int current_line);
+void fill_cache(Block* ast, Cache* cache);

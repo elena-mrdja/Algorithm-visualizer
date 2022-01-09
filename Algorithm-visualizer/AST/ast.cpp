@@ -210,16 +210,19 @@ IfRest::IfRest(AlgoParser::IfrestContext* ctx){
 
 
 
-ValuesList::ValuesList(Value* h, Value* t, double v){
+/*ValuesList::ValuesList(Value* h, Value* t, double v){
     head = h;
     tail = t;
     current = v;
-};
+};*/
 
 ValuesList::ValuesList(){
-    head = new Value();
+    head = nullptr;
+    tail = nullptr;
+    current = 1;
+    /*head = new Value();
     tail = head;
-    current = tail->value;
+    current = tail->value;*/
 }
 
 Value* ValuesList::get_head(){return head;};
@@ -227,209 +230,206 @@ Value* ValuesList::get_tail(){return tail;};
 
 void ValuesList::set_head(Value* h){head = h;};
 void ValuesList::set_tail(Value* t){tail = t;};
-bool ValuesList::is_empty(){return head == nullptr;};
+bool ValuesList::is_empty(){cout <<"inside empty"<<endl;return (head == nullptr and tail == nullptr);};
 void ValuesList::set_value(double v){current = v;};
 double ValuesList::get_value(){return current;};
 void ValuesList::add_value(Value* v){
+    cout << v << endl;
     if (is_empty()){
+        cout << "empty" << endl;
         head = v;
         tail = v;
     }
     else {
+        cout << "not empty" << endl;
         tail->next = v;
-        v->prev = tail;
+        //v->prev = tail;
         tail = v;
     }
 };
 
 Expression* AssignDec::get_condition(){
     switch (type) {
-    case declaration : return nullptr;
-    case assignment : return nullptr;
-    case ifelse : return get_child_ifelse()->get_condition();
-    case ifrest : return nullptr;
-    case while_loop : get_child_ifelse()->get_condition();
-    case unop : return nullptr;
-    case print_stmt : return nullptr;
-    case return_stmt : return nullptr;
-    case unknown_stmt_type : return nullptr;
+    case declaration : return nullptr; break;
+    case assignment : return nullptr;break;
+    case ifelse : return get_child_ifelse()->get_condition();break;
+    case ifrest : return nullptr;break;
+    case while_loop : get_child_ifelse()->get_condition();break;
+    case unop : return nullptr;break;
+    case print_stmt : return nullptr;break;
+    case return_stmt : return nullptr;break;
+    case unknown_stmt_type : return nullptr;break;
 }
 }
 
 Expression* AssignDec::get_expression(){
     switch (type) {
-    case declaration : return child_d->get_expression();
-    case assignment :  return child_a->get_expression();
-    case ifelse : return nullptr;
-    case ifrest : return nullptr;
-    case while_loop : return nullptr;
-    case unop : return nullptr;
-    case print_stmt : return child_p->get_expression();
-    case return_stmt : return child_r->get_expression();
-    case unknown_stmt_type : return nullptr;
+    case declaration : return child_d->get_expression();break;
+    case assignment :  return child_a->get_expression();break;
+    case ifelse : return nullptr;break;
+    case ifrest : return nullptr;break;
+    case while_loop : return nullptr;break;
+    case unop : return nullptr;break;
+    case print_stmt : return child_p->get_expression();break;
+    case return_stmt : return child_r->get_expression();break;
+    case unknown_stmt_type : return nullptr;break;
     }
 }
 
 string AssignDec::get_name(){
     switch (get_type()){
-    case declaration : return get_child_dec()->get_name();
-    case assignment : return get_child_ass()->get_name();
-    case ifelse : return get_child_ifelse()->get_name();
-    case ifrest : return get_child_ifrest()->get_name();
-    case while_loop : return get_child_while()->get_name();
-    case print_stmt : return get_child_print()->get_name();
-    case return_stmt : return get_child_return()->get_name();
-    case unop : return get_child_unop()->get_name();
-    case unknown_stmt_type : return "Error";
+    case declaration : return get_child_dec()->get_name();break;
+    case assignment : return get_child_ass()->get_name();break;
+    case ifelse : return get_child_ifelse()->get_name();break;
+    case ifrest : return get_child_ifrest()->get_name();break;
+    case while_loop : return get_child_while()->get_name();break;
+    case print_stmt : return get_child_print()->get_name();break;
+    case return_stmt : return get_child_return()->get_name();break;
+    case unop : return get_child_unop()->get_name();break;
+    case unknown_stmt_type : return "Error";break;
 }
 };
 string AssignDec::get_var_type(){
     switch (type){
-    case declaration : return get_child_dec()->get_var_type();
-    case assignment : get_child_ass()->get_var_type();
-    case ifelse : return get_child_ifelse()->get_var_type();
-    case ifrest : return get_child_ifrest()->get_var_type();
-    case while_loop : return get_child_while()->get_var_type();
-    case print_stmt : return get_child_print()->get_var_type();
-    case return_stmt : return get_child_return()->get_var_type();
-    case unop : return get_child_unop()->get_var_type();
-    case unknown_stmt_type : return "Error";
+    case declaration : return get_child_dec()->get_var_type();break;
+    case assignment : get_child_ass()->get_var_type();break;
+    case ifelse : return get_child_ifelse()->get_var_type();break;
+    case ifrest : return get_child_ifrest()->get_var_type();break;
+    case while_loop : return get_child_while()->get_var_type();break;
+    case print_stmt : return get_child_print()->get_var_type();break;
+    case return_stmt : return get_child_return()->get_var_type();break;
+    case unop : return get_child_unop()->get_var_type();break;
+    case unknown_stmt_type : return "Error";break;
     };
 }
 int AssignDec::get_jump_length(){
     switch (get_type()){
-    case declaration : return get_child_dec()->get_jump_length();
-    case assignment : return get_child_ass()->get_jump_length();
-    case ifelse : return get_child_ifelse()->get_jump_length();
-    case ifrest : return get_child_ifrest()->get_jump_length();
-    case while_loop : return get_child_while()->get_jump_length();
-    case print_stmt : return get_child_print()->get_jump_length();
-    case return_stmt : return get_child_return()->get_jump_length();
-    case unop : return get_child_unop()->get_jump_length();
-    case unknown_stmt_type : return -1;
+    case declaration : return get_child_dec()->get_jump_length();break;
+    case assignment : return get_child_ass()->get_jump_length();break;
+    case ifelse : return get_child_ifelse()->get_jump_length();break;
+    case ifrest : return get_child_ifrest()->get_jump_length();break;
+    case while_loop : return get_child_while()->get_jump_length();break;
+    case print_stmt : return get_child_print()->get_jump_length();break;
+    case return_stmt : return get_child_return()->get_jump_length();break;
+    case unop : return get_child_unop()->get_jump_length();break;
+    case unknown_stmt_type : return -1;break;
 };
 }
 Block* AssignDec::get_block(){
     switch (type){
-    case declaration : return get_child_dec()->get_block();
-    case assignment : return get_child_ass()->get_block();
-    case ifelse : return get_child_ifelse()->get_block();
-    case ifrest : return get_child_ifrest()->get_block();
-    case while_loop : return get_child_while()->get_block();
-    case print_stmt : get_child_print()->get_block();
-    case return_stmt : get_child_return()->get_block();
-    case unop : get_child_unop()->get_block();
-    case unknown_stmt_type : return nullptr;
+    case declaration : return get_child_dec()->get_block();break;
+    case assignment : return get_child_ass()->get_block();break;
+    case ifelse : return get_child_ifelse()->get_block();break;
+    case ifrest : return get_child_ifrest()->get_block();break;
+    case while_loop : return get_child_while()->get_block();break;
+    case print_stmt : get_child_print()->get_block();break;
+    case return_stmt : get_child_return()->get_block();break;
+    case unop : get_child_unop()->get_block();break;
+    case unknown_stmt_type : return nullptr;break;
 }
 };
 int AssignDec::get_flowchart_size(){
     switch (type){
-    case declaration : return get_child_dec()->get_flowchart_size();
-    case assignment : return get_child_ass()->get_flowchart_size();
-    case ifelse : return get_child_ifelse()->get_flowchart_size();
-    case ifrest : return get_child_ifrest()->get_flowchart_size();
-    case while_loop : return get_child_while()->get_flowchart_size();
-    case print_stmt : return get_child_print()->get_flowchart_size();
-    case return_stmt : return get_child_return()->get_flowchart_size();
-    case unop : return get_child_unop()->get_flowchart_size();
-    case unknown_stmt_type : return -1;
+    case declaration : return get_child_dec()->get_flowchart_size();break;
+    case assignment : return get_child_ass()->get_flowchart_size();break;
+    case ifelse : return get_child_ifelse()->get_flowchart_size();break;
+    case ifrest : return get_child_ifrest()->get_flowchart_size();break;
+    case while_loop : return get_child_while()->get_flowchart_size();break;
+    case print_stmt : return get_child_print()->get_flowchart_size();break;
+    case return_stmt : return get_child_return()->get_flowchart_size();break;
+    case unop : return get_child_unop()->get_flowchart_size();break;
+    case unknown_stmt_type : return -1;break;
 };
 }
 AssignDec* AssignDec::get_ifrest(){
     switch (type) {
-    case declaration : return get_child_dec()->get_ifrest();
-    case assignment :  return get_child_ass()->get_ifrest();
-    case ifelse : return get_child_ifelse()->get_ifrest();
-    case ifrest : return get_child_ifrest()->get_ifrest();
-    case while_loop : return get_child_while()->get_ifrest();
-    case unop : return get_child_unop()->get_ifrest();
-    case print_stmt : return get_child_print()->get_ifrest();
-    case return_stmt : return get_child_return()->get_ifrest();
-    case unknown_stmt_type : return nullptr;
+    case declaration : return get_child_dec()->get_ifrest();break;
+    case assignment :  return get_child_ass()->get_ifrest();break;
+    case ifelse : return get_child_ifelse()->get_ifrest();break;
+    case ifrest : return get_child_ifrest()->get_ifrest();break;
+    case while_loop : return get_child_while()->get_ifrest();break;
+    case unop : return get_child_unop()->get_ifrest();break;
+    case print_stmt : return get_child_print()->get_ifrest();break;
+    case return_stmt : return get_child_return()->get_ifrest();break;
+    case unknown_stmt_type : return nullptr;break;
     }
 };
 
 string AssignDec::get_text(){
     switch (type) {
-    case declaration : return get_child_dec()->get_text();
-    case assignment :  return get_child_ass()->get_text();
-    case ifelse : return get_child_ifelse()->get_text();
-    case ifrest : return get_child_ifrest()->get_text();
-    case while_loop : return get_child_while()->get_text();
-    case unop : return get_child_unop()->get_text();
-    case print_stmt : return get_child_print()->get_text();
-    case return_stmt : return get_child_return()->get_text();
-    case unknown_stmt_type : return nullptr;
+    case declaration : return get_child_dec()->get_text();break;
+    case assignment :  return get_child_ass()->get_text();break;
+    case ifelse : return get_child_ifelse()->get_text();break;
+    case ifrest : return get_child_ifrest()->get_text();break;
+    case while_loop : return get_child_while()->get_text();break;
+    case unop : return get_child_unop()->get_text();break;
+    case print_stmt : return get_child_print()->get_text();break;
+    case return_stmt : return get_child_return()->get_text();break;
+    case unknown_stmt_type : return nullptr;break;
     }
 };
 
 string Expression::get_operation(){
     switch (expression_type) {
-    case binop : return get_child_binop()->get_operation();
-    case neg : return get_child_neg()->get_operation();
-    case number : return get_child_sing()->get_operation();
-    case variable : return get_child_sing()->get_operation();
-    case binop_exp : return "Error";
-    case unknown_exp_type : cout << "Get operation Error!" << endl; return "Error";
+    case binop : return get_child_binop()->get_operation();break;
+    case neg : return get_child_neg()->get_operation();break;
+    case number : return get_child_sing()->get_operation();break;
+    case variable : return get_child_sing()->get_operation();break;
+    case binop_exp : return "Error";break;
+    case unknown_exp_type : cout << "Get operation Error!" << endl; return "Error";break;
     }
 };
 Expression* Expression::get_left_expression(){
 switch (expression_type) {
-case binop : return get_child_binop()->get_left_expression();
-case neg : return get_child_neg()->get_left_expression();
-case number : return get_child_sing()->get_left_expression();
-case variable : return get_child_sing()->get_left_expression();
-case binop_exp : return nullptr;
-case unknown_exp_type : cout << "Get left exp Error!" << endl; return nullptr;
+case binop : return get_child_binop()->get_left_expression();break;
+case neg : return get_child_neg()->get_left_expression();break;
+case number : return get_child_sing()->get_left_expression();break;
+case variable : return get_child_sing()->get_left_expression();break;
+case binop_exp : return nullptr;break;
+case unknown_exp_type : cout << "Get left exp Error!" << endl; return nullptr;break;
 }
 };
 Expression* Expression::get_right_expression(){
     switch (expression_type) {
-    case binop : return get_child_binop()->get_right_expression();
-    case neg : return get_child_neg()->get_right_expression();
-    case number : return get_child_sing()->get_right_expression();
-    case variable : return get_child_sing()->get_right_expression();
-    case binop_exp : return nullptr;
-    case unknown_exp_type : cout << "Get right exp Error!" << endl; return nullptr;
+    case binop : return get_child_binop()->get_right_expression();break;
+    case neg : return get_child_neg()->get_right_expression();break;
+    case number : return get_child_sing()->get_right_expression();break;
+    case variable : return get_child_sing()->get_right_expression();break;
+    case binop_exp : return nullptr;break;
+    case unknown_exp_type : cout << "Get right exp Error!" << endl; return nullptr;break;
     }
 };
 string Expression::get_text(){
     switch (expression_type) {
-    case binop : return get_child_binop()->get_operation();
-    case neg : return get_child_neg()->get_operation();
-    case number : return get_child_sing()->get_operation();
-    case variable : return get_child_sing()->get_operation();
-    case binop_exp : return "Error";
-    case unknown_exp_type : cout << "Get text Error!" << endl; return "Error";
+    case binop : return get_child_binop()->get_operation();break;
+    case neg : return get_child_neg()->get_operation();break;
+    case number : return get_child_sing()->get_operation();break;
+    case variable : return get_child_sing()->get_operation();break;
+    case binop_exp : return "Error";break;
+    case unknown_exp_type : cout << "Get text Error!" << endl; return "Error";break;
     }
 };
 value_type Expression::get_value_type(){
     switch (expression_type) {
-    case binop : return get_child_binop()->get_value_type();
-    case neg : return get_child_neg()->get_value_type();
-    case number : return get_child_sing()->get_value_type();
-    case variable : return get_child_sing()->get_value_type();
-    case binop_exp : return unknown_value_type;
-    case unknown_exp_type : cout << "Get value type Error!" << endl; return unknown_value_type;
+    case binop : return get_child_binop()->get_value_type();break;
+    case neg : return get_child_neg()->get_value_type();break;
+    case number : return get_child_sing()->get_value_type();break;
+    case variable : return get_child_sing()->get_value_type();break;
+    case binop_exp : return unknown_value_type;break;
+    case unknown_exp_type : cout << "Get value type Error!" << endl; return unknown_value_type;break;
     }
 };
 double Expression::get_value(Cache* cache, int i){
     switch (expression_type) {
-    case binop : return get_child_binop()->get_value(cache, i);
-    case neg : return get_child_neg()->get_value(cache, i);
-    case number : return get_child_sing()->get_value(cache, i);
-    case variable : return get_child_sing()->get_value(cache, i);
-    case binop_exp : return 0;
-    case unknown_exp_type : cout << "Get value Error!" << endl; return 0;
+    case binop : return get_child_binop()->get_value(cache, i);break;
+    case neg : return get_child_neg()->get_value(cache, i);break;
+    case number : return get_child_sing()->get_value(cache, i);break;
+    case variable : return get_child_sing()->get_value(cache, i);break;
+    case binop_exp : return 0;break;
+    case unknown_exp_type : cout << "Get value Error!" << endl; return 0;break;
     }
 };
 
-void fill_while_block(Block* block, Expression* condition, Cache* cache, int while_condition_line);
-void fill_declaration(Declaration* dec, Cache* cache, int current_line);
-void fill_assignment(Assignment* assign, Cache* cache, int current_line);
-void fill_ifelse(IfElse* ifelse, Cache* cache, int if_condition_line);
-void fill_unop(UnOp* unop, Cache* cache, int if_condition_line);
-void fill_statement(AssignDec stmt, Cache* cache, int current_line);
 
 void fill_while_block(Block* block, Expression* condition, Cache* cache, int while_condition_line){
     //Block : the block of the while statement
@@ -442,67 +442,75 @@ void fill_while_block(Block* block, Expression* condition, Cache* cache, int whi
     };
 };
 
-void fill_declaration(Declaration dec, Cache* cache, int declaration_line){
+void fill_declaration(Declaration* dec, Cache* cache, int declaration_line){
+    cout << "entering dec" << endl;
     Value* value = new Value;
-    value->value = dec.get_expression()->get_value(cache, declaration_line);
-    cache->get_map()[declaration_line][dec.get_name()]->add_value(value);
+    cout << "private check" << endl;
+    value->value = dec->get_expression()->get_value(cache, declaration_line);
+    cout << cache->get_map()[declaration_line][dec->get_name()]<< endl;
+    cache->get_map()[declaration_line][dec->get_name()]->add_value(value);
+    cout << "private check 2" << endl;
 };
 
-void fill_assignment(Assignment assign, Cache* cache, int assignment_line){
+void fill_assignment(Assignment* assign, Cache* cache, int assignment_line){
     Value* value = new Value;
-    value->value = assign.get_expression()->get_value(cache, assignment_line);
-    cache->get_map()[assignment_line][assign.get_name()]->add_value(value);
+    value->value = assign->get_expression()->get_value(cache, assignment_line);
+    cache->get_map()[assignment_line][assign->get_name()]->add_value(value);
 };
 
-void fill_ifelse(IfElse ifelse, Cache* cache, int if_condition_line){
-    Expression* condition = ifelse.get_condition();
+void fill_ifelse(IfElse* ifelse, Cache* cache, int if_condition_line){
+    Expression* condition = ifelse->get_condition();
     if (condition->get_value(cache, if_condition_line)){
-        int n = ifelse.get_block()->get_size();
+        int n = ifelse->get_block()->get_size();
         for (int i = 1; i <= n; i++){
-            fill_statement(ifelse.get_block()->get_child(i - 1), cache, if_condition_line + i);
+            fill_statement(ifelse->get_block()->get_child(i - 1), cache, if_condition_line + i);
         };
     }
     else {
-        if (ifelse.get_ifrest() != nullptr) {
-            int n = ifelse.get_block()->get_size();
-            int m = ifelse.get_ifrest()->get_block()->get_size();
+        if (ifelse->get_ifrest() != nullptr) {
+            int n = ifelse->get_block()->get_size();
+            int m = ifelse->get_ifrest()->get_block()->get_size();
             for (int i = 1; i <= m; i++) {
-                fill_statement(ifelse.get_ifrest()->get_block()->get_child(i - 1), cache, if_condition_line + n + i);
+                fill_statement(ifelse->get_ifrest()->get_block()->get_child(i - 1), cache, if_condition_line + n + i);
             }
         }
     }
 };
 
-void fill_unop(UnOp unop, Cache* cache, int current_line){
+void fill_unop(UnOp* unop, Cache* cache, int current_line){
     Value* value = new Value;
-    value->value = unop.get_expression()->get_value(cache, current_line);
-    cache->get_map()[current_line][unop.get_name()]->add_value(value);
+    value->value = unop->get_expression()->get_value(cache, current_line);
+    cache->get_map()[current_line][unop->get_name()]->add_value(value);
 }
 
 void fill_cache(Block* ast, Cache* cache){
+    cout << "entering" << endl;
     int current_line = 0;
     int n = ast->get_size();
     while (current_line < n){
+        cout << current_line << endl;
         //with our constraints, the first line has to be a declaration
         int next_line = current_line + ast->get_child(current_line).get_jump_length();
         fill_statement(ast->get_child(current_line), cache, current_line);
         //next_line : in case of stmts with no blocks, the line increases by only 1
         cache->get_map()[next_line] = cache->get_map()[current_line];
         current_line = next_line;
+        cout << current_line << endl;
     };
 };
 
 void fill_statement(AssignDec stmt, Cache* cache, int current_line){
+    cout << "entering stmt" << endl;
     switch (stmt.get_type()){
-    case declaration : fill_declaration(stmt.get_child_dec(), cache, current_line);
-    case assignment : fill_assignment(stmt.get_child_ass(), cache, current_line);
-    case ifelse : fill_ifelse(stmt.get_child_ifelse(), cache, current_line);
-    case ifrest : cout << "error: ifelse";
-    case while_loop : fill_while_block(stmt.get_child_while()->get_block(), stmt.get_child_while()->get_condition(), cache, current_line);
-    case unop : fill_unop(stmt.get_child_unop(), cache, current_line);
-    case print_stmt : {};
-    case return_stmt : {};
-    case unknown_stmt_type : cout << "Fill Stmt Error!"  << endl;
+    case declaration :cout << "d" << endl; fill_declaration(stmt.get_child_dec(), cache, current_line); break;
+    case assignment : cout << "a" << endl;fill_assignment(stmt.get_child_ass(), cache, current_line); break;
+    case ifelse : cout << "if" << endl;fill_ifelse(stmt.get_child_ifelse(), cache, current_line);break;
+    case ifrest : cout << "error: ifelse";break;
+    case while_loop : fill_while_block(stmt.get_child_while()->get_block(), stmt.get_child_while()->get_condition(), cache, current_line);break;
+    case unop : fill_unop(stmt.get_child_unop(), cache, current_line);break;
+    case print_stmt : {};break;
+    case return_stmt : {};break;
+    case unknown_stmt_type : cout << "Fill Stmt Error!"  << endl;break;
     };
 };
 
@@ -573,30 +581,30 @@ flowchart* read_return(Return* return_stmt, int line_num, Cache* cache){
     return chart;
 };
 
-flowchart* read_statement(AssignDec* stmt, int line_num, Cache* cache){
+flowchart* read_statement(AssignDec stmt, int line_num, Cache* cache){
     //returns a flowchart corresponding to the given statement
     //this function is supposed to be used within the walker i will keep the line of the statement being read
     //(so, if stmt is in the 20th line, i = 20)
-    switch (stmt->get_type()){
-    case declaration : return read_declaration(stmt->get_child_dec(), line_num, cache);
-    case assignment : return read_assignment(stmt->get_child_ass(), line_num, cache);
-    case ifelse : return read_if(stmt->get_child_ifelse(), line_num, cache);
-    case ifrest : return read_else(stmt->get_child_ifrest(), line_num, cache);
-    case while_loop : return read_while(stmt->get_child_while(), line_num, cache);
-    case unop : return read_unop(stmt->get_child_unop(), line_num, cache);
-    case print_stmt : return read_print(stmt->get_child_print(), line_num, cache);
-    case return_stmt : return read_return(stmt->get_child_return(), line_num, cache);
+    switch (stmt.get_type()){
+    case declaration : return read_declaration(stmt.get_child_dec(), line_num, cache);
+    case assignment : return read_assignment(stmt.get_child_ass(), line_num, cache);
+    case ifelse : return read_if(stmt.get_child_ifelse(), line_num, cache);
+    case ifrest : return read_else(stmt.get_child_ifrest(), line_num, cache);
+    case while_loop : return read_while(stmt.get_child_while(), line_num, cache);
+    case unop : return read_unop(stmt.get_child_unop(), line_num, cache);
+    case print_stmt : return read_print(stmt.get_child_print(), line_num, cache);
+    case return_stmt : return read_return(stmt.get_child_return(), line_num, cache);
     case unknown_stmt_type : cout << "Read Stmt Error!" << endl; return nullptr;
     }
 
 };
 
-flowchart l[MAX_LINES] = {};
+flowchart* l[MAX_LINES] = {};
 
 void draw_flowchart(AST* ast, Cache* cache){
     int n = ast->get_size();
     for (int i = 0; i < n; i++){
-        flowchart chart = read_statement(ast->get_child(i), i, cache);
+        flowchart* chart =  read_statement(ast->get_child(i), i, cache);
         l[i] = chart;
 
     };
