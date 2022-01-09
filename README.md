@@ -46,7 +46,7 @@ Our project is using the ANTLR4. The folder with the path Algorithm-visualizer/A
 
   1) Download all the files
   2) Download Java (you might use this link for that: https://www.oracle.com/java/technologies/downloads/#java11-windows)
-  2) Creat an empty folder called (ex. build) (inside the test_antlr4 folder)
+  2) Creat an empty folder called (ex. build) (inside the AST folder)
   3) In the Terminal direct yourself into build folder
   4) Call: cmake ../ (you might need to download and install cmake)
   5) Call: make
