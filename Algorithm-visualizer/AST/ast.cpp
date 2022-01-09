@@ -300,6 +300,19 @@ void ValuesList::add_value(Value* v){
     }
 };
 
+Expression* AssignDec::get_condition(){
+    switch (type) {
+    case declaration : return nullptr;
+    case assignment : return nullptr;
+    case ifelse : return get_child_ifelse()->get_condition();
+    case ifrest : return nullptr;
+    case while_loop : get_child_ifelse()->get_condition();
+    case unop : return nullptr;
+    case print_stmt : return nullptr;
+    case return_stmt : return nullptr;
+    case unknown_stmt_type : return nullptr;
+}
+
 
 //variable tracking
 /*Cache::Cache(int number){

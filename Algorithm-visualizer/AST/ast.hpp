@@ -135,6 +135,52 @@ private:
     map<string, ValuesList*>* variables[MAX_LINES]; //MAX_LINES defined on the top of the file
 };
 
+class Expression;
+class Block;
+class Assignment;
+class Declaration;
+class IfElse;
+class IfRest;
+class WhileStmt;
+class Return;
+class Print;
+class UnOp;
+
+class AssignDec { //needed to unite statement children
+public:
+    AssignDec(AlgoParser::StmtsContext* i);
+    AssignDec(){type = unknown_stmt_type; child_d = nullptr;child_a = nullptr;child_if = nullptr;child_ifrest = nullptr;child_r = nullptr;child_p = nullptr; child_while = nullptr;child_u = nullptr;};
+    ~AssignDec(){delete child_d; delete child_a; delete child_if; delete child_ifrest; delete child_r; delete child_p; delete child_while; delete child_u;};
+    virtual string get_name(){return nullptr;};
+    virtual Expression* get_expression(){return nullptr;};
+    stmt_type get_type(){return type;};
+    virtual string get_var_type(){return nullptr;};
+    int num_stmts(){return 0;};
+    int get_jump_length(){return 1;};
+    virtual Block* get_block(){return nullptr;};
+    virtual int get_flowchart_size(){return 0;};
+    virtual stmt_type get_stmt_type(){return unknown_stmt_type;};
+    Declaration* get_child_dec(){return child_d;}
+    Assignment* get_child_ass(){return child_a;};
+    IfElse* get_child_ifelse(){return child_if;}
+    IfRest* get_child_ifrest(){return child_ifrest;}
+    Return* get_child_return(){return child_r;}
+    Print* get_child_print(){return child_p;}
+    WhileStmt* get_child_while(){return child_while;}
+    UnOp* get_child_unop(){return child_u;}
+    virtual Expression* get_condition();
+    virtual AssignDec* get_ifrest(){return nullptr;};
+private:
+    Declaration* child_d;
+    Assignment* child_a;
+    IfElse* child_if;
+    IfRest* child_ifrest;
+    Return* child_r;
+    Print* child_p;
+    WhileStmt* child_while;
+    UnOp* child_u;
+    stmt_type type;
+};
 
 
 class SingleOutput : public BinOpExp {
@@ -414,50 +460,8 @@ private:
 
 class Block;
 
-class IfRest;
-class Declaration;
-class Assignment;
-class IfElse;
-class UnOp;
-class WhileStmt;
-class Return;
-class Print;
 
-class AssignDec { //needed to unite statement children
-public:
-    AssignDec(AlgoParser::StmtsContext* i);
-    AssignDec(){type = unknown_stmt_type; child_d = nullptr;child_a = nullptr;child_if = nullptr;child_ifrest = nullptr;child_r = nullptr;child_p = nullptr; child_while = nullptr;child_u = nullptr;};
-    ~AssignDec(){delete child_d; delete child_a; delete child_if; delete child_ifrest; delete child_r; delete child_p; delete child_while; delete child_u;};
-    virtual string get_name(){return nullptr;};
-    virtual Expression* get_expression(){return nullptr;};
-    stmt_type get_type(){return type;};
-    virtual string get_var_type(){return nullptr;};
-    int num_stmts(){return 0;};
-    int get_jump_length(){return 1;};
-    virtual Block* get_block(){return nullptr;};
-    virtual int get_flowchart_size(){return 0;};
-    virtual stmt_type get_stmt_type(){return unknown_stmt_type;};
-    Declaration* get_child_dec(){return child_d;}
-    Assignment* get_child_ass(){return child_a;};
-    IfElse* get_child_ifelse(){return child_if;}
-    IfRest* get_child_ifrest(){return child_ifrest;}
-    Return* get_child_return(){return child_r;}
-    Print* get_child_print(){return child_p;}
-    WhileStmt* get_child_while(){return child_while;}
-    UnOp* get_child_unop(){return child_u;}
-    virtual Expression* get_condition(){return nullptr;};
-    virtual AssignDec* get_ifrest(){return nullptr;};
-private:
-    Declaration* child_d;
-    Assignment* child_a;
-    IfElse* child_if;
-    IfRest* child_ifrest;
-    Return* child_r;
-    Print* child_p;
-    WhileStmt* child_while;
-    UnOp* child_u;
-    stmt_type type;
-};
+class AssignDec;
 class Declaration : public AssignDec {
 public:
     Declaration(AlgoParser::VarDecContext* ctx);
