@@ -123,7 +123,6 @@ private:
 //the following three classes are for variable tracking
 struct Value{
     double value;
-    Value* prev;
     Value* next;
 };
 
@@ -141,11 +140,7 @@ public:
     void set_tail(Value* t);
 
     void add_value(Value* v);
-    bool is_empty(); //fill in
-    void pop(){
-        Value* t = get_tail();
-        tail = t->prev;
-    };
+    bool is_empty();
 
     Value* head;
     Value* tail;

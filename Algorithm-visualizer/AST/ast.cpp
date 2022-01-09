@@ -230,7 +230,7 @@ Value* ValuesList::get_tail(){return tail;};
 
 void ValuesList::set_head(Value* h){head = h;};
 void ValuesList::set_tail(Value* t){tail = t;};
-bool ValuesList::is_empty(){cout <<"inside empty"<<endl;return (head == nullptr and tail == nullptr);};
+bool ValuesList::is_empty(){cout <<"inside empty"<<endl;return head == nullptr;};
 void ValuesList::set_value(double v){current = v;};
 double ValuesList::get_value(){return current;};
 void ValuesList::add_value(Value* v){
@@ -239,12 +239,12 @@ void ValuesList::add_value(Value* v){
         cout << "empty" << endl;
         head = v;
         tail = v;
+        while (tail->next != nullptr) tail = tail->next;
     }
     else {
         cout << "not empty" << endl;
         tail->next = v;
-        //v->prev = tail;
-        tail = v;
+        while (tail->next != nullptr) tail = tail->next;
     }
 };
 
