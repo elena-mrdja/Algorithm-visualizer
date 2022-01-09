@@ -584,29 +584,7 @@ private :
     AssignDec* child;
 };*/
 
-class Block {
-public :
-    Block(AlgoParser::BlockContext* ctx);
-    Block();
-    ////~Block(){delete children; delete child;};
-    AssignDec* get_children(){return children;}
-    AssignDec get_child(int i){return children[i];} //returns a child by index
-    int get_size(){return size;} //needed for a for loop
-    types get_type(){return block;};
-    string get_operation(){return "none";};
-    //walker function
-    int get_block_flowchart_size(){
-        size = 0;
-        for (int i = 0; i < get_size(); i++){
-            size += get_child(i).get_flowchart_size();
-        };
-        return size;
-    };
-private:
-    AssignDec child;
-    AssignDec* children;
-    int size;
-};
+// BLOCK 
 class WhileStmt : public AssignDec {
 public:
     virtual string get_text(){return condition->get_text();};
@@ -630,50 +608,7 @@ private:
     Block* block_stmt;
 };
 
-class IfRest: public AssignDec{
-public:
-    IfRest(AlgoParser::IfrestContext* ctx);
-    ////~IfRest(){delete block;}
-    virtual string get_text(){return "Else";};
-    Expression* get_condition(){return nullptr;}
-    //BlockIf* get_block(){return block;}
-    //AssignDec* get_block_child(int i){return block->get_child(i).get_child();}
-    virtual Expression* get_expression(){return nullptr;}
-    Expression* get_value(){return nullptr;}
-    string get_name(){return "none";}
-    string get_var_type(){return "none";}
-    AssignDec* get_ifrest(){return nullptr;}
-    string get_operation(){return "none";};
-    int get_flowchart_size(){return get_block()->get_block_flowchart_size();};
-    virtual Block* get_block(){return block;};
-    stmt_type get_stmt_type(){return ifrest;};
-private:
-    Block* block;
-};
-
-
-
-class IfElse: public AssignDec{
-public:
-    IfElse(AlgoParser::IfelseContext* ctx);
-    ////~IfElse(){delete condition; delete block; delete else_stmt;}
-    virtual string get_text(){return condition->get_text();};
-    Expression* get_condition(){return condition;};
-    virtual Expression* get_expression(){return nullptr;}
-    //AssignDec* get_block_child(int i){return block->get_child(i).get_child();};
-    virtual Block* get_block(){return block;};
-    stmt_type get_stmt_type(){return ifelse;};
-    Expression* get_value(){return nullptr;}
-    string get_name(){return "none";}
-    string get_var_type(){return "none";}
-    AssignDec* get_ifrest(){return else_stmt;}
-    int get_jump_length(){return block->get_size() + else_stmt->get_block()->get_size() + 1;};
-    int get_flowchart_size(){return get_block()->get_block_flowchart_size() + get_ifrest()->get_block()->get_block_flowchart_size() + 1;};
-private:
-    Expression* condition;
-    Block* block;
-    IfRest* else_stmt;
-};
+//IFREST IFELSE
 
 class Return : public AssignDec {
 public:
