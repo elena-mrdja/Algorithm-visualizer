@@ -584,7 +584,31 @@ private :
     AssignDec* child;
 };*/
 
-// BLOCK 
+
+class Block {
+public :
+    Block(AlgoParser::BlockContext* ctx);
+    Block();
+    ////~Block(){delete children; delete child;};
+    AssignDec* get_children(){return children;}
+    AssignDec get_child(int i){return children[i];} //returns a child by index
+    int get_size(){return size;} //needed for a for loop
+    types get_type(){return block;};
+    string get_operation(){return "none";};
+    //walker function
+    int get_block_flowchart_size(){
+        size = 0;
+        for (int i = 0; i < get_size(); i++){
+            size += get_child(i).get_flowchart_size();
+        };
+        return size;
+    };
+private:
+    AssignDec child;
+    AssignDec* children;
+    int size;
+};
+
 class WhileStmt : public AssignDec {
 public:
     virtual string get_text(){return condition->get_text();};
