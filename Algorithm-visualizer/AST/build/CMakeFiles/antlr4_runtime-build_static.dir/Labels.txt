@@ -1,0 +1,6 @@
+# Target labels
+ antlr4_runtime
+# Source files and their labels
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/CMakeFiles/antlr4_runtime-build_static
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/CMakeFiles/antlr4_runtime-build_static.rule
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/antlr4_runtime/src/antlr4_runtime-stamp/antlr4_runtime-build_static.rule

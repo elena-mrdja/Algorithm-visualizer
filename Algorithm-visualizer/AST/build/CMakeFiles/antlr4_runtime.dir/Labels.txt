@@ -1,0 +1,13 @@
+# Target labels
+ antlr4_runtime
+# Source files and their labels
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/CMakeFiles/antlr4_runtime
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/CMakeFiles/antlr4_runtime.rule
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/CMakeFiles/antlr4_runtime-complete.rule
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/antlr4_runtime/src/antlr4_runtime-stamp/antlr4_runtime-build.rule
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/antlr4_runtime/src/antlr4_runtime-stamp/antlr4_runtime-configure.rule
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/antlr4_runtime/src/antlr4_runtime-stamp/antlr4_runtime-download.rule
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/antlr4_runtime/src/antlr4_runtime-stamp/antlr4_runtime-install.rule
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/antlr4_runtime/src/antlr4_runtime-stamp/antlr4_runtime-mkdir.rule
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/antlr4_runtime/src/antlr4_runtime-stamp/antlr4_runtime-patch.rule
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/antlr4_runtime/src/antlr4_runtime-stamp/antlr4_runtime-update.rule

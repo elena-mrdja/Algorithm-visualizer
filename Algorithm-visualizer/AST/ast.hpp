@@ -129,22 +129,19 @@ struct Value{
 class ValuesList {
 public:
     ValuesList();
-    ValuesList(Value* h, Value* t, double v);
+    ValuesList(Value* h, Value* t);
     //~ValuesList();
     Value* get_head();
     Value* get_tail();
-    double get_value();
 
-    void set_value(double v);
     void set_head(Value* h);
     void set_tail(Value* t);
 
     void add_value(Value* v);
     bool is_empty();
 
-    Value* head;
-    Value* tail;
-    double current;
+    Value* head = NULL;
+    Value* tail = NULL;
 };
 
 
@@ -157,12 +154,19 @@ public:
     void new_var(Declaration* dec, int num);
     ValuesList* get_var(string var);
     double get_last_value(string name, int i){
+        cout << "entering get last value" << endl;
         return variables[i][name]->get_tail()->value;
     };
     map<string, ValuesList*>* get_map(){return variables;};
     void add_value(Value* v, int line_num, string name){
+        cout << "in add value" << endl;
+        ValuesList* l = new ValuesList;
+        variables[line_num][name] = l;
         variables[line_num][name]->add_value(v);
     };
+    double get_value_at(string name, int line){
+        return variables[line][name]->get_tail()->value;
+    }
     void set_line(int line_to_set, int line_to_copy){
         variables[line_to_set] = variables[line_to_copy];
     };
@@ -239,6 +243,7 @@ public:
         cout << val_type << " val_type" << endl;
         if (val_type == double_value) return stod(value);
         else {
+            cout << "entering else in get value" << endl;
             return cache->get_last_value(value, i);
         }
     }; //returns the value as a string <- IMPORTANT
@@ -251,10 +256,13 @@ private:
 class BinOp : public Expression{
 public:
     BinOp(AlgoParser::ExpContext* ctx);
+    BinOp();
     //~BinOp(){delete left_exp; delete right_exp;};
     exp_type get_exp_type(){return binop;};
     string get_text(){
+        cout << "get text binop" << endl;
         if (left_exp->get_exp_type() == number or left_exp->get_exp_type() == variable) {
+            cout << "var num" << endl;
             if (right_exp->get_exp_type() == number or right_exp->get_exp_type() == variable)
             {
                 return left_exp->get_text() + " " + get_operation() + " " + right_exp->get_text();
@@ -264,8 +272,15 @@ public:
             }
         }
         else {
+            cout << "not varnum" << endl;
             if (right_exp->get_exp_type() == number or right_exp->get_exp_type() == variable) {
-                return "(" + left_exp->get_text() + ") " + get_operation() + " " + right_exp->get_text();
+                cout << "varnum 2 " << endl;
+                cout << right_exp->get_text() << endl;
+                cout << left_exp->get_exp_type() << endl;
+                cout <<left_exp->get_child_binop() << endl;
+                string l = left_exp->get_text();
+                string r = right_exp->get_text();
+                return "(" + l + ") " + get_operation() + " " + r;
             }
         }
         return "(" + left_exp->get_text() + ") " + get_operation() + " (" + right_exp->get_text() + ")";
@@ -309,35 +324,38 @@ public:
     double get_value(Cache* cache, int i){
             switch(operation) {
             case addition: {
-                if (left_exp->get_value_type() == boolean or right_exp->get_value_type() == boolean) {return 0;};
+                /*if (left_exp->get_value_type() == boolean or right_exp->get_value_type() == boolean) {return 0;};
                 {
                     cout << "One of the expressions is a boolean";
                     return 0;
-                };
+                };*/
+                cout << "addition" << endl;
                 return left_exp->get_value(cache, i) + right_exp->get_value(cache, i);
             };
             case subtraction: {
-                if (left_exp->get_value_type() == boolean or right_exp->get_value_type() == boolean)
+                /*if (left_exp->get_value_type() == boolean or right_exp->get_value_type() == boolean)
                 {
                     cout << "One of the expressions is a boolean";
                     return 0;
-                };
+                };*/
                 return left_exp->get_value(cache, i) - right_exp->get_value(cache, i);
             };
             case multiplication: {
-                if (left_exp->get_value_type() == boolean or right_exp->get_value_type() == boolean)
+                /*if (left_exp->get_value_type() == boolean or right_exp->get_value_type() == boolean)
                 {
                     cout << "One of the expressions is a boolean";
                     return 0;
-                };
+                };*/
+                cout << "multiplication" << endl;
+                cout << left_exp->get_value(cache, i) << endl;
                 return left_exp->get_value(cache, i) * right_exp->get_value(cache, i);
             };
             case division: {
-                if (left_exp->get_value_type() == boolean or right_exp->get_value_type() == boolean)
+                /*if (left_exp->get_value_type() == boolean or right_exp->get_value_type() == boolean)
                 {
                     cout << "One of the expressions is a boolean";
                     return 0;
-                };
+                };*/
                 if (right_exp->get_value(cache, i) == 0)
                 {
                     cout << "Division by zero";
@@ -346,11 +364,11 @@ public:
                 return left_exp->get_value(cache, i) / right_exp->get_value(cache, i);
             };
             case modulo: {
-                if (left_exp->get_value_type() == boolean or right_exp->get_value_type() == boolean)
+                /*if (left_exp->get_value_type() == boolean or right_exp->get_value_type() == boolean)
                 {
                     cout << "One of the expressions is a boolean";
                     return 0;
-                };
+                };*/
                 if (right_exp->get_value(cache, i) == 0)
                 {
                     cout << "Division by zero";
@@ -384,29 +402,29 @@ public:
                 return 0;
             };
             case mthan: {
-                if (left_exp->get_value_type() == boolean or right_exp->get_value_type() == boolean)
+                /*if (left_exp->get_value_type() == boolean or right_exp->get_value_type() == boolean)
                 {
                     cout << "One of the expressions is a boolean";
                     return 0;
-                };
+                };*/
                 if (left_exp->get_value(cache, i) > right_exp->get_value(cache, i)) return 1;
                 return 0;
             };
             case leq: {
-                if (left_exp->get_value_type() == boolean or right_exp->get_value_type() == boolean)
+                /*if (left_exp->get_value_type() == boolean or right_exp->get_value_type() == boolean)
                 {
                     cout << "One of the expressions is a boolean";
                     return 0;
-                };
+                };*/
                 if (left_exp->get_value(cache, i) <= right_exp->get_value(cache, i)) return 1;
                 return 0;
             };
             case meq: {
-                if (left_exp->get_value_type() == boolean or right_exp->get_value_type() == boolean)
+                /*if (left_exp->get_value_type() == boolean or right_exp->get_value_type() == boolean)
                 {
                     cout << "One of the expressions is a boolean";
                     return 0;
-                };
+                };*/
                 if (left_exp->get_value(cache, i) >= right_exp->get_value(cache, i)) return 1;
                 return 0;
             };
@@ -806,3 +824,13 @@ void fill_ifelse(IfElse* ifelse, Cache* cache, int if_condition_line);
 void fill_unop(UnOp* unop, Cache* cache, int if_condition_line);
 void fill_statement(AssignDec stmt, Cache* cache, int current_line);
 void fill_cache(Block* ast, Cache* cache);
+void draw_flowchart(Block* ast, Cache* cache);
+flowchart* read_statement(AssignDec stmt, int line_num, Cache* cache);
+flowchart* read_declaration(Declaration* dec, int line_num, Cache* cache);
+flowchart* read_assignment(Assignment* assign, int line_num, Cache* cache);
+flowchart* read_if(IfElse* ifelse, int line_num, Cache* cache);
+flowchart* read_else(IfRest* ifrest, int line_num, Cache* cache);
+flowchart* read_while(WhileStmt* while_stmt, int line_num, Cache* cache);
+flowchart* read_unop(UnOp* unop, int line_num, Cache* cache);
+flowchart* read_print(Print* print_stmt, int line_num, Cache* cache);
+flowchart* read_return(Return* return_stmt, int line_num, Cache* cache);

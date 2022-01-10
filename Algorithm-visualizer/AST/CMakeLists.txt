@@ -51,10 +51,12 @@ target_link_libraries(test_antlr4 antlr4_static)
 
 add_custom_command(TARGET test_antlr4 POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_if_different
+  "${PROJECT_SOURCE_DIR}/examples/example1.cpp"
   "${PROJECT_SOURCE_DIR}/examples/example2.cpp"
   "${PROJECT_SOURCE_DIR}/examples/example3.cpp"
   "${PROJECT_SOURCE_DIR}/examples/example4.cpp"
   "${PROJECT_SOURCE_DIR}/examples/example5.cpp"
   "${PROJECT_SOURCE_DIR}/examples/example6.cpp"
   "${PROJECT_SOURCE_DIR}/examples/example7.cpp"
+  "${PROJECT_SOURCE_DIR}/examples/example11.cpp"
   $<TARGET_FILE_DIR:test_antlr4>)

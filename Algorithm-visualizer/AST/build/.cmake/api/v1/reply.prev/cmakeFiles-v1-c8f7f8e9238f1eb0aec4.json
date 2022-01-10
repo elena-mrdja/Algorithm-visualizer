@@ -1,0 +1,246 @@
+{
+	"inputs" : 
+	[
+		{
+			"path" : "CMakeLists.txt"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "build/CMakeFiles/3.22.1/CMakeSystem.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/Platform/Darwin-Initialize.cmake"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "build/CMakeFiles/3.22.1/CMakeCCompiler.cmake"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "build/CMakeFiles/3.22.1/CMakeCXXCompiler.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/CMakeGenericSystem.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/Platform/Darwin.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/Platform/UnixPaths.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/CMakeCInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/CMakeLanguageInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/Compiler/AppleClang-C.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/Compiler/Clang.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/Compiler/GNU.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/Platform/Apple-AppleClang-C.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/Platform/Apple-Clang-C.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/Platform/Apple-Clang.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/CMakeCXXInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/CMakeLanguageInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/Compiler/AppleClang-CXX.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/Compiler/Clang.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/Platform/Apple-AppleClang-CXX.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/Platform/Apple-Clang-CXX.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/Platform/Apple-Clang.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake"
+		},
+		{
+			"path" : "cmake/ExternalAntlr4Cpp.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/ExternalProject.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/FindGit.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/FindPackageMessage.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/RepositoryInfo.txt.in"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/FindGit.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/FindPackageMessage.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/ExternalProject-gitupdate.cmake.in"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "build/antlr4_runtime/tmp/antlr4_runtime-cfgcmd.txt.in"
+		},
+		{
+			"path" : "cmake/FindANTLR.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/FindJava.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/CMakeFindJavaCommon.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/FindPackageMessage.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/private/var/folders/0r/c545811d30338l9b7lb33pzw0000gn/T/AppTranslocation/D56EC948-7475-49E3-BC15-8E69684F51C8/d/CMake.app/Contents/share/cmake-3.22/Modules/FindPackageMessage.cmake"
+		}
+	],
+	"kind" : "cmakeFiles",
+	"paths" : 
+	{
+		"build" : "/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build",
+		"source" : "/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST"
+	},
+	"version" : 
+	{
+		"major" : 1,
+		"minor" : 0
+	}
+}

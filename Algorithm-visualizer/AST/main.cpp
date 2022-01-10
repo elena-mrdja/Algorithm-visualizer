@@ -13,7 +13,7 @@ using namespace antlrcpptest;
 int main(int argc, const char* argv[]) {
     cout << "testing" <<endl;
     std::ifstream stream;
-    stream.open("example2.cpp"); // testing file
+    stream.open("example11.cpp"); // testing file
 
     ANTLRInputStream input(stream);
 
@@ -32,9 +32,10 @@ int main(int argc, const char* argv[]) {
     Block ast(tree->mainStmt()->block());
     Cache* cache = new Cache(ast.get_size());
     fill_cache(&ast, cache);
-    cout << cache << endl;
+    cout << "cache filled" << cache << endl;
+    draw_flowchart(&ast, cache);
+    cout<<"test"<<endl;
     //Declaration dec = Declaration(tree->mainStmt()->block()->stmts(0)->varDec());
     //Expression exp = Expression(tree->mainStmt()->block()->stmts(1)->assign()->exp(0));
-    cout <<ast.get_child(2).get_expression()->get_value(cache, 0)<< "    <-  Final Testing Output" << endl;
     return 0;
 }

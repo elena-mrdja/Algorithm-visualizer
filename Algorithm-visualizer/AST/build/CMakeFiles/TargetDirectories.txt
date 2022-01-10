@@ -1,0 +1,6 @@
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/CMakeFiles/antlr4_runtime.dir
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/CMakeFiles/antlr4_runtime-build_static.dir
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/CMakeFiles/antlr4_runtime-build_shared.dir
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/CMakeFiles/test_antlr4.dir
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/CMakeFiles/edit_cache.dir
+/Users/dashazorkot/Downloads/ALGOVIZ/Algorithm-visualizer/Algorithm-visualizer/AST/build/CMakeFiles/rebuild_cache.dir

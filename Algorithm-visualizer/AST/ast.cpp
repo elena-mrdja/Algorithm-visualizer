@@ -16,7 +16,7 @@ Expression::Expression(AlgoParser::ExpContext* ctx){
         expression_type = neg;
     }else if (ctx->LP()){
         child_binop_exp = new Expression(ctx->exp(0));
-        expression_type = binop_exp;
+        expression_type = child_binop_exp->get_exp_type();
     }else{
         child_sing = new SingleOutput(ctx);
         if (ctx->variable()){
@@ -212,16 +212,14 @@ IfRest::IfRest(AlgoParser::IfrestContext* ctx){
     block = new Block(ctx->block());
 }
 
-/*ValuesList::ValuesList(Value* h, Value* t, double v){
+ValuesList::ValuesList(Value* h, Value* t){
     head = h;
     tail = t;
-    current = v;
-};*/
+};
 
 ValuesList::ValuesList(){
-    head = nullptr;
-    tail = nullptr;
-    current = 1;
+    head = NULL;
+    tail = NULL;
     /*head = new Value();
     tail = head;
     current = tail->value;*/
@@ -232,9 +230,12 @@ Value* ValuesList::get_tail(){return tail;};
 
 void ValuesList::set_head(Value* h){head = h;};
 void ValuesList::set_tail(Value* t){tail = t;};
-bool ValuesList::is_empty(){cout <<"inside empty"<<endl;return head == nullptr;};
-void ValuesList::set_value(double v){current = v;};
-double ValuesList::get_value(){return current;};
+bool ValuesList::is_empty(){
+    cout <<"inside empty"<<endl;
+    if (head == 0) cout << "true" << endl; return true;
+    cout << "false"<< endl;
+    return false;
+};
 void ValuesList::add_value(Value* v){
     cout << v << endl;
     if (is_empty()){
@@ -403,10 +404,10 @@ Expression* Expression::get_right_expression(){
 };
 string Expression::get_text(){
     switch (expression_type) {
-    case binop : return get_child_binop()->get_operation();break;
-    case neg : return get_child_neg()->get_operation();break;
-    case number : return get_child_sing()->get_operation();break;
-    case variable : return get_child_sing()->get_operation();break;
+    case binop : return get_child_binop()->get_text();break;
+    case neg : return get_child_neg()->get_text();break;
+    case number : return get_child_sing()->get_text();break;
+    case variable : return get_child_sing()->get_text();break;
     case binop_exp : return "Error";break;
     case unknown_exp_type : cout << "Get text Error!" << endl; return "Error";break;
     }
@@ -448,8 +449,10 @@ void fill_declaration(Declaration* dec, Cache* cache, int declaration_line){
     cout << "entering dec" << endl;
     Value* value = new Value;
     cout << "private check" << endl;
+    cout << "expression" << dec->get_expression() << endl;
     value->value = dec->get_expression()->get_value(cache, declaration_line);
-    cout << cache->get_map()[declaration_line][dec->get_name()]<< endl;
+    cout << "exp get value" << endl;
+    cout << "value value" << value->value << endl;
     cache->add_value(value,  declaration_line, dec->get_name());
     cout << "private check 2" << endl;
 };
@@ -577,7 +580,7 @@ flowchart* read_print(Print* print_stmt, int line_num, Cache* cache){
 };
 flowchart* read_return(Return* return_stmt, int line_num, Cache* cache){
     flowchart* chart = new flowchart;
-    chart->shape = rectangle;
+    chart->shape = circle;
     chart->text = return_stmt->get_text();
     chart->color = red;
     return chart;
@@ -603,10 +606,14 @@ flowchart* read_statement(AssignDec stmt, int line_num, Cache* cache){
 
 flowchart* l[MAX_LINES] = {};
 
-void draw_flowchart(AST* ast, Cache* cache){
+void draw_flowchart(Block* ast, Cache* cache){
+    cout << "chartfunc" << endl;
     int n = ast->get_size();
+    cout << n<<endl;
     for (int i = 0; i < n; i++){
         flowchart* chart =  read_statement(ast->get_child(i), i, cache);
+        cout << chart->shape << "shape" << endl;
+        cout << chart->text << endl;
         l[i] = chart;
 
     };
