@@ -82,6 +82,7 @@ void VariableExplorer::track(vector<unordered_map<char, vector<double>>> v, int 
 {
     const int X = 50;
     string words="";
+    int X_add;
 
     unordered_map<char, vector<double>> map = v[index];
     int size = map.size();
@@ -90,6 +91,8 @@ void VariableExplorer::track(vector<unordered_map<char, vector<double>>> v, int 
     Y_next += 20;
 
     for(auto it : map){
+        if (it.second.size() == 1) {X_add = 42*(index+1);}
+        else {X_add = 1425;}
         for(int j = 0; j < it.second.size();j++) {
                 words = words + it.first + " = " + std::to_string(it.second[j]) + "\n";
                 Y_next += 20;
@@ -99,7 +102,8 @@ void VariableExplorer::track(vector<unordered_map<char, vector<double>>> v, int 
     Y_next += 15;
 
     QString word = QString::fromStdString(words);
-    auto text = this->createText2(word, X+42*(index+1),Y_current,100,100);
+    auto text = this->createText2(word, X+X_add, Y_current, 100, 100);
+
     scene->addItem(text);
     Y_current = Y_next;
 }
