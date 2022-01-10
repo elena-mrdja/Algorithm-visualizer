@@ -151,11 +151,15 @@ Assignment::Assignment(AlgoParser::AssignContext* ctx)
     name = ctx->variable()->STRING()->getText();
 }
 
+
+
 Block::Block(AlgoParser::BlockContext* ctx) {
     size = ctx->stmts().size();
     children = new AssignDec[size];
     int i = 0;
+    
     for (;i < size; i++){
+        
          AssignDec child(ctx->stmts()[i]);
          children[i] = child;
     };
@@ -207,8 +211,6 @@ IfElse::IfElse(AlgoParser::IfelseContext* ctx){
 IfRest::IfRest(AlgoParser::IfrestContext* ctx){
     block = new Block(ctx->block());
 }
-
-
 
 /*ValuesList::ValuesList(Value* h, Value* t, double v){
     head = h;

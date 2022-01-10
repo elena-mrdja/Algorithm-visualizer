@@ -588,6 +588,7 @@ private :
     AssignDec* child;
 };*/
 
+
 class Block {
 public :
     Block(AlgoParser::BlockContext* ctx);
@@ -611,6 +612,7 @@ private:
     AssignDec* children;
     int size;
 };
+
 class WhileStmt : public AssignDec {
 public:
     virtual string get_text(){return condition->get_text();};
