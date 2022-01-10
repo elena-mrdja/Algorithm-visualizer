@@ -191,7 +191,7 @@ void MainWindow::on_variables_clicked()
     vec3 = {pair1, pair2, pair3};
 
     vector<pair<vector<string>,vector<int>>> vec4;
-    vec4 = {pair1, pair2, pair3,pair41, pair42, pair43};
+    vec4 = {pair41, pair42, pair43};
 
     list = {vec1, vec2, vec3, vec4};
 
