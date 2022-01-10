@@ -125,7 +125,7 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 void CodeEditor::writeOut(QString docText)
 {
     //QDir::currentPath()
-    std::string const nomFichier("/Users/mina_goranovic/Desktop/score.txt");
+    std::string const nomFichier("/Users/katia_borisova/Desktop/ANTLR_FILE/score.txt");
     docText = this->toPlainText();
     std::ofstream MyFile(nomFichier);
     if(MyFile)

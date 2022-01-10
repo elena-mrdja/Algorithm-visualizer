@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <iostream>
 #include <QFontMetrics>
+
 //GLOBAL VARIABLES
 
 //Process

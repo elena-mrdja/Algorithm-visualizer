@@ -17,13 +17,14 @@ int const squareSize = 100;
 int const decisionLength = sqrt(20000);
 int const decisionWidth = sqrt(20000);
 
-int trackerIndex;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    index = 0;
 
 }
 
@@ -47,10 +48,6 @@ enum chart_shape {
 //};
 
 
-flowchart one = {0, "Declare x"};
-flowchart two = {1, "If x = 1", 1};
-flowchart three = {0, "Assign x"};
-flowchart four = {1, "While x > 10", 3};
 
 
 //void MainWindow::on_Visualize_clicked()
@@ -67,100 +64,13 @@ flowchart four = {1, "While x > 10", 3};
 void MainWindow::on_Visualize_clicked()
 {
     /*IF THE PROGRAM FAILS TO BUILD MAYBE CHECK THE VALUE BOUDING i
-     * IT HAS TO BE THE SAME AS THE NUMBER OF STATEMENTS IN THE ARRAY*/
-
-//    flowchart arr[3] = {{0, "Statement 1", 0,0},
-//                        {0, "Statement 2", 0,0},
-//                        {0, "Statement 2", 0,0}};
-
-//    flowchart arr[3] = {{1, "If n°1", 2,0},
-//                        {0, "Statement 1", 0,0},
-//                        {0, "Statement 2", 0,0}};
-
-//    flowchart arr[5] = {{1, "If n°1", 2,2},
-//                        {0, "Statement 1 in if", 0,0},
-//                        {0, "Statement 2 in if", 0,0},
-//                        {0, "Statement 1 in else", 0,0},
-//                        {0, "Statement 2 in else", 0,0}};
-
-//    flowchart arr[3] = {{2, "While n°1", 2,0},
-//                        {0, "Statement 1", 0,0},
-//                        {0, "Statement 2", 0,0}};
-
-//    flowchart arr[6] = {{1, "If n°1", 4, 1},
-//                        {0, "Statement in if n°1", 0,0},
-//                        {1, "If n°2", 1, 1},
-//                        {0, "Statement in if n°2", 0,0},
-//                        {0, "Statement in else n°2", 0,0},
-//                        {0, "Statement in else n°1", 0,0}};
-
-
-//    flowchart arr[9] = {{1, "If n°1", 4, 4},
-//                        {0, "Statement in if n°1", 0,0},
-//                        {1, "If n°2", 1, 1},
-//                        {0, "Statement in if n°2", 0,0},
-//                        {0, "Statement in else n°2", 0,0},
-//                        {0, "Statement in else n°1", 0,0},
-//                        {1, "If n°3", 1, 1},
-//                        {0, "Statement in if n°3", 0,0},
-//                        {0, "Statement in else n°3", 0,0}};
-
-
-//    flowchart arr[6] = {{2, "While n°1", 5, 0},
-//                        {0, "Statement 1 in while n°1",0,0},
-//                        {2, "While n°2", 2, 0},
-//                        {0, "Statement 1 in while n°2", 0,0},
-//                        {0, "Statement 2 in while n°2", 0,0},
-//                        {0, "Statement 2 in while n°1",0,0}};
-
-//    flowchart arr[12] = {{2, "While n°1", 11, 0},
-//                         {0, "Statement 1 in while n°1", 0,0},
-//                         {1, "If n°1", 4, 4},
-//                         {0, "Statement in if n°1", 0,0},
-//                         {1, "If n°2", 1, 1},
-//                         {0, "Statement in if n°2", 0,0},
-//                         {0, "Statement in else n°2", 0,0},
-//                         {0, "Statement in else n°1", 0,0},
-//                         {1, "If n°3", 1, 1},
-//                         {0, "Statement in if n°3", 0,0},
-//                         {0, "Statement in else n°3", 0,0},
-//                         {0, "Statement 2 in while n°1", 0,0}};
-
-//    flowchart arr[17] = {{1, "If n°1", 8,8},
-//                         {0, "Statement 1 in if n°1", 0,0},
-//                         {2, "While n°1", 5, 0},
-//                         {0, "Statement 1 in while n°1",0,0},
-//                         {1, "If n°2", 1, 1},
-//                         {0, "Statement 1 in if n°2", 0,0},
-//                         {0, "Statement 2 in else n°2", 0,0},
-//                         {0, "Statement 2 in while n°1",0,0},
-//                         {0, "Statement 2 in if n°1", 0,0},
-//                         {0, "Statement 1 in else n°1", 0,0},
-//                         {2, "While n°2", 5, 0},
-//                         {0, "Statement 1 in while n°2",0,0},
-//                         {1, "If n°2", 1, 1},
-//                         {0, "Statement 1 in if n°2", 0,0},
-//                         {0, "Statement 2 in else n°2", 0,0},
-//                         {0, "Statement 2 in while n°2",0,0},
-//                         {0, "Statement 2 in else n°1", 0,0}};
-
-    flowchart arr[17] = {{1, "If n°1", 8,8},
-                         {0, "Statement 1 in if n°1", 0,0},
-                         {2, "While n°1", 5, 0},
-                         {0, "Statement 1 in while n°1",0,0},
-                         {2, "While n°2", 2, 0},
-                         {0, "Statement 1 in while n°2", 0,0},
-                         {0, "Statement 2 in while n°2", 0,0},
-                         {0, "Statement 2 in while n°1",0,0},
-                         {0, "Statement 2 in if n°1", 0,0},
-                         {0, "Statement 1 in else n°1", 0,0},
-                         {2, "While n°3", 5, 0},
-                         {0, "Statement 1 in while n°3",0,0},
-                         {2, "While n°4", 2, 0},
-                         {0, "Statement 1 in while n°4", 0,0},
-                         {0, "Statement 2 in while n°4", 0,0},
-                         {0, "Statement 2 in while n°3",0,0},
-                         {0, "Statement 2 in else n°1", 0,0}};
+     * IT HAS TO BE THE SAME AS THE NUMBER OF STATEMENTS IN THE test17AY*/
+    flowchart test17[6] = {{0, "Declare i", 0,0},
+                          {0, "Declare n", 0,0},
+                          {0, "Declare multiplication", 0,0},
+                          {2, "While i <= 10", 2,0},
+                          {0, "Assign multiplication", 0,0},
+                          {0, "Asign i", 0,0}};
 
     const int X = 300;
     int Y = 20;
@@ -177,12 +87,12 @@ void MainWindow::on_Visualize_clicked()
     Y += processWidth + spacing;
 
 
-    for (int i = 0; i < 17; i++)
+    for (int i = 0; i < 6; i++)
     {
-        std::string str = arr[i].text;
+        std::string str = test17[i].text;
 
         //If we have a rectangle
-        if (arr[i].chart_shape == 0)
+        if (test17[i].chart_shape == 0)
         {
             //Draw
             this->ui->widget_3->setShape(Viewer::Process);
@@ -193,35 +103,35 @@ void MainWindow::on_Visualize_clicked()
         }
 
         //If we have a diamond
-        if (arr[i].chart_shape > 0)
+        if (test17[i].chart_shape > 0)
         {
-            ifStatements = arr[i].first_block;
-            elseStatements = arr[i].second_block; //Initialised to 0 and stays 0 in case of no else or in case of while
+            ifStatements = test17[i].first_block;
+            elseStatements = test17[i].second_block; //Initialised to 0 and stays 0 in case of no else or in case of while
             numberStatements = ifStatements + elseStatements;
             //We copy all the statements contained in one decision block to pass them to the computing function
 
-            flowchart process_arr[numberStatements + 1];
+            flowchart process_test17[numberStatements + 1];
             for(int j = 0; j < numberStatements+1; j++)
             {
-                process_arr[j] = arr[i+j];
+                process_test17[j] = test17[i+j];
             }
 
             //Draw
             this->ui->widget_3->setShape(Viewer::Decision);
-            //first return value of the function is the width of the block it displays (pointer type to access elements of the array)
+            //first return value of the function is the width of the block it displays (pointer type to access elements of the test17ay)
 
-            int * tmp = this->ui->widget_3->compute(X, Y+20,str, process_arr);
+            int * tmp = this->ui->widget_3->compute(X, Y+20,str, process_test17);
             int processBlockWidth = 0;
             processBlockWidth = tmp[0];
             Y+= processBlockWidth;
 
             //Adding the line (and space to Y variable) after we have drawn a block.
-            if(arr[i].chart_shape == 1)
+            if(test17[i].chart_shape == 1)
             {
                 this->ui->widget_3->compute_vertical(X+processLength/2, Y, spacing);
                 Y+= spacing;
             }
-            else if(arr[i].chart_shape == 2)
+            else if(test17[i].chart_shape == 2)
             {
                 this->ui->widget_3->compute_vertical(X+processLength/2, Y, spacing/2);
                 Y+= spacing/2;
@@ -239,58 +149,56 @@ void MainWindow::on_Visualize_clicked()
 
 void MainWindow::on_variables_clicked()
 {
-    vector<char> order;
-    vector<unordered_map<char, vector<double>>::iterator> vec;
+
+    vector<vector<pair<vector<string>,vector<int>>>> list;
 
 
-    //postoje funkcije koje ce ti pomoci da ubacis value
-    unordered_map<char, vector<double>> mapa;
-    mapa['z'].push_back(4);
-    mapa['z'].push_back(5);
-    mapa['x'].push_back(1);
-    mapa['y'].push_back(2);
-    mapa['y'].push_back(3);
-    order.push_back('z');
-    order.push_back('x');
-    order.push_back('y');
+    pair<vector<string>,vector<int>> pair1;
+    pair1.first = {"i"};
+    pair1.second = {1};
 
-    unordered_map<char, vector<double>> mapa1;
-    mapa1['a'].push_back(4);
-    mapa1['z'].push_back(5.98);
-    mapa1['b'].push_back(11);
-    mapa1['b'].push_back(24);
-    mapa1['b'].push_back(32);
-
-    unordered_map<char, vector<double>> mapa2;
-    mapa2['a'].push_back(8);
-    mapa2['z'].push_back(10);
-    mapa2['b'].push_back(22);
-    mapa2['b'].push_back(38);
-    mapa2['b'].push_back(64);
+    pair<vector<string>,vector<int>> pair2;
+    pair2.first = {"n"};
+    pair2.second = {7};
 
 
-    vector<unordered_map<char, vector<double>>> ve;
-    ve.push_back(mapa);
-    ve.push_back(mapa1);
-    ve.push_back(mapa2);
 
-    for(unordered_map<char, vector<double>>::iterator it=mapa.begin();it!=mapa.end();it++)
-    {
-        vec.push_back(it);
-    }
+    pair<vector<string>,vector<int>> pair3;
+    pair3.first = {"multiplication"};
+    pair3.second = {0};
 
-    if (trackerIndex == ve.size())
-    {
-        trackerIndex = 1;
-    }
-    else
-    {
-        trackerIndex++;
-    }
+    pair<vector<string>,vector<int>> pair41;
+    pair41.first = {"i"};
+    pair41.second = {2,3,4,5,6,7,8,9,10,11};
 
-    this->ui->widget_4->writeOut(QString("Btn"));
-    this->ui->widget_5->track(ve, trackerIndex);
-    //this->ui->widget_5->track2(vec);
+    pair<vector<string>,vector<int>> pair42;
+    pair42.first = {"n"};
+    pair42.second = {7,14,21,28,35,42,49,56,63,70};
+
+    pair<vector<string>,vector<int>> pair43;
+    pair43.first = {"multiplication"};
+    pair43.second = {7,14,21,28,35,42,49,56,63,70};
+
+
+    vector<pair<vector<string>,vector<int>>> vec1;
+    vec1 = {pair1};
+
+    vector<pair<vector<string>,vector<int>>> vec2;
+    vec2 = {pair1, pair2};
+
+
+    vector<pair<vector<string>,vector<int>>> vec3;
+    vec3 = {pair1, pair2, pair3};
+
+    vector<pair<vector<string>,vector<int>>> vec4;
+    vec4 = {pair1, pair2, pair3,pair41, pair42, pair43};
+
+    list = {vec1, vec2, vec3, vec4};
+
+    this->ui->widget_5->track(list, index);
+    index ++;
+
+
 }
 
 
@@ -322,3 +230,5 @@ void MainWindow::on_Upload_clicked()
   //  update();
 //}
 
+
+//I mean ure doing ifs qwith ......, thats the worst thing i've ever saw
