@@ -17,13 +17,14 @@ int const squareSize = 100;
 int const decisionLength = sqrt(20000);
 int const decisionWidth = sqrt(20000);
 
-int trackerIndex;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    index = 0;
 
 }
 
@@ -47,10 +48,6 @@ enum chart_shape {
 //};
 
 
-flowchart one = {0, "Declare x"};
-flowchart two = {1, "If x = 1", 1};
-flowchart three = {0, "Assign x"};
-flowchart four = {1, "While x > 10", 3};
 
 
 //void MainWindow::on_Visualize_clicked()
@@ -67,6 +64,7 @@ flowchart four = {1, "While x > 10", 3};
 void MainWindow::on_Visualize_clicked()
 {
     /*IF THE PROGRAM FAILS TO BUILD MAYBE CHECK THE VALUE BOUDING i
+<<<<<<< HEAD
      * IT HAS TO BE THE SAME AS THE NUMBER OF STATEMENTS IN THE ARRAY*/
 
 //    flowchart arr[3] = {{0, "Statement 1", 0,0},
@@ -171,6 +169,15 @@ void MainWindow::on_Visualize_clicked()
 //                       {0, "S", 0,0},
 //                       {0,"S",0,0}};
 
+     /* IT HAS TO BE THE SAME AS THE NUMBER OF STATEMENTS IN THE test17AY*/
+    flowchart test17[6] = {{0, "Declare i", 0,0},
+                          {0, "Declare n", 0,0},
+                          {0, "Declare multiplication", 0,0},
+                          {2, "While i <= 10", 2,0},
+                          {0, "Assign multiplication", 0,0},
+                          {0, "Asign i", 0,0}};
+
+
     const int X = 300;
     int Y = 20;
     const int spacing = 80;
@@ -186,12 +193,12 @@ void MainWindow::on_Visualize_clicked()
     Y += processWidth + spacing;
 
 
-    for (int i = 0; i < 17; i++)
+    for (int i = 0; i < 6; i++)
     {
-        std::string str = arr[i].text;
+        std::string str = test17[i].text;
 
         //If we have a rectangle
-        if (arr[i].chart_shape == 0)
+        if (test17[i].chart_shape == 0)
         {
             //Draw
             this->ui->widget_3->setShape(Viewer::Process);
@@ -202,35 +209,35 @@ void MainWindow::on_Visualize_clicked()
         }
 
         //If we have a diamond
-        if (arr[i].chart_shape > 0)
+        if (test17[i].chart_shape > 0)
         {
-            ifStatements = arr[i].first_block;
-            elseStatements = arr[i].second_block; //Initialised to 0 and stays 0 in case of no else or in case of while
+            ifStatements = test17[i].first_block;
+            elseStatements = test17[i].second_block; //Initialised to 0 and stays 0 in case of no else or in case of while
             numberStatements = ifStatements + elseStatements;
             //We copy all the statements contained in one decision block to pass them to the computing function
 
-            flowchart process_arr[numberStatements + 1];
+            flowchart process_test17[numberStatements + 1];
             for(int j = 0; j < numberStatements+1; j++)
             {
-                process_arr[j] = arr[i+j];
+                process_test17[j] = test17[i+j];
             }
 
             //Draw
             this->ui->widget_3->setShape(Viewer::Decision);
-            //first return value of the function is the width of the block it displays (pointer type to access elements of the array)
+            //first return value of the function is the width of the block it displays (pointer type to access elements of the test17ay)
 
-            int * tmp = this->ui->widget_3->compute(X, Y+20,str, process_arr);
+            int * tmp = this->ui->widget_3->compute(X, Y+20,str, process_test17);
             int processBlockWidth = 0;
             processBlockWidth = tmp[0];
             Y+= processBlockWidth;
 
             //Adding the line (and space to Y variable) after we have drawn a block.
-            if(arr[i].chart_shape == 1)
+            if(test17[i].chart_shape == 1)
             {
                 this->ui->widget_3->compute_vertical(X+processLength/2, Y, spacing);
                 Y+= spacing;
             }
-            else if(arr[i].chart_shape == 2)
+            else if(test17[i].chart_shape == 2)
             {
                 this->ui->widget_3->compute_vertical(X+processLength/2, Y, spacing/2);
                 Y+= spacing/2;
@@ -254,51 +261,96 @@ void MainWindow::on_variables_clicked()
 
     //postoje funkcije koje ce ti pomoci da ubacis value
     unordered_map<char, vector<double>> mapa;
-    mapa['z'].push_back(4);
-    mapa['z'].push_back(5);
-    mapa['x'].push_back(1);
-    mapa['y'].push_back(2);
-    mapa['y'].push_back(3);
-    order.push_back('z');
-    order.push_back('x');
-    order.push_back('y');
+    mapa['i'].push_back(1);
+
 
     unordered_map<char, vector<double>> mapa1;
-    mapa1['a'].push_back(4);
-    mapa1['z'].push_back(5.98);
-    mapa1['b'].push_back(11);
-    mapa1['b'].push_back(24);
-    mapa1['b'].push_back(32);
+    mapa1['i'].push_back(1);
+    mapa1['n'].push_back(7);
+
 
     unordered_map<char, vector<double>> mapa2;
-    mapa2['a'].push_back(8);
-    mapa2['z'].push_back(10);
-    mapa2['b'].push_back(22);
-    mapa2['b'].push_back(38);
-    mapa2['b'].push_back(64);
+    mapa2['i'].push_back(1);
+    mapa2['n'].push_back(7);
+    mapa2['m'].push_back(0);
+
+
+    unordered_map<char, vector<double>> mapa3;
+    mapa3['i'].push_back(1);
+    mapa3['n'].push_back(7);
+    mapa3['m'].push_back(7);
+
+    mapa3['i'].push_back(2);
+    mapa3['n'].push_back(7);
+    mapa3['m'].push_back(14);
+
+    mapa3['i'].push_back(3);
+    mapa3['n'].push_back(7);
+    mapa3['m'].push_back(21);
+
+    mapa3['i'].push_back(4);
+    mapa3['n'].push_back(7);
+    mapa3['m'].push_back(28);
+
+    mapa3['i'].push_back(5);
+    mapa3['n'].push_back(7);
+    mapa3['m'].push_back(35);
+
+    mapa3['i'].push_back(6);
+    mapa3['n'].push_back(7);
+    mapa3['m'].push_back(42);
+
+    mapa3['i'].push_back(7);
+    mapa3['n'].push_back(7);
+    mapa3['m'].push_back(49);
+
+    mapa3['i'].push_back(1);
+    mapa3['n'].push_back(7);
+    mapa3['m'].push_back(7);
+
+    mapa3['i'].push_back(8);
+    mapa3['n'].push_back(7);
+    mapa3['m'].push_back(56);
+
+    mapa3['i'].push_back(9);
+    mapa3['n'].push_back(7);
+    mapa3['m'].push_back(63);
+
+    mapa3['i'].push_back(10);
+    mapa3['n'].push_back(7);
+    mapa3['m'].push_back(70);
+    mapa3['i'].push_back(11);
+
 
 
     vector<unordered_map<char, vector<double>>> ve;
     ve.push_back(mapa);
     ve.push_back(mapa1);
     ve.push_back(mapa2);
+    ve.push_back(mapa3);
 
     for(unordered_map<char, vector<double>>::iterator it=mapa.begin();it!=mapa.end();it++)
     {
         vec.push_back(it);
     }
 
-    if (trackerIndex == ve.size())
-    {
-        trackerIndex = 1;
-    }
-    else
-    {
-        trackerIndex++;
-    }
 
-    this->ui->widget_4->writeOut(QString("Btn"));
-    this->ui->widget_5->track(ve, trackerIndex);
+
+    //index = ve.size();
+    this->ui->widget_5->track(ve, index);
+    index ++;
+
+    //if (trackerIndex == ve.size())
+    //{
+      //  trackerIndex = 1;
+    //}
+    //else
+    //{
+      //  trackerIndex++;
+    //}
+
+
+    //this->ui->widget_4->writeOut(QString("Btn"));
     //this->ui->widget_5->track2(vec);
 }
 
@@ -350,3 +402,4 @@ void MainWindow::on_zoomIn_clicked()
 }
 
 void MainWindow::on_zoomOut_clicked(){}
+
