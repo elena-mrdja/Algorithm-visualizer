@@ -156,12 +156,16 @@ public:
     //Cache();
     void new_var(Declaration* dec, int num);
     ValuesList* get_var(string var);
-    void add_new_value(string var, Value* value, int line);
     double get_last_value(string name, int i){
         return variables[i][name]->get_tail()->value;
     };
     map<string, ValuesList*>* get_map(){return variables;};
-
+    void add_value(Value* v, int line_num, string name){
+        variables[line_num][name]->add_value(v);
+    };
+    void set_line(int line_to_set, int line_to_copy){
+        variables[line_to_set] = variables[line_to_copy];
+    };
 private:
     int num_lines;
     map<string, ValuesList*>* variables = new  map<string, ValuesList*>[MAX_LINES]; //MAX_LINES defined on the top of the file

@@ -448,14 +448,14 @@ void fill_declaration(Declaration* dec, Cache* cache, int declaration_line){
     cout << "private check" << endl;
     value->value = dec->get_expression()->get_value(cache, declaration_line);
     cout << cache->get_map()[declaration_line][dec->get_name()]<< endl;
-    cache->get_map()[declaration_line][dec->get_name()]->add_value(value);
+    cache->add_value(value,  declaration_line, dec->get_name());
     cout << "private check 2" << endl;
 };
 
 void fill_assignment(Assignment* assign, Cache* cache, int assignment_line){
     Value* value = new Value;
     value->value = assign->get_expression()->get_value(cache, assignment_line);
-    cache->get_map()[assignment_line][assign->get_name()]->add_value(value);
+    cache->add_value(value,  assignment_line, assign->get_name());
 };
 
 void fill_ifelse(IfElse* ifelse, Cache* cache, int if_condition_line){
@@ -477,10 +477,10 @@ void fill_ifelse(IfElse* ifelse, Cache* cache, int if_condition_line){
     }
 };
 
-void fill_unop(UnOp* unop, Cache* cache, int current_line){
+void fill_unop(UnOp* unop, Cache* cache, int unop_line){
     Value* value = new Value;
-    value->value = unop->get_expression()->get_value(cache, current_line);
-    cache->get_map()[current_line][unop->get_name()]->add_value(value);
+    value->value = unop->get_expression()->get_value(cache, unop_line);
+    cache->add_value(value,  unop_line, unop->get_name());
 }
 
 void fill_cache(Block* ast, Cache* cache){
@@ -493,7 +493,7 @@ void fill_cache(Block* ast, Cache* cache){
         int next_line = current_line + ast->get_child(current_line).get_jump_length();
         fill_statement(ast->get_child(current_line), cache, current_line);
         //next_line : in case of stmts with no blocks, the line increases by only 1
-        cache->get_map()[next_line] = cache->get_map()[current_line];
+        cache->set_line(next_line, current_line);
         current_line = next_line;
         cout << current_line << endl;
     };
