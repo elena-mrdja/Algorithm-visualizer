@@ -51,10 +51,26 @@ target_link_libraries(test_antlr4 antlr4_static)
 
 add_custom_command(TARGET test_antlr4 POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_if_different
+  "${PROJECT_SOURCE_DIR}/examples/example1.cpp"
   "${PROJECT_SOURCE_DIR}/examples/example2.cpp"
   "${PROJECT_SOURCE_DIR}/examples/example3.cpp"
   "${PROJECT_SOURCE_DIR}/examples/example4.cpp"
   "${PROJECT_SOURCE_DIR}/examples/example5.cpp"
   "${PROJECT_SOURCE_DIR}/examples/example6.cpp"
   "${PROJECT_SOURCE_DIR}/examples/example7.cpp"
+  "${PROJECT_SOURCE_DIR}/examples/example8.cpp"
+  "${PROJECT_SOURCE_DIR}/examples/example9.cpp"
+  "${PROJECT_SOURCE_DIR}/examples/example10.cpp"
+  "${PROJECT_SOURCE_DIR}/examples/example11.cpp"
+  "${PROJECT_SOURCE_DIR}/examples/example12.cpp"
+  "${PROJECT_SOURCE_DIR}/examples/example13.cpp"
+  "${PROJECT_SOURCE_DIR}/examples/example14.cpp"
+  "${PROJECT_SOURCE_DIR}/examples/example15.cpp"
+  "${PROJECT_SOURCE_DIR}/examples/example16.cpp"
+  "${PROJECT_SOURCE_DIR}/examples/example17.cpp"
+  "${PROJECT_SOURCE_DIR}/examples/example18.cpp"
+  "${PROJECT_SOURCE_DIR}/examples/example19.cpp"
+  "${PROJECT_SOURCE_DIR}/examples/example20.cpp"
+  "${PROJECT_SOURCE_DIR}/examples/example21.cpp"
+  "${PROJECT_SOURCE_DIR}/examples/example22.cpp"
   $<TARGET_FILE_DIR:test_antlr4>)
