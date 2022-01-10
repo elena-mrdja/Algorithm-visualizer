@@ -30,6 +30,10 @@ Viewer::Viewer(QWidget *parent) : QWidget(parent), mBackgroundColor(0,0,255),mSh
     on_shape_changed();
 
     set_background();
+    //view->scale(0.5, 0.5);
+//    mZoom = new Graphics_view_zoom(this);
+//    mZoom->set_modifiers(Qt::NoModifier);
+
 
     //manual_flowchart();
 
@@ -530,9 +534,7 @@ void Viewer::WheelEvent(QWheelEvent *event)
     {
         item->setTransform(QTransform::fromScale(1/scaleFactor, 1/scaleFactor), true);
     }
-
 }
-
 
 
 

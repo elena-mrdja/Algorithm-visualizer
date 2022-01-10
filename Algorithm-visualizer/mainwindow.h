@@ -28,6 +28,14 @@ private slots:
 
     void on_Upload_clicked();
 
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
+
+    void on_zoomIn_clicked();
+
+    void on_zoomOut_clicked();
+
 private:
     Ui::MainWindow *ui;
 

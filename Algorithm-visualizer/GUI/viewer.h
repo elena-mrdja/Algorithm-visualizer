@@ -44,7 +44,7 @@ public:
     ShapeType shape() const {return mShape; }
 
     void setScale(float scale) {mScale=scale; repaint();}
-    float scale() const {return mScale;}
+    //float scale() const {return mScale;}
 
     void draw_start(const int radius);
 
@@ -95,10 +95,14 @@ private:
     float mIntervalLength;
     float mScale;
     int mStepCount;
+    //qreal _scale;
+    //Graphics_view_zoom* mZoom;
 
 
 protected:
     virtual void WheelEvent(QWheelEvent *event);
+//    void scalingTime(qreal x);
+//    void animFinished();
 
 
 signals:

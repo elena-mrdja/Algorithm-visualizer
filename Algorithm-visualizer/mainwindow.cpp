@@ -113,18 +113,18 @@ void MainWindow::on_Visualize_clicked()
 //                        {0, "Statement 2 in while n°2", 0,0},
 //                        {0, "Statement 2 in while n°1",0,0}};
 
-    flowchart arr[12] = {{2, "While n°1", 11, 0},
-                         {0, "Statement 1 in while n°1", 0,0},
-                         {1, "If n°1", 4, 4},
-                         {0, "Statement in if n°1", 0,0},
-                         {1, "If n°2", 1, 1},
-                         {0, "Statement in if n°2", 0,0},
-                         {0, "Statement in else n°2", 0,0},
-                         {0, "Statement in else n°1", 0,0},
-                         {1, "If n°3", 1, 1},
-                         {0, "Statement in if n°3", 0,0},
-                         {0, "Statement in else n°3", 0,0},
-                         {0, "Statement 2 in while n°1", 0,0}};
+//    flowchart arr[12] = {{2, "While n°1", 11, 0},
+//                         {0, "Statement 1 in while n°1", 0,0},
+//                         {1, "If n°1", 4, 4},
+//                         {0, "Statement in if n°1", 0,0},
+//                         {1, "If n°2", 1, 1},
+//                         {0, "Statement in if n°2", 0,0},
+//                         {0, "Statement in else n°2", 0,0},
+//                         {0, "Statement in else n°1", 0,0},
+//                         {1, "If n°3", 1, 1},
+//                         {0, "Statement in if n°3", 0,0},
+//                         {0, "Statement in else n°3", 0,0},
+//                         {0, "Statement 2 in while n°1", 0,0}};
 
 //    flowchart arr[17] = {{1, "If n°1", 8,8},
 //                         {0, "Statement 1 in if n°1", 0,0},
@@ -144,23 +144,23 @@ void MainWindow::on_Visualize_clicked()
 //                         {0, "Statement 2 in while n°2",0,0},
 //                         {0, "Statement 2 in else n°1", 0,0}};
 
-//    flowchart arr[17] = {{1, "If n°1", 8,8},
-//                         {0, "Statement 1 in if n°1", 0,0},
-//                         {2, "While n°1", 5, 0},
-//                         {0, "Statement 1 in while n°1",0,0},
-//                         {2, "While n°2", 2, 0},
-//                         {0, "Statement 1 in while n°2", 0,0},
-//                         {0, "Statement 2 in while n°2", 0,0},
-//                         {0, "Statement 2 in while n°1",0,0},
-//                         {0, "Statement 2 in if n°1", 0,0},
-//                         {0, "Statement 1 in else n°1", 0,0},
-//                         {2, "While n°3", 5, 0},
-//                         {0, "Statement 1 in while n°3",0,0},
-//                         {2, "While n°4", 2, 0},
-//                         {0, "Statement 1 in while n°4", 0,0},
-//                         {0, "Statement 2 in while n°4", 0,0},
-//                         {0, "Statement 2 in while n°3",0,0},
-//                         {0, "Statement 2 in else n°1", 0,0}};
+    flowchart arr[17] = {{1, "If n°1", 8,8},
+                         {0, "Statement 1 in if n°1", 0,0},
+                         {2, "While n°1", 5, 0},
+                         {0, "Statement 1 in while n°1",0,0},
+                         {2, "While n°2", 2, 0},
+                         {0, "Statement 1 in while n°2", 0,0},
+                         {0, "Statement 2 in while n°2", 0,0},
+                         {0, "Statement 2 in while n°1",0,0},
+                         {0, "Statement 2 in if n°1", 0,0},
+                         {0, "Statement 1 in else n°1", 0,0},
+                         {2, "While n°3", 5, 0},
+                         {0, "Statement 1 in while n°3",0,0},
+                         {2, "While n°4", 2, 0},
+                         {0, "Statement 1 in while n°4", 0,0},
+                         {0, "Statement 2 in while n°4", 0,0},
+                         {0, "Statement 2 in while n°3",0,0},
+                         {0, "Statement 2 in else n°1", 0,0}};
 
 
 //    flowchart arr[7] = {{1, "If", 2, 4},
@@ -186,7 +186,7 @@ void MainWindow::on_Visualize_clicked()
     Y += processWidth + spacing;
 
 
-    for (int i = 0; i < 12; i++)
+    for (int i = 0; i < 17; i++)
     {
         std::string str = arr[i].text;
 
@@ -331,3 +331,22 @@ void MainWindow::on_Upload_clicked()
   //  update();
 //}
 
+
+void MainWindow::on_pushButton_clicked()
+{
+    this->ui->widget_3->view->scale(0.7, 0.7);
+}
+
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    this->ui->widget_3->view->scale(1.4, 1.4);
+}
+
+
+void MainWindow::on_zoomIn_clicked()
+{
+
+}
+
+void MainWindow::on_zoomOut_clicked(){}
