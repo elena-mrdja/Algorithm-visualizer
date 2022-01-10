@@ -559,8 +559,9 @@ flowchart* read_while(WhileStmt* while_stmt, int line_num, Cache* cache){
     chart->shape = diamond;
     chart->text = while_stmt->get_condition()->get_text();
     chart->first_block = while_stmt->get_block()->get_block_flowchart_size();
-    if (while_stmt->get_condition()->get_value(cache, line_num)) chart->color = green;
-    else chart->color = red;
+    //if (while_stmt->get_condition()->get_value(cache, line_num)) chart->color = green;
+    //else chart->color = red;
+    chart->color = red;
     return chart;
 };
 flowchart* read_unop(UnOp* unop, int line_num, Cache* cache){
