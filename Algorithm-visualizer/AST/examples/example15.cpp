@@ -13,8 +13,8 @@ int main(){
         while (i<=n/2) {
             if (n % i == 0) {
               prime = false;
-              break;
-            }
+              break;}
+            i ++;
         }
     }
     if (prime){
