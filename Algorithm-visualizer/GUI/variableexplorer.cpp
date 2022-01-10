@@ -102,7 +102,7 @@ void VariableExplorer::track(vector<vector<pair<vector<string>,vector<int>>>> li
         }
     }
     if (size_pair > 1) {
-        X_add = 875;
+        X_add = 840;
         for(int j = 0; j < size_pair; j++){
             for (int i = 0; i < size_map; i ++){
                 words = words + map[i].first[0] + " = "  + to_string(map[i].second[j]) + "\n";
@@ -116,7 +116,7 @@ void VariableExplorer::track(vector<vector<pair<vector<string>,vector<int>>>> li
     words = words + "_________________________" + "\n";
 
     QString word = QString::fromStdString(words);
-    auto text = this->createText2(word, X+X_add, Y_current, 100, 100);
+    auto text = this->createText2(word, X, Y_current);
 
     scene->addItem(text);
     Y_current = Y_next;
@@ -161,14 +161,12 @@ scene->addItem(text);*/
     }
 }*/
 
-QGraphicsSimpleTextItem* VariableExplorer::createText2(QString str, int x, int y, int w, int l)
+QGraphicsSimpleTextItem* VariableExplorer::createText2(QString str, int x, int y)
 {
     auto text = new QGraphicsSimpleTextItem(str);
     text->setBrush(QBrush(Qt::white));
     text->setPen(QPen(QPen(Qt::white)));
     QFontMetrics font = QFontMetrics(text->font());
-    int length = font.horizontalAdvance(str);
-    int height = font.height();
-    text->setPos(x + w/2 - length/2,y + l/2 - height/2);
+    text->setPos(x,y);
     return text;
 }

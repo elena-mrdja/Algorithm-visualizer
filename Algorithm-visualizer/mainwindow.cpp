@@ -149,10 +149,12 @@ void MainWindow::on_Visualize_clicked()
 
 void MainWindow::on_variables_clicked()
 {
-
+    //list of lists of pairs, where both elements of the pair are vectors (first one with always lenght one, a string/name of var)
+    //and the other one having 1 or more elements (in loop case)
     vector<vector<pair<vector<string>,vector<int>>>> list;
 
 
+    //i fill manually the evolution of the code
     pair<vector<string>,vector<int>> pair1;
     pair1.first = {"i"};
     pair1.second = {1};
@@ -173,7 +175,7 @@ void MainWindow::on_variables_clicked()
 
     pair<vector<string>,vector<int>> pair42;
     pair42.first = {"n"};
-    pair42.second = {7,14,21,28,35,42,49,56,63,70};
+    pair42.second = {7,7,7,7,7,7,7,7,7,7};
 
     pair<vector<string>,vector<int>> pair43;
     pair43.first = {"multiplication"};
@@ -191,9 +193,11 @@ void MainWindow::on_variables_clicked()
     vec3 = {pair1, pair2, pair3};
 
     vector<pair<vector<string>,vector<int>>> vec4;
-    vec4 = {pair41, pair42, pair43};
+    vec4 = {pair42, pair43, pair41};
 
-    list = {vec1, vec2, vec3, vec4};
+    //this is the final list
+    //on button clicked take an element from the list and print it resp
+    list = {vec1, vec2, vec4, vec3,vec2,vec4};
 
     this->ui->widget_5->track(list, index);
     index ++;
