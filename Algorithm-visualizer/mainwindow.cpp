@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "GUI/test_vartrack.hpp"
 #include <QPainter>
 #include <iostream>
 #include <string>
@@ -149,60 +150,8 @@ void MainWindow::on_Visualize_clicked()
 
 void MainWindow::on_variables_clicked()
 {
-    //list of lists of pairs, where both elements of the pair are vectors (first one with always lenght one, a string/name of var)
-    //and the other one having 1 or more elements (in loop case)
-    vector<vector<pair<vector<string>,vector<int>>>> list;
-
-
-    //i fill manually the evolution of the code
-    pair<vector<string>,vector<int>> pair1;
-    pair1.first = {"i"};
-    pair1.second = {1};
-
-    pair<vector<string>,vector<int>> pair2;
-    pair2.first = {"n"};
-    pair2.second = {7};
-
-
-
-    pair<vector<string>,vector<int>> pair3;
-    pair3.first = {"multiplication"};
-    pair3.second = {0};
-
-    pair<vector<string>,vector<int>> pair41;
-    pair41.first = {"i"};
-    pair41.second = {2,3,4,5,6,7,8,9,10,11};
-
-    pair<vector<string>,vector<int>> pair42;
-    pair42.first = {"n"};
-    pair42.second = {7,7,7,7,7,7,7,7,7,7};
-
-    pair<vector<string>,vector<int>> pair43;
-    pair43.first = {"multiplication"};
-    pair43.second = {7,14,21,28,35,42,49,56,63,70};
-
-
-    vector<pair<vector<string>,vector<int>>> vec1;
-    vec1 = {pair1};
-
-    vector<pair<vector<string>,vector<int>>> vec2;
-    vec2 = {pair1, pair2};
-
-
-    vector<pair<vector<string>,vector<int>>> vec3;
-    vec3 = {pair1, pair2, pair3};
-
-    vector<pair<vector<string>,vector<int>>> vec4;
-    vec4 = {pair42, pair43, pair41};
-
-    //this is the final list
-    //on button clicked take an element from the list and print it resp
-    list = {vec1, vec2, vec4, vec3,vec2,vec4};
-
-    this->ui->widget_5->track(list, index);
+    this->ui->widget_5->track(test17(), index);
     index ++;
-
-
 }
 
 

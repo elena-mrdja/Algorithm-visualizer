@@ -15,6 +15,8 @@ SOURCES += \
     GUI/textblockdata.cpp \
     GUI/variableexplorer.cpp \
     GUI/viewer.cpp \
+    GUI/test_vartrack.cpp\
+    GUI/test_flowchart.cpp\
     main.cpp \
     mainwindow.cpp \
 
@@ -25,6 +27,8 @@ HEADERS += \
     GUI/textblockdata.h \
     GUI/variableexplorer.h \
     GUI/viewer.h \
+    GUI/test_vartrack.hpp\
+    GUI/test_flowchart.hpp\
     mainwindow.h \
 
 FORMS += \
