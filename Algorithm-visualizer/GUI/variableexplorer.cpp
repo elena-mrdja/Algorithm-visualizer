@@ -3,8 +3,8 @@
 VariableExplorer::VariableExplorer(QWidget *parent) : QGraphicsView(parent)
 {
     set_background();
-    Y_current = -35;
-    Y_next = -35;
+    Y_current = 0;
+    Y_next = 0;
 
 
 }
@@ -80,29 +80,26 @@ void VariableExplorer::set_background()
 
 void VariableExplorer::track(vector<unordered_map<char, vector<double>>> v, int index)
 {
-    const int X = 50;
+    const int X = 5;
     string words="";
-    int X_add;
 
     unordered_map<char, vector<double>> map = v[index];
     int size = map.size();
 
-    words = words + "Line: " + std::to_string(index+1) + "\n";
-    Y_next += 20;
+    words = words + "State of all variables declared so far at line " + std::to_string(index+1) + " is: "+ "\n";
+    Y_next += 25;
 
     for(auto it : map){
-        if (it.second.size() == 1) {X_add = 42*(index+1);}
-        else {X_add = 1425;}
         for(int j = 0; j < it.second.size();j++) {
                 words = words + it.first + " = " + std::to_string(it.second[j]) + "\n";
                 Y_next += 20;
             }
         }
-    words = words + "_________________________" + "\n";
+    words = words + "_____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________" + "\n";
     Y_next += 15;
 
     QString word = QString::fromStdString(words);
-    auto text = this->createText2(word, X+X_add, Y_current, 100, 100);
+    auto text = this->createText2(word, X, Y_current);
 
     scene->addItem(text);
     Y_current = Y_next;
@@ -147,7 +144,7 @@ scene->addItem(text);*/
     }
 }*/
 
-QGraphicsSimpleTextItem* VariableExplorer::createText2(QString str, int x, int y, int w, int l)
+QGraphicsSimpleTextItem* VariableExplorer::createText2(QString str, int x, int y)
 {
     auto text = new QGraphicsSimpleTextItem(str);
     text->setBrush(QBrush(Qt::white));
@@ -155,6 +152,6 @@ QGraphicsSimpleTextItem* VariableExplorer::createText2(QString str, int x, int y
     QFontMetrics font = QFontMetrics(text->font());
     int length = font.horizontalAdvance(str);
     int height = font.height();
-    text->setPos(x + w/2 - length/2,y + l/2 - height/2);
+    text->setPos(x ,y );
     return text;
 }
