@@ -66,7 +66,7 @@ void MainWindow::on_Visualize_clicked()
 {
     /*IF THE PROGRAM FAILS TO BUILD MAYBE CHECK THE VALUE BOUDING i
 <<<<<<< HEAD
-     * IT HAS TO BE THE SAME AS THE NUMBER OF STATEMENTS IN THE ARRAY*/
+     * IT HAS TO BE THE SAME AS THE NUMBER OF STATEMENTS IN THE test18AY*/
 
 //    flowchart arr[3] = {{0, "Statement 1", 0,0},
 //                        {0, "Statement 2", 0,0},
@@ -202,6 +202,11 @@ void MainWindow::on_Visualize_clicked()
                           {0, "Assign result", 1,0},
                           {0, "Asign n", 0,0}};
 
+    flowchart test19[4] = {{2, "While a != b", 3,0},
+                                                     {1, "If a > b", 2,0},
+                           {0, "lal", 0,0},
+                                                     {0, "Asign prime", 0,0}};
+
     const int X = 300;
     int Y = 20;
     const int spacing = 80;
@@ -217,12 +222,12 @@ void MainWindow::on_Visualize_clicked()
     Y += processWidth + spacing;
 
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 9; i++)
     {
-        std::string str = test18[i].text;
+        std::string str = test15[i].text;
 
         //If we have a rectangle
-        if (test18[i].chart_shape == 0)
+        if (test15[i].chart_shape == 0)
         {
             //Draw
             this->ui->widget_3->setShape(Viewer::Process);
@@ -233,36 +238,38 @@ void MainWindow::on_Visualize_clicked()
         }
 
         //If we have a diamond
-        if (test18[i].chart_shape > 0)
+        if (test15[i].chart_shape > 0)
         {
-            ifStatements = test18[i].first_block;
-            elseStatements = test18[i].second_block; //Initialised to 0 and stays 0 in case of no else or in case of while
+            ifStatements = test15[i].first_block;
+            elseStatements = test15[i].second_block; //Initialised to 0 and stays 0 in case of no else or in case of while
             numberStatements = ifStatements + elseStatements;
             //We copy all the statements contained in one decision block to pass them to the computing function
 
-            flowchart process_test18[numberStatements + 1];
+            flowchart process_test19[numberStatements + 1];
             for(int j = 0; j < numberStatements+1; j++)
             {
-                process_test18[j] = test18[i+j];
+                process_test19[j] = test15[i+j];
             }
 
             //Draw
             this->ui->widget_3->setShape(Viewer::Decision);
             //first return value of the function is the width of the block it displays (pointer type to access elements of the test17ay)
 
-            int * tmp = this->ui->widget_3->compute(X, Y+20,str, process_test18);
+            int * tmp = this->ui->widget_3->compute(X, Y+20,str, process_test19);
             int processBlockWidth = 0;
             processBlockWidth = tmp[0];
             Y+= processBlockWidth;
 
             //Adding the line (and space to Y variable) after we have drawn a block.
-            if(test18[i].chart_shape == 1)
-            {
+            if(test15[i].chart_shape == 1)
+            {   Y -= 20;
                 this->ui->widget_3->compute_vertical(X+processLength/2, Y, spacing);
                 Y+= spacing;
             }
-            else if(test18[i].chart_shape == 2)
+            else if(test15[i].chart_shape == 2)
             {
+
+
                 this->ui->widget_3->compute_vertical(X+processLength/2, Y, spacing/2);
                 Y+= spacing/2;
             }
@@ -279,9 +286,10 @@ void MainWindow::on_Visualize_clicked()
 
 void MainWindow::on_variables_clicked()
 {
-    this->ui->widget_5->track(test18(), index);
+    this->ui->widget_5->track(test15(), index);
     index ++;
 }
+
 
 
 

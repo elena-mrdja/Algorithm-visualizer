@@ -174,7 +174,7 @@ int *Viewer::compute_decision(double x, double y, std::string str, flowchart *pr
 
 
             int *tmp = compute_if(x,y, str, if_arr);
-            int ifBlockWidth = tmp[0] - 20; // -20 because the diamond shape forming the if is drawn at y-20 and then rotated 90° to be centered on the same spot if it had been drawn at (x,y)
+            int ifBlockWidth = tmp[0]-40; // -20 because the diamond shape forming the if is drawn at y-20 and then rotated 90° to be centered on the same spot if it had been drawn at (x,y)
 
             int ifElseSpacing = 30 + processWidth/2;
             compute_vertical(x+150, y + ifBlockWidth, ifElseSpacing);
@@ -182,12 +182,15 @@ int *Viewer::compute_decision(double x, double y, std::string str, flowchart *pr
             int *tmp1 = compute_else(x, y+ifBlockWidth+ifElseSpacing, "Else", else_arr);
             int elseBlockWidth = tmp1[0];
 
-            int blockWidth = ifBlockWidth+ ifElseSpacing + elseBlockWidth;
+            int blockWidth = ifBlockWidth+ ifElseSpacing + elseBlockWidth + 40;
             int results[2] = {blockWidth, 1+tmp[1]};
             return results;
         }
         else
         {
+//            int *tmp =  compute_if(x,y, str, process_arr);
+//            int results[2] = {tmp[0]+40, tmp[1]};
+//            return results;
             return compute_if(x,y, str, process_arr);
 
         }
@@ -288,7 +291,7 @@ int *Viewer::compute_if(double x, double y, std::string str, flowchart *if_arr)
             i += newNumberStatements;
         }
     }
-    int results[2] = {y_pos  - y_bottom_diamond + decisionWidth -20, numberIf};
+    int results[2] = {y_pos  - y_bottom_diamond + decisionWidth , numberIf};
     return results;
 }
 
@@ -446,7 +449,7 @@ int *Viewer::compute_while(double x, double y, std::string str, flowchart *while
             if (while_arr[i].chart_shape ==1)
             {
                 int * tmp_if = compute(x, y_pos+40, statementString, process_arr);
-                returnIf = tmp_if[0] ;
+                returnIf = tmp_if[0];
                 numberIf = tmp_if[1];
                 y_pos += returnIf ;
                 compute_vertical(x_bottom_diamond, y_pos, spacing);
@@ -467,7 +470,10 @@ int *Viewer::compute_while(double x, double y, std::string str, flowchart *while
     //Drawing the lines to represent the loop circling until the loop invariant is false
     compute_horizontal(x_right_diamond, y_right_diamond, whileLine*numberWhile + ((100 + indentation+processWidth/2) * numberIf));
 
-    int line_length =  decisionWidth/2 + ((numberStatements - loopsStatements) * spacing) + (numberProcess * processWidth) + spacing/2  + returnIf + returnWhile ;
+
+    int line_length =  decisionWidth/2 + ((numberStatements - loopsStatements) * spacing) + (numberProcess * processWidth) + spacing/2  + returnIf + returnWhile + 40;
+    std::cout << "spacing times" << (numberStatements - loopsStatements)<< std::endl;
+    std::cout << "return if" << returnIf << std::endl;
 
     compute_vertical(x_right_diamond +whileLine*numberWhile + ((100 + indentation+processWidth/2) * numberIf), y_right_diamond, line_length);
     compute_horizontal(x_bottom_diamond, y_right_diamond + line_length, whileLine*numberWhile + ((100 + indentation+processWidth/2) * numberIf) + decisionLength/2);
