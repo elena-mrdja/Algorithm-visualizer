@@ -8,7 +8,6 @@ int main(){
     double multiplication = 0;
     while(i<=10){
         multiplication = n * i;
-        std::cout << n << " * " << i << " = " << multiplication << std::endl;
         i++;
     }
     return 0;
