@@ -51,6 +51,7 @@ Our project is using the ANTLR4. The folder with the path Algorithm-visualizer/A
   5) Call: cmake ../ (you might need to download and install cmake).
   If you have the Cmake, then make sure you configure and generate the project:
   <img width="1431" alt="cmake2" src="https://user-images.githubusercontent.com/91254922/148872728-f0860d32-4b4d-418d-9547-0318b1c53cee.png">
+  
   6) Call: make
   7) Now your project is configurated and you can open it in QT (use CMakeLists.txt file to configurate QT project)
   <img width="821" alt="open" src="https://user-images.githubusercontent.com/91254922/148872974-bc3b60e8-1e0f-419c-9421-87bcff1f975b.png">
@@ -60,6 +61,7 @@ Our project is using the ANTLR4. The folder with the path Algorithm-visualizer/A
 - Our program work only with the function main.
 - It works only with the grammar we defined, which can be found in the doc/project_design.md file.
 <img width="1299" alt="grammar" src="https://user-images.githubusercontent.com/91254922/148873551-6745520a-17e5-4a9c-a299-e07de9e80d99.png">
+
 - When declaring a variable, user has to assing to it its inital value .
 - When using Unop, the user is asked to write the Unop after the variable (i.e please write i++ instead of ++i).
 - User is asked to not write more than 100 statements (where one statement is basically one line of code excluding the lines containing only brackets or declaration of while loop/if/else).
