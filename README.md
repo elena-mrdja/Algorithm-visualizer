@@ -94,5 +94,5 @@ Write the code in the CodeCell and click the “Done” button.  Our program wil
 # Demo video on some examples:
 ## Function that calculates the GCD of two given integers: (14)
 ## Function that checks whether the given integer is prime:(15)
-## Function that calculates the number of vowels, of consonants, of digits and of spaces in a string: (20)
+## Function that calculates the power of a number x^n: (18)
 
