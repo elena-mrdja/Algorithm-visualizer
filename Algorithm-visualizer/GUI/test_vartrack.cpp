@@ -103,7 +103,7 @@ vector<vector<pair<vector<string>,vector<int>>>> test14(){
     vec2 = {pair1, pair2};
 
     vector<pair<vector<string>,vector<int>>> vec3;
-    vec3 = {pair3, pair2};
+    vec3 = {pair3, pair4};
 
     vector<vector<pair<vector<string>,vector<int>>>> list;
     list = {vec1, vec2, vec3};
@@ -238,7 +238,57 @@ vector<vector<pair<vector<string>,vector<int>>>> test17(){
     return list;
  }
 
-vector<vector<pair<vector<string>,vector<int>>>> test18();
+vector<vector<pair<vector<string>,vector<int>>>> test18(){
+    //list of lists of pairs, where both elements of the pair are vectors (first one with always lenght one, a string/name of var)
+    //and the other one having 1 or more elements (in loop case)
+    vector<vector<pair<vector<string>,vector<int>>>> list;
+
+
+    //i fill manually the evolution of the code
+    pair<vector<string>,vector<int>> pair1;
+    pair1.first = {"x"};
+    pair1.second = {6};
+
+    pair<vector<string>,vector<int>> pair2;
+    pair2.first = {"n"};
+    pair2.second = {4};
+
+    pair<vector<string>,vector<int>> pair3;
+    pair3.first = {"result"};
+    pair3.second = {1};
+
+    pair<vector<string>,vector<int>> pair4;
+    pair4.first = {"x"};
+    pair4.second = {6,6,6,6};
+
+    pair<vector<string>,vector<int>> pair5;
+    pair5.first = {"result"};
+    pair5.second = {6,36,216,1296};
+
+    pair<vector<string>,vector<int>> pair6;
+    pair6.first = {"n"};
+    pair6.second = {3,2,1,0};
+
+
+    vector<pair<vector<string>,vector<int>>> vec1;
+    vec1 = {pair1};
+
+    vector<pair<vector<string>,vector<int>>> vec2;
+    vec2 = {pair1, pair2};
+
+
+    vector<pair<vector<string>,vector<int>>> vec3;
+    vec3 = {pair1, pair2, pair3};
+
+    vector<pair<vector<string>,vector<int>>> vec4;
+    vec4 = {pair4, pair5, pair6};
+
+    //this is the final list
+    //on button clicked take an element from the list and print it resp
+    list = {vec1, vec2, vec3, vec4};
+
+    return list;
+};
 
 vector<vector<pair<vector<string>,vector<int>>>> test19();
 

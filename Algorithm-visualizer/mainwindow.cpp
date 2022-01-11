@@ -178,6 +178,29 @@ void MainWindow::on_Visualize_clicked()
                           {0, "Assign multiplication", 0,0},
                           {0, "Asign i", 0,0}};
 
+    flowchart test14[6] = {{0, "Declare a", 0,0},
+                          {0, "Declare b", 0,0},
+                          {2, "While a != b", 4,0},
+                          {1, "If a > b", 1,1},
+                          {0, "Asign a", 0,0},
+                          {0, "Asign b", 0,0}};
+
+    flowchart test15[9] = {{0, "Declare n", 0,0},
+                          {0, "Declare i", 0,0},
+                          {0, "Declare prime", 0,0},
+                          {1, "If a > b", 1,4},
+                          {0, "Asign prime", 0,0},
+                          {2, "While a != b", 2,0},
+                          {1, "If a > b", 1,0},
+                          {0, "Asign prime", 0,0},
+                          {0, "Asign i", 0,0}};
+
+    flowchart test18[6] = {{0, "Declare x", 0,0},
+                          {0, "Declare n", 0,0},
+                          {0, "Declare result", 0,0},
+                          {2, "While a != b", 2,0},
+                          {0, "Assign result", 1,0},
+                          {0, "Asign n", 0,0}};
 
     const int X = 300;
     int Y = 20;
@@ -196,10 +219,10 @@ void MainWindow::on_Visualize_clicked()
 
     for (int i = 0; i < 6; i++)
     {
-        std::string str = test17[i].text;
+        std::string str = test18[i].text;
 
         //If we have a rectangle
-        if (test17[i].chart_shape == 0)
+        if (test18[i].chart_shape == 0)
         {
             //Draw
             this->ui->widget_3->setShape(Viewer::Process);
@@ -210,35 +233,35 @@ void MainWindow::on_Visualize_clicked()
         }
 
         //If we have a diamond
-        if (test17[i].chart_shape > 0)
+        if (test18[i].chart_shape > 0)
         {
-            ifStatements = test17[i].first_block;
-            elseStatements = test17[i].second_block; //Initialised to 0 and stays 0 in case of no else or in case of while
+            ifStatements = test18[i].first_block;
+            elseStatements = test18[i].second_block; //Initialised to 0 and stays 0 in case of no else or in case of while
             numberStatements = ifStatements + elseStatements;
             //We copy all the statements contained in one decision block to pass them to the computing function
 
-            flowchart process_test17[numberStatements + 1];
+            flowchart process_test18[numberStatements + 1];
             for(int j = 0; j < numberStatements+1; j++)
             {
-                process_test17[j] = test17[i+j];
+                process_test18[j] = test18[i+j];
             }
 
             //Draw
             this->ui->widget_3->setShape(Viewer::Decision);
             //first return value of the function is the width of the block it displays (pointer type to access elements of the test17ay)
 
-            int * tmp = this->ui->widget_3->compute(X, Y+20,str, process_test17);
+            int * tmp = this->ui->widget_3->compute(X, Y+20,str, process_test18);
             int processBlockWidth = 0;
             processBlockWidth = tmp[0];
             Y+= processBlockWidth;
 
             //Adding the line (and space to Y variable) after we have drawn a block.
-            if(test17[i].chart_shape == 1)
+            if(test18[i].chart_shape == 1)
             {
                 this->ui->widget_3->compute_vertical(X+processLength/2, Y, spacing);
                 Y+= spacing;
             }
-            else if(test17[i].chart_shape == 2)
+            else if(test18[i].chart_shape == 2)
             {
                 this->ui->widget_3->compute_vertical(X+processLength/2, Y, spacing/2);
                 Y+= spacing/2;
@@ -256,7 +279,7 @@ void MainWindow::on_Visualize_clicked()
 
 void MainWindow::on_variables_clicked()
 {
-    this->ui->widget_5->track(test17(), index);
+    this->ui->widget_5->track(test18(), index);
     index ++;
 }
 

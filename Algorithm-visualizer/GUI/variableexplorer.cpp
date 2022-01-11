@@ -95,18 +95,17 @@ void VariableExplorer::track(vector<vector<pair<vector<string>,vector<int>>>> li
 
     int size_pair = map[0].second.size();
     if (size_pair == 1) {
-        X_add = 18*index*index;
         for(int i = 0; i < size_map; i++){
             words = words + map[i].first[0] + " = "  + to_string(map[i].second[0]) + "\n";
             Y_next += 20;
         }
     }
     if (size_pair > 1) {
-        X_add = 840;
         for(int j = 0; j < size_pair; j++){
             for (int i = 0; i < size_map; i ++){
                 words = words + map[i].first[0] + " = "  + to_string(map[i].second[j]) + "\n";
-                Y_next += 20;
+                if (i == size_map -1 && j < size_pair -1) {words = words + "__ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ " + "\n";}
+
             }
         }
       }
