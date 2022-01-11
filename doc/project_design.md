@@ -135,7 +135,7 @@ We will use the ANTLR4 library during the lexing and parsing process and for now
 * < exp > = ‘’’< integerType > | < doubleType >| < boolType >| < string >| LP < exp > RP| < exp > < binOp > < exp > | < unop > < exp >| < exp > < unop >| < negation > | < variable >‘’’   
 * < negation > = MINUS < exp >
 * < boolType > = TRUE| FALSE
-* < binOp > = binOp:  PLUS | MINUS | TIMES| DIV | MOD | XOR | XAND | EQQ | NOTEQQ | LT | MT | LEQ | MEQ
+* < binOp > =  PLUS | MINUS | TIMES| DIV | MOD | XOR | XAND | EQQ | NOTEQQ | LT | MT | LEQ | MEQ
 * < unop > = PLUSPLUS | MINUSMINUS
 
 
