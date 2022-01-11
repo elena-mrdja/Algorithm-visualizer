@@ -100,5 +100,4 @@ Write the code in the CodeCell and click the “Done” button.  Our program wil
 <a href="https://user-images.githubusercontent.com/91254922/148878912-ff24ea6a-1bf2-498c-8c54-91b4282aece1.mp4" title="Link Title"><img src="https://user-images.githubusercontent.com/91254922/148878823-72375ecc-b625-4e11-8d97-128bd4be4b5a.png" alt="Alternate Text" /></a>
 
 ## Function that calculates the power of a number x^n: (18)
-<a href="https://user-images.githubusercontent.com/91254922/148889521-3a8e7fcb-0632-46fd-b107-ae4d74314c21.mp4
-" title="Link Title"><img src="https://user-images.githubusercontent.com/91254922/148889506-40c2e0f5-3855-4998-9080-6cbb141947f4.png" alt="Alternate Text" /></a>
+<a href="https://user-images.githubusercontent.com/91254922/148889521-3a8e7fcb-0632-46fd-b107-ae4d74314c21.mp4" title="Link Title"><img src="https://user-images.githubusercontent.com/91254922/148889506-40c2e0f5-3855-4998-9080-6cbb141947f4.png" alt="Alternate Text" /></a>
