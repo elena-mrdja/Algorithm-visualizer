@@ -3,6 +3,7 @@
 #include <QPainter>
 #include <iostream>
 #include <string>
+#include<GUI/test_vartrack.hpp>
 using namespace std;
 
 //GLOBAL VARIABLES
@@ -255,104 +256,10 @@ void MainWindow::on_Visualize_clicked()
 
 void MainWindow::on_variables_clicked()
 {
-    vector<char> order;
-    vector<unordered_map<char, vector<double>>::iterator> vec;
-
-
-    //postoje funkcije koje ce ti pomoci da ubacis value
-    unordered_map<char, vector<double>> mapa;
-    mapa['i'].push_back(1);
-
-
-    unordered_map<char, vector<double>> mapa1;
-    mapa1['i'].push_back(1);
-    mapa1['n'].push_back(7);
-
-
-    unordered_map<char, vector<double>> mapa2;
-    mapa2['i'].push_back(1);
-    mapa2['n'].push_back(7);
-    mapa2['m'].push_back(0);
-
-
-    unordered_map<char, vector<double>> mapa3;
-    mapa3['i'].push_back(1);
-    mapa3['n'].push_back(7);
-    mapa3['m'].push_back(7);
-
-    mapa3['i'].push_back(2);
-    mapa3['n'].push_back(7);
-    mapa3['m'].push_back(14);
-
-    mapa3['i'].push_back(3);
-    mapa3['n'].push_back(7);
-    mapa3['m'].push_back(21);
-
-    mapa3['i'].push_back(4);
-    mapa3['n'].push_back(7);
-    mapa3['m'].push_back(28);
-
-    mapa3['i'].push_back(5);
-    mapa3['n'].push_back(7);
-    mapa3['m'].push_back(35);
-
-    mapa3['i'].push_back(6);
-    mapa3['n'].push_back(7);
-    mapa3['m'].push_back(42);
-
-    mapa3['i'].push_back(7);
-    mapa3['n'].push_back(7);
-    mapa3['m'].push_back(49);
-
-    mapa3['i'].push_back(1);
-    mapa3['n'].push_back(7);
-    mapa3['m'].push_back(7);
-
-    mapa3['i'].push_back(8);
-    mapa3['n'].push_back(7);
-    mapa3['m'].push_back(56);
-
-    mapa3['i'].push_back(9);
-    mapa3['n'].push_back(7);
-    mapa3['m'].push_back(63);
-
-    mapa3['i'].push_back(10);
-    mapa3['n'].push_back(7);
-    mapa3['m'].push_back(70);
-    mapa3['i'].push_back(11);
-
-
-
-    vector<unordered_map<char, vector<double>>> ve;
-    ve.push_back(mapa);
-    ve.push_back(mapa1);
-    ve.push_back(mapa2);
-    ve.push_back(mapa3);
-
-    for(unordered_map<char, vector<double>>::iterator it=mapa.begin();it!=mapa.end();it++)
-    {
-        vec.push_back(it);
-    }
-
-
-
-    //index = ve.size();
-    this->ui->widget_5->track(ve, index);
+    this->ui->widget_5->track(test17(), index);
     index ++;
-
-    //if (trackerIndex == ve.size())
-    //{
-      //  trackerIndex = 1;
-    //}
-    //else
-    //{
-      //  trackerIndex++;
-    //}
-
-
-    //this->ui->widget_4->writeOut(QString("Btn"));
-    //this->ui->widget_5->track2(vec);
 }
+
 
 
 

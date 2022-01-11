@@ -78,25 +78,42 @@ void VariableExplorer::set_background()
 
 //ValueList a ne vector
 
-void VariableExplorer::track(vector<unordered_map<char, vector<double>>> v, int index)
+void VariableExplorer::track(vector<vector<pair<vector<string>,vector<int>>>> list, int index)
 {
+
+
     const int X = 5;
     string words="";
+    int X_add;
 
-    unordered_map<char, vector<double>> map = v[index];
-    int size = map.size();
+    vector<pair<vector<string>,vector<int>>> map = list[index];
+    int size_map = map.size();
 
-    words = words + "State of all variables declared so far at line " + std::to_string(index+1) + " is: "+ "\n";
-    Y_next += 25;
 
-    for(auto it : map){
-        for(int j = 0; j < it.second.size();j++) {
-                words = words + it.first + " = " + std::to_string(it.second[j]) + "\n";
+    words = words + "The state of all vairbales declared so far at line " + std::to_string(index+1) + " is: \n";
+    Y_next += 20;
+
+    int size_pair = map[0].second.size();
+    if (size_pair == 1) {
+        X_add = 18*index*index;
+        for(int i = 0; i < size_map; i++){
+            words = words + map[i].first[0] + " = "  + to_string(map[i].second[0]) + "\n";
+            Y_next += 20;
+        }
+    }
+    if (size_pair > 1) {
+        X_add = 840;
+        for(int j = 0; j < size_pair; j++){
+            for (int i = 0; i < size_map; i ++){
+                words = words + map[i].first[0] + " = "  + to_string(map[i].second[j]) + "\n";
                 Y_next += 20;
             }
         }
-    words = words + "_____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________" + "\n";
+      }
+
+
     Y_next += 15;
+    words = words + "____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________" + "\n";
 
     QString word = QString::fromStdString(words);
     auto text = this->createText2(word, X, Y_current);
@@ -110,7 +127,6 @@ void VariableExplorer::track(vector<unordered_map<char, vector<double>>> v, int 
 
 /*string words="";
 vector<pair<char, double>> written;
-
 for(int i=0;i<index;i++)
 {
     map mp = mp_pointers[i];
@@ -150,8 +166,6 @@ QGraphicsSimpleTextItem* VariableExplorer::createText2(QString str, int x, int y
     text->setBrush(QBrush(Qt::white));
     text->setPen(QPen(QPen(Qt::white)));
     QFontMetrics font = QFontMetrics(text->font());
-    int length = font.horizontalAdvance(str);
-    int height = font.height();
-    text->setPos(x ,y );
+    text->setPos(x,y);
     return text;
 }
