@@ -131,7 +131,7 @@ We will use the ANTLR4 library during the lexing and parsing process and for now
 * < ifrest > = ’’’|ELSE < block > |ELSE < ifelse > | ‘’’ 
 * < jump > = ‘’’ | CONT| BREAK ’’’
 * < return > = ‘’’RETURN < exp > SEMICOLON’’’
-* < exp > = ‘’’|VAR |TRUE |FALSE |LP < exp > RP |< exp >  < binop > < exp > |< unop > < exp > | < exp > < unop >‘’’    
+* < exp > = ‘’’|VAR |TRUE |FALSE |LP < exp > RP |< exp >  < binop > < exp > | < exp > < unop >‘’’    
 
 
 
