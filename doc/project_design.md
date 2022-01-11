@@ -120,18 +120,23 @@ We will use the ANTLR4 library during the lexing and parsing process and for now
 
 ## Initial grammar we defined:
 
-* < program > = ‘’’ INT MAIN LP RP <block> ‘’’ 
+* < file > = ‘’’ < libray > < main >‘’’ 
+* < main > = ‘’’ INT MAIN LP RP <block> ‘’’ 
 * < block > = ’’’LCB < stmts > RCB ‘’’
-* < stmts > = ‘’’ < varDec > < stmts > |< block >  < stmts > |< assign > < stmts > |< print > < stmts > |< while > < stmts > |< jump > < stmts >  |< ifelse > < stmts > |< return > < stmts > | ‘’’
-* < varDec > = ‘’’< type > VAR ASSIGN < exp > SEMICOMMA’’’
+* < stmts > = ‘’’ < varDec > |< assign > |< print > |< while > |< jump > |< ifelse > |< return > | < exp > SEMICOLON | < library >‘’’
+* < varDec > = ‘’’< type > < variable > EQ < exp > SEMICOMMA’’’
 * < type > = ‘’’ | INT | BOOL | STR | DOUBLE ’’’
 * < assign > = ‘’’VAR EQ < exp > SEMICOLON’’’
 * < while > = ‘’’WHILE LP < exp > RP <block>’’’
 * < ifelse > = ‘’’IF LP < exp > RP < block > < ifrest >’’’
-* < ifrest > = ’’’|ELSE < block > |ELSE < ifelse > | ‘’’ 
-* < jump > = ‘’’ | CONT| BREAK ’’’
+* < ifrest > = ’’’ELSE < block > |ELSE < ifelse >‘’’ 
+* < jump > = ‘’’  CONT | BREAK ’’’
 * < return > = ‘’’RETURN < exp > SEMICOLON’’’
-* < exp > = ‘’’|VAR |TRUE |FALSE |LP < exp > RP |< exp >  < binop > < exp > | < exp > < unop >‘’’    
+* < exp > = ‘’’< integerType > | < doubleType >| < boolType >| < string >| LP < exp > RP| < exp > < binOp > < exp > | < unop > < exp >| < exp > < unop >| < negation > | < variable >‘’’   
+* < negation > = MINUS < exp >
+* < boolType > = TRUE| FALSE
+* < binOp > = binOp:  PLUS | MINUS | TIMES| DIV | MOD | XOR | XAND | EQQ | NOTEQQ | LT | MT | LEQ | MEQ
+* < unop > = PLUSPLUS | MINUSMINUS
 
 
 
