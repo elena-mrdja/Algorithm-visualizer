@@ -26,7 +26,7 @@ This team will be working on the tokenization and the lexical analysis of the co
 
 ## AST/Interpreter team 
 This team will be working on AST classes, but mostly on the way we will interpret the code. They will make two interfaces: one will use for drawing toe flowchart and on the other that we will use for tracking the variables.
-*	Milena Nedeljkovic
+*	Milena Nedeljković
 *	Matea Gjika
 *	Darya Todoskova
 *	Evdokia Guenievna
@@ -35,12 +35,12 @@ This team will be working on AST classes, but mostly on the way we will interpre
 This is the frontend team that will code the interface part of the project which the user will directly interact with. 
 *	Elena Mrdja
 *	John Levy
-*	Mina Goranovic
+*	Mina Goranović
 
 
 
 
-##Additional dependencies
+# Additional dependencies
 
 Our project is using the ANTLR4. The folder with the path Algorithm-visualizer/AST in the brach "Workspace" contains all of the files needed to run the code. In order to install ANTLR and be able to compile the project, please follow the following steps:
 
@@ -49,7 +49,34 @@ Our project is using the ANTLR4. The folder with the path Algorithm-visualizer/A
   2) Creat an empty folder called (ex. build) (inside the AST folder)
   3) In the Terminal direct yourself into build folder
   4) Call: cmake ../ (you might need to download and install cmake)
-  5) Call: make
-  6) Now your project is configurated and you can open it in QT (use CMakeLists.txt file to configurate QT project)
+  6) Call: make
+  7) Now your project is configurated and you can open it in QT (use CMakeLists.txt file to configurate QT project)
  
+# Limitations:
+- It works only with the grammar we defined, which can be found in the doc/project_design.md file
+- When declaringn a variable, user has to assint to it its inital value 
+- When using Unop, the user is asked to write the Unop after the variable (i.e please write i++ instead of ++i)
+- User is asked to not write more than 100 statements (where one statement is basically one line of code excluding the lines containing only brackets or declaration of while loop/if/else)
+- The user is expected to write a code that can be compiled
+- The user is asked to not write inifite loops
+- The 
+
+
+# Functionalities:
+
+Write the code in the CodeCell and click the “Done” button.  Our program will read your code you allow you two simultaneous actions on click of the corresponding buttons:
+
+- Visualization of the structure of your code in the shape of a flowchart. Click on the “Visualize” button and the corresponding flowchart will appear in the ViewCell. 
+- Our program allows you to zoom in and out so that you can have a better overview for long codes and large, nested loops.
+- The variabls tracking for each line of the code. Click on the “Show me variables state” button to see the state of variable in the first line. Every following click will update the state of all declared variables at the following line.
+- When it comes to loops, our VariableTrack cell displays all of the variables states during the execution of the loop at a single click.
+
+
+# Improvements and features done in some of the teams:
+- We are working on the expansion of the grammar the user can use. Currently, there are some structures, such as array type, that are defined in the AST, but still need their implementation in the Interpreter part of the backend and the GUI.
+- We have a half done function that uploads a .cpp file from the user’s computer.
+- We have backend potential to connect the View cell and the VarTrack cell so that user can clearly see which part of the code are actually being executed.
+
+
+# Demo video on some examples:
 
