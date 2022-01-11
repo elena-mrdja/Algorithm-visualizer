@@ -72,14 +72,14 @@ Our project is using the ANTLR4. The folder with the path Algorithm-visualizer/A
 
 # Functionalities:
 
-Write the code in the CodeCell and click the “Done” button.  Our program will read your code you allow you two simultaneous actions on click of the corresponding buttons (click on the picture for a video demonstration):  <br> <br>
+Write the code in the CodeCell and click the “Done” button.  Our program will read your code you allow you two simultaneous actions on click of the corresponding buttons (click on the picture for a video demonstration):  
 <a href="https://user-images.githubusercontent.com/91254922/148877205-275e3975-e643-4417-96ff-7a9152d83e64.mp4" title="Link Title"></a>
 
 - Visualization of the structure of your code in the shape of a flowchart. Click on the “Visualize” button and the corresponding flowchart will appear in the ViewCell. 
-- Our program allows you to zoom in and out so that you can have a better overview for long codes and large, nested loops. <br> <br>
-<a href="https://user-images.githubusercontent.com/91254922/148878912-ff24ea6a-1bf2-498c-8c54-91b4282aece1.mp4" title="Link Title"><img src="https://user-images.githubusercontent.com/91254922/148878823-72375ecc-b625-4e11-8d97-128bd4be4b5a.png" alt="Alternate Text" /></a>
+- Our program allows you to zoom in and out so that you can have a better overview for long codes and large, nested loops.
+<a href="https://user-images.githubusercontent.com/91254922/148878912-ff24ea6a-1bf2-498c-8c54-91b4282aece1.mp4" title="Link Title"><img src="https://user-images.githubusercontent.com/91254922/148878823-72375ecc-b625-4e11-8d97-128bd4be4b5a.png" alt="Alternate Text"/></a>
 - The variabls tracking for each line of the code. Click on the “Show me variables state” button to see the state of variable in the first line. Every following click will update the state of all declared variables at the following line.
-- When it comes to loops, our VariableTrack cell displays all of the variables states during the execution of the loop at a single click.  <br> <br>
+- When it comes to loops, our VariableTrack cell displays all of the variables states during the execution of the loop at a single click. 
 <a href="https://user-images.githubusercontent.com/91254922/148878974-2593340b-70ca-42e2-935f-b29675975c25.mp4" title="Link Title"></a>
 
 
@@ -97,7 +97,7 @@ Write the code in the CodeCell and click the “Done” button.  Our program wil
 
 
 ## Function that checks whether the given integer is prime:
-<a href="https://user-images.githubusercontent.com/91254922/148878912-ff24ea6a-1bf2-498c-8c54-91b4282aece1.mp4" title="Link Title"><img src="https://user-images.githubusercontent.com/91254922/148878823-72375ecc-b625-4e11-8d97-128bd4be4b5a.png" alt="Alternate Text" /></a>
+<a href="https://user-images.githubusercontent.com/91254922/148971371-9dbd79f3-bf91-4274-bade-cb835f9b9095.mp4" title="Link Title"><img src="https://user-images.githubusercontent.com/91254922/148878823-72375ecc-b625-4e11-8d97-128bd4be4b5a.png" alt="Alternate Text" /></a>
 
 ## Function that calculates the power of a number x^n: (18)
 <a href="https://user-images.githubusercontent.com/91254922/148889521-3a8e7fcb-0632-46fd-b107-ae4d74314c21.mp4" title="Link Title"><img src="https://user-images.githubusercontent.com/91254922/148889506-40c2e0f5-3855-4998-9080-6cbb141947f4.png" alt="Alternate Text" /></a>
